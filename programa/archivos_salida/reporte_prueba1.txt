@@ -24,4 +24,6 @@ IDENTIFICADOR (TIPO)      | LEXEMA                    | LINEA      | COLUMNA
 28 (CLOSE_BLOCK)          | !                         | 5          | 1         
 2 (WORLD)                 | world                     | 5          | 3         
 ----------------------------------------------------------------------
+No se encontraron errores léxicos.
+----------------------------------------------------------------------
 FIN DEL ANALISIS

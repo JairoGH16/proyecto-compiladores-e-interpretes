@@ -3,6 +3,7 @@ import java.util.*;
 import java_cup.runtime.Symbol;
 
 public class Main {
+    // Escáner para leer lo que se ocupa por consola
     private static final Scanner sc = new Scanner(System.in);
     
     // Rutas de carpetas para que el programa sepa donde buscar
@@ -63,7 +64,7 @@ public class Main {
         }
     }
 
-    // Buscar los txt disponibles y deja escoger cual analizar
+    // Buscar los txt disponibles y dejar escoger cual analizar
     private static void menuAnalisisLexico() {
         File folder = new File(RUTA_PRUEBAS);
         File[] listaArchivos = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
@@ -104,6 +105,9 @@ public class Main {
     private static void ejecutarLexer(File archivoFuente) {
         String nombreSinExt = archivoFuente.getName().replace(".txt", "");
         String rutaReporte = RUTA_SALIDA + "reporte_" + nombreSinExt + ".txt";
+        
+        // Lista para ir guardando los errores para ponerlos al final del txt
+        List<String> listaErrores = new ArrayList<>();
 
         try {
             System.out.println("Analizando: " + archivoFuente.getName() + "...");
@@ -122,9 +126,10 @@ public class Main {
             writer.printf("%-25s | %-25s | %-10s | %-10s%n", "IDENTIFICADOR (TIPO)", "LEXEMA", "LINEA", "COLUMNA");
             writer.println("----------------------------------------------------------------------");
 
-            // Sacar el valor de EOF de sym.java
+            // Sacar valores de sym.java por reflexion
             Class<?> symClass = Class.forName("parserlexer.sym");
             int EOF_VAL = symClass.getField("EOF").getInt(null);
+            int ERROR_VAL = symClass.getField("ERROR").getInt(null);
 
             // Sacar tokens uno por uno hasta llegar al final del archivo
             while (true) {
@@ -137,18 +142,34 @@ public class Main {
                 String nombreToken = obtenerNombreToken(s.sym);
                 String idConTipo = s.sym + " (" + nombreToken + ")";
 
+                // Si es un error lo mete a la lista para el final
+                if (s.sym == ERROR_VAL) {
+                    listaErrores.add("Caracter ilegal <" + lexema + "> en línea " + s.left);
+                }
+
                 // Escribir la linea en el reporte
                 writer.printf("%-25s | %-25s | %-10d | %-10d%n", 
                                idConTipo, lexema, s.left, s.right);
             }
 
+            // Escribe el resumen de errores antes de cerrar
+            writer.println("----------------------------------------------------------------------");
+            if (!listaErrores.isEmpty()) {
+                writer.println("ERRORES ENCONTRADOS:");
+                for (String err : listaErrores) {
+                    writer.println("- " + err);
+                }
+            } else {
+                writer.println("No se encontraron errores léxicos.");
+            }
+            
             writer.println("----------------------------------------------------------------------");
             writer.println("FIN DEL ANALISIS");
             writer.close();
             System.out.println("Reporte generado: " + rutaReporte);
 
         } catch (ClassNotFoundException e) {
-            System.err.println("Error: No estan los archivos del Lexer. Use la opcion 1 primero.");
+            System.err.println("Error: No están los archivos del Lexer. Use la opcion 1 primero.");
         } catch (Exception e) {
             System.err.println("Error analizando " + archivoFuente.getName() + ": " + e.getMessage());
         }
