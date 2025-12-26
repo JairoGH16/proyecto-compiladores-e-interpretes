@@ -1,0 +1,27 @@
+REPORTE DE TOKENS: prueba1.txt
+======================================================================
+IDENTIFICADOR (TIPO)      | LEXEMA                    | LINEA      | COLUMNA   
+----------------------------------------------------------------------
+2 (WORLD)                 | world                     | 1          | 1         
+4 (INT)                   | int                       | 1          | 7         
+51 (ASSIGN)               | =                         | 1          | 11        
+3 (LOCAL)                 | local                     | 1          | 13        
+5 (FLOAT)                 | float                     | 1          | 19        
+59 (ID)                   | x                         | 1          | 25        
+51 (ASSIGN)               | =                         | 1          | 27        
+56 (FLOAT_LITERAL)        | 3.14                      | 1          | 29        
+24 (ENDL)                 | endl                      | 1          | 34        
+11 (GIFT)                 | gift                      | 3          | 1         
+10 (COAL)                 | coal                      | 3          | 6         
+9 (NAVIDAD)               | navidad                   | 3          | 11        
+29 (OPEN_PAREN)           | ¿                         | 3          | 19        
+30 (CLOSE_PAREN)          | ?                         | 3          | 21        
+27 (OPEN_BLOCK)           | ¡                         | 3          | 23        
+22 (SHOW)                 | show                      | 4          | 5         
+57 (STRING_LITERAL)       | Hola mundo 123            | 4          | 25        
+50 (NOT)                  | Σ                         | 4          | 30        
+24 (ENDL)                 | endl                      | 4          | 32        
+28 (CLOSE_BLOCK)          | !                         | 5          | 1         
+2 (WORLD)                 | world                     | 5          | 3         
+----------------------------------------------------------------------
+FIN DEL ANALISIS
