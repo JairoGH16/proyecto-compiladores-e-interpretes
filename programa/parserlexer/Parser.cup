@@ -37,6 +37,8 @@ terminal Float   FLOAT_LITERAL;
 terminal String  STRING_LITERAL;
 terminal Character CHAR_LITERAL;
 terminal String ID;
+/* Errores */
+terminal ERROR;
 
 /* Non terminals */
 non terminal expr_list;

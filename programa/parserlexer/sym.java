@@ -55,6 +55,7 @@ public class sym {
   public static final int BREAK = 21;
   public static final int OPEN_BRACKET = 31;
   public static final int WORLD = 2;
+  public static final int ERROR = 60;
   public static final int ARROW = 52;
   public static final int ELSE = 14;
   public static final int CLOSE_BLOCK = 28;
@@ -128,7 +129,8 @@ public class sym {
   "FLOAT_LITERAL",
   "STRING_LITERAL",
   "CHAR_LITERAL",
-  "ID"
+  "ID",
+  "ERROR"
   };
 }
 

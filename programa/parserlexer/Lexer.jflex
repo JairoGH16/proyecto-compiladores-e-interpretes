@@ -40,6 +40,9 @@ FloatLiteral   = [0-9]+ \. [0-9]+
 /* estado para capturar cadenas de texto */
 %state STRING
 
+/* estado para capturar errores en una linea (modo pánico) */
+%state PANIC_MODE
+
 %%
 
 <YYINITIAL> {
@@ -149,6 +152,13 @@ FloatLiteral   = [0-9]+ \. [0-9]+
     \\                             { string.append('\\'); }
 }
 
-/* error fallback */
-[^]                              { throw new Error("Illegal character <"+
-                                                    yytext()+">"); }
+/* error fallback, maneja errores lexicos causados por elementos desconocidos y continua en la linea siguiente (modo pánico) */
+<YYINITIAL> [^] { 
+    String elementoDesconocido = yytext();
+    System.err.println("Error: Elemento desconocido <" + elementoDesconocido + "> en la línea " + (yyline + 1));
+    yybegin(PANIC_MODE); 
+    return symbol(sym.ERROR, elementoDesconocido);
+}
+/* En el estado PANIC_MODE se consumen todos los caracteres hasta el final de la linea */
+<PANIC_MODE> [^\r\n]+ { /* ignorar */ }
+<PANIC_MODE> {LineTerminator} { yybegin(YYINITIAL); }
