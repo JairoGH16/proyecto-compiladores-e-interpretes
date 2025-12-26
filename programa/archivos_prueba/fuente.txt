@@ -1,0 +1,5 @@
+world int = local float x = 3.14 endl
+| Un comentario
+gift coal navidad ¿ ? ¡
+    show "Hola mundo 123" endl
+!

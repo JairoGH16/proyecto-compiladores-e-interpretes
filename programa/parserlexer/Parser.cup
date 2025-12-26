@@ -1,6 +1,7 @@
 package parserlexer;
-/* Simple +/-/* expression language; parser evaluates constant expressions on the fly*/
 import java_cup.runtime.*;
+/*Especificación CUP para generar la clase sym, por ahora solo define terminales para el análisis léxico.
+ De momento, este archivo solo se usa para generar sym.java, todavía no se parsea*/
 
 parser code {:
     // Connect this parser to a scanner!
@@ -12,18 +13,33 @@ parser code {:
 init with {: s.init(); :};
 scan with {: return s.next_token(); :};
 
-/* Terminals (tokens returned by the scanner). */
-terminal            SEMI, PLUS, MINUS, TIMES, UMINUS, LPAREN, RPAREN;
-terminal Integer    NUMBER;        // our scanner provides numbers as integers
+/* ----- Terminales (tokens retornados por el scanner). ----- */
+
+/* Palabras reservadas */
+terminal WORLD, LOCAL, INT, FLOAT, BOOL, CHAR, STRING;
+terminal NAVIDAD, COAL, GIFT;
+terminal DECIDE, OF, ELSE, END, LOOP, EXIT, WHEN, FOR;
+terminal RETURN, BREAK, SHOW, GET, ENDL;
+terminal TRUE, FALSE;
+/* Operadores y delimitadores */
+terminal OPEN_BLOCK, CLOSE_BLOCK;        // ¡ !
+terminal OPEN_PAREN, CLOSE_PAREN;        // ¿ ?
+terminal OPEN_BRACKET, CLOSE_BRACKET;    // [ ]
+terminal INCREMENT, DECREMENT;            // ++ --
+terminal PLUS, MINUS, MULT, DIV, INT_DIV, MOD, POWER;
+terminal LTEQ, GTEQ, EQEQ, NEQ, LT, GT;
+terminal AND, OR, NOT;                    // @ ~ Σ
+terminal ASSIGN, ARROW;                   // = ->
+terminal COMMA, SEMICOLON;
+/* Literales con valor */
+terminal Integer INT_LITERAL;
+terminal Float   FLOAT_LITERAL;
+terminal String  STRING_LITERAL;
+terminal Character CHAR_LITERAL;
+terminal String ID;
 
 /* Non terminals */
-non terminal            expr_list;
-non terminal Integer    expr;      // used to store evaluated subexpressions
-
-/* Precedences */
-precedence left PLUS, MINUS;
-precedence left TIMES;
-precedence left UMINUS;
+non terminal expr_list;
 
 /* The grammar rules */
 expr_list ::= ;
