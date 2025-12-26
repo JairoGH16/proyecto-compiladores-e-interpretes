@@ -15,7 +15,7 @@ IDENTIFICADOR (TIPO)      | LEXEMA                    | LINEA      | COLUMNA
 10 (COAL)                 | coal                      | 3          | 6         
 60 (ERROR)                | #                         | 3          | 11        
 22 (SHOW)                 | show                      | 4          | 5         
-57 (STRING_LITERAL)       | Hola mundo 123            | 4          | 25        
+57 (STRING_LITERAL)       | "Hola mundo 123"          | 4          | 25        
 50 (NOT)                  | Σ                         | 4          | 30        
 24 (ENDL)                 | endl                      | 4          | 32        
 60 (ERROR)                | #                         | 5          | 1         

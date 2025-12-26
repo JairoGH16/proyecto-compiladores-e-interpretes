@@ -43,6 +43,9 @@ FloatLiteral   = [0-9]+ \. [0-9]+
 /* estado para capturar errores en una linea (modo pánico) */
 %state PANIC_MODE
 
+/* estado para capturar comentarios multilinea */
+%state MULTICOMMENT
+
 %%
 
 <YYINITIAL> {
@@ -130,18 +133,18 @@ FloatLiteral   = [0-9]+ \. [0-9]+
     \'[^\']\'         { return symbol(sym.CHAR_LITERAL, 
                                yytext().charAt(1)); }
 /* Cadenas de texto */
-    \"                { string.setLength(0); yybegin(STRING); }
+    \"                { string.setLength(0); string.append('\"'); yybegin(STRING); }
 /* Identificadores */
     {Identifier}      { return symbol(sym.ID, yytext()); }
 
 /* ----- Comentarios y espacios ------------------------ */
     {WhiteSpace}      { /* Ignorar */ }
     {LineComment}     { /* Ignorar */ }
-    {MultiLineComment} { /* Ignorar */ }
+    "є"               { yybegin(MULTICOMMENT); }
 }
 
 <STRING> {
-    \"                             { yybegin(YYINITIAL); 
+    \"                             { string.append('\"'); yybegin(YYINITIAL); 
                                    return symbol(sym.STRING_LITERAL, 
                                    string.toString()); }
     [^\n\r\"\\]+                   { string.append( yytext() ); }
@@ -150,6 +153,14 @@ FloatLiteral   = [0-9]+ \. [0-9]+
     \\r                            { string.append('\r'); }
     \\\"                           { string.append('\"'); }
     \\                             { string.append('\\'); }
+}
+
+/* Comentarios multilinea */
+<MULTICOMMENT> {
+    "э"               { yybegin(YYINITIAL); }
+    [^\r\nэ]+         { /* ignorar */ }
+    {LineTerminator}  { /* ignorar */ }
+    <<EOF>>           { yybegin(YYINITIAL); return symbol(sym.ERROR, "Comentario multilinea no cerrado"); }
 }
 
 /* error fallback, maneja errores lexicos causados por elementos desconocidos y continua en la linea siguiente (modo pánico) */

@@ -18,7 +18,7 @@ IDENTIFICADOR (TIPO)      | LEXEMA                    | LINEA      | COLUMNA
 30 (CLOSE_PAREN)          | ?                         | 3          | 21        
 27 (OPEN_BLOCK)           | ¡                         | 3          | 23        
 22 (SHOW)                 | show                      | 4          | 5         
-57 (STRING_LITERAL)       | Hola mundo 123            | 4          | 25        
+57 (STRING_LITERAL)       | "Hola mundo 123"          | 4          | 25        
 50 (NOT)                  | Σ                         | 4          | 30        
 24 (ENDL)                 | endl                      | 4          | 32        
 28 (CLOSE_BLOCK)          | !                         | 5          | 1         

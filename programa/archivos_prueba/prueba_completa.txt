@@ -1,0 +1,13 @@
+| comentario de una línea
+world local int float bool char string
+navidad coal gift decide of else end loop exit when
+for
+return break show get endl true
+false
+// / % ^ ¡ ! !! ¿ ? [ ] ++ -- + - *
+<= >= == Σ= < > @ ~ Σ = -> , ;
+є Comentario
+multi
+linea э
+12345 3.14 "Hola" 'A' una_variable_123
+navidad ¡ decide of ¿ bool x = true ? -> show "ok" endl !
