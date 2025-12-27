@@ -101,7 +101,7 @@ public class Parser extends java_cup.runtime.lr_parser {
     }
 
 
-    // Connect this parser to a scanner!
+    // Conectar el parser al scanner (aunque no parseemos aún, es estructura obligatoria)
     scanner s;
     Parser(scanner s){ this.s=s; }
 

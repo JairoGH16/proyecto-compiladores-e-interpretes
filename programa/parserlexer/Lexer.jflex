@@ -1,6 +1,14 @@
 package parserlexer;
 import java_cup.runtime.*;
-/* Analizador Léxico para lenguaje de configuración de chips */
+
+/*
+ * Analizador Léxico para lenguaje de configuración de chips
+ * Objetivo: Definir las reglas léxicas (expresiones regulares) que JFlex usará para generar la clase Lexer.java.
+ *           Este archivo se encarga de reconocer todos los tokens válidos del lenguaje.
+ * Entrada: Archivo de texto con código fuente en el lenguaje personalizado.
+ * Salida: Tokens de tipo Symbol (definidos en sym.java) para cada lexema encontrado.
+ * Restricciones: Requiere codificación UTF-8 para reconocer caracteres especiales como 'Σ', '¡', '¿', 'є', 'э'.
+ */
 
 %%
 
@@ -12,142 +20,208 @@ import java_cup.runtime.*;
 %column
 
 %{
+  // Buffer para ir construyendo strings literales caracter por caracter cuando estamos en el estado STRING
   StringBuffer string = new StringBuffer();
 
+  /*
+   * Método symbol (sin valor)
+   * Objetivo: Crear un objeto Symbol para tokens simples (palabras reservadas, operadores).
+   * Entrada: type (ID numérico del token).
+   * Salida: Objeto Symbol con la línea y columna ajustadas (base 1 para lectura humana).
+   */
   private Symbol symbol(int type) {
     return new Symbol(type, yyline + 1, yycolumn + 1);
   }
+  
+  /*
+   * Método symbol (con valor)
+   * Objetivo: Crear un objeto Symbol para tokens complejos que llevan datos asociados (literales, IDs).
+   * Entrada: type (ID numérico del token), value (valor del lexema parseado).
+   * Salida: Objeto Symbol con tipo, valor, línea y columna.
+   */
   private Symbol symbol(int type, Object value) {
     return new Symbol(type, yyline + 1, yycolumn + 1, value);
   }
 %}
 
-/* expresiones regulares básicas */
+/* ----- Definiciones de Expresiones Regulares Básicas ----- */
 LineTerminator = \r|\n|\r\n
 WhiteSpace     = {LineTerminator} | [ \t\f]
 
-/* comentarios */
+/* Comentarios: de una línea (|) y multilínea (empieza con є y termina con э) */
 LineComment    = "|" [^\r\n]*
 MultiLineComment = "є" ~"э"
 
-/* identificadores */
+/* Identificadores: empiezan con letra/guion bajo, siguen letras/numeros/guion bajo */
 Identifier = [a-zA-Z_][a-zA-Z0-9_]*
 
-/* literales Numéricos */
+/* Literales numéricos: Enteros y Flotantes (con punto decimal obligatorio) */
 IntegerLiteral = [0-9]+
 FloatLiteral   = [0-9]+ \. [0-9]+
 
-/* estado para capturar cadenas de texto */
+/*
+ * Estados léxicos:
+ * - YYINITIAL: Estado por defecto.
+ * - STRING: Para procesar cadenas de texto y sus escapes.
+ * - PANIC_MODE: Para ignorar el resto de la línea tras un error.
+ * - MULTICOMMENT: Para procesar bloques de comentarios multilínea.
+ */
 %state STRING
-
-/* estado para capturar errores en una linea (modo pánico) */
 %state PANIC_MODE
-
-/* estado para capturar comentarios multilinea */
 %state MULTICOMMENT
 
 %%
 
 <YYINITIAL> {
-/* ----- Palabras reservadas ------------------------- */
-/* Variables */
-    "world"      { return symbol(sym.WORLD); }
-    "local"      { return symbol(sym.LOCAL); }
+/* 
+ * ----- Palabras Reservadas ----- 
+ * Objetivo: Identificar keywords del lenguaje.
+ * Se definen antes que los identificadores para tener prioridad.
+ */
+
+/* Variables y alcance */
+    "world"      { return symbol(sym.WORLD); }    // Globales
+    "local"      { return symbol(sym.LOCAL); }    // Locales
+
 /* Tipos de datos */
     "int"        { return symbol(sym.INT); }
     "float"      { return symbol(sym.FLOAT); }
     "bool"       { return symbol(sym.BOOL); }
     "char"       { return symbol(sym.CHAR); }
     "string"     { return symbol(sym.STRING); }
- /* Main y funciones */
-    "navidad"    { return symbol(sym.NAVIDAD); }
-    "coal"       { return symbol(sym.COAL); }
-    "gift"       { return symbol(sym.GIFT); }
-/* Estructuras de control */
-    "decide"     { return symbol(sym.DECIDE); }
-    "of"         { return symbol(sym.OF); }
-    "else"       { return symbol(sym.ELSE); }
-    "end"        { return symbol(sym.END); }
-    "loop"       { return symbol(sym.LOOP); }
-    "exit"       { return symbol(sym.EXIT); }
-    "when"       { return symbol(sym.WHEN); }
-    "for"        { return symbol(sym.FOR); }
+
+/* Estructura del programa y funciones */
+    "navidad"    { return symbol(sym.NAVIDAD); }  // main
+    "coal"       { return symbol(sym.COAL); }     // void
+    "gift"       { return symbol(sym.GIFT); }     // function
+
 /* Control de flujo */
+    "decide"     { return symbol(sym.DECIDE); }   // if
+    "of"         { return symbol(sym.OF); }       // parte del if
+    "else"       { return symbol(sym.ELSE); }
+    "end"        { return symbol(sym.END); }      // cierre genérico
+    "loop"       { return symbol(sym.LOOP); }     // bucle infinito
+    "exit"       { return symbol(sym.EXIT); }     // break condicional del loop
+    "when"       { return symbol(sym.WHEN); }     // condición del exit
+    "for"        { return symbol(sym.FOR); }      // bucle for
+
+/* Saltos */
     "return"     { return symbol(sym.RETURN); }
     "break"      { return symbol(sym.BREAK); }
-    /* Entrada/Salida */
-    "show"       { return symbol(sym.SHOW); }
-    "get"        { return symbol(sym.GET); }
-/* Delimitador de fin de instrucción */
+
+/* Entrada / Salida */
+    "show"       { return symbol(sym.SHOW); }     // print
+    "get"        { return symbol(sym.GET); }      // read
+
+/* Fin de instrucción (reemplaza al punto y coma a veces en este lenguaje) */
     "endl"       { return symbol(sym.ENDL); }
+
 /* Literales booleanos */
     "true"       { return symbol(sym.TRUE); }
     "false"      { return symbol(sym.FALSE); }
 
-/* ----- Operadores ------------------------------ */
-/* Bloques (reemplazan llaves) */
+/* 
+ * ----- Operadores y Delimitadores -----
+ * Caracteres especiales definidos en el enunciado (UTF-8).
+ */
+
+/* Bloques de código (reemplazan { y }) */
     "¡"          { return symbol(sym.OPEN_BLOCK); }
     "!"          { return symbol(sym.CLOSE_BLOCK); }
-/* Paréntesis (reemplazan paréntesis tradicionales) */
+
+/* Paréntesis de agrupación (reemplazan ( y )) */
     "¿"          { return symbol(sym.OPEN_PAREN); }
     "?"          { return symbol(sym.CLOSE_PAREN); }
-/* Corchetes para arreglos */
+
+/* Corchetes de arreglos */
     "["          { return symbol(sym.OPEN_BRACKET); }
     "]"          { return symbol(sym.CLOSE_BRACKET); }
-/* Operadores aritméticos */
+
+/* Aritmética */
     "++"         { return symbol(sym.INCREMENT); }
     "--"         { return symbol(sym.DECREMENT); }
     "+"          { return symbol(sym.PLUS); }
     "-"          { return symbol(sym.MINUS); }
     "*"          { return symbol(sym.MULT); }
-    "//"         { return symbol(sym.INT_DIV); }
-    "/"          { return symbol(sym.DIV); }
+    "//"         { return symbol(sym.INT_DIV); }  // División Entera
+    "/"          { return symbol(sym.DIV); }      // División Decimal
     "%"          { return symbol(sym.MOD); }
     "^"          { return symbol(sym.POWER); }
-/* Operadores relacionales */
+
+/* Relacionales */
     "<="         { return symbol(sym.LTEQ); }
     ">="         { return symbol(sym.GTEQ); }
     "=="         { return symbol(sym.EQEQ); }
-    "Σ="         { return symbol(sym.NEQ); }
+    "Σ="         { return symbol(sym.NEQ); }      // Diferente de
     "<"          { return symbol(sym.LT); }
     ">"          { return symbol(sym.GT); }
-/* Operadores lógicos */
-    "@"          { return symbol(sym.AND); }
-    "~"          { return symbol(sym.OR); }
-    "Σ"          { return symbol(sym.NOT); }
-/* Asignación */
+
+/* Lógicos */
+    "@"          { return symbol(sym.AND); }      // Conjunción
+    "~"          { return symbol(sym.OR); }       // Disyunción
+    "Σ"          { return symbol(sym.NOT); }      // Negación
+
+/* Asignación y otros símbolos */
     "="          { return symbol(sym.ASSIGN); }
-/* Flecha (para decide of) */
-    "->"         { return symbol(sym.ARROW); }
-/* Separadores */
+    "->"         { return symbol(sym.ARROW); }    // Para el decide of
     ","          { return symbol(sym.COMMA); }
     ";"          { return symbol(sym.SEMICOLON); }
 
-/* ----- Literales ------------------------------ */
-/* Números */
+/* 
+ * ----- Literales y Valores -----
+ */
+
+/* Flotantes */
     {FloatLiteral}    { return symbol(sym.FLOAT_LITERAL, 
                                Float.parseFloat(yytext())); }
+
+/* Enteros */
     {IntegerLiteral}  { return symbol(sym.INT_LITERAL, 
-                               Integer.parseInt(yytext())); } 
-/* Caracteres individuales */
+                               Integer.parseInt(yytext())); }
+
+/* Char literal: captura un solo caracter entre comillas simples */
     \'[^\']\'         { return symbol(sym.CHAR_LITERAL, 
                                yytext().charAt(1)); }
-/* Cadenas de texto */
-    \"                { string.setLength(0); string.append('\"'); yybegin(STRING); }
-/* Identificadores */
+
+/* 
+ * String literal: detecta comilla doble inicial.
+ * Acción: Limpia el buffer, añade la comilla inicial y cambia al estado STRING.
+ */
+    \"                { string.setLength(0); 
+                        string.append('\"'); 
+                        yybegin(STRING); }
+
+/* Identificadores de usuario */
     {Identifier}      { return symbol(sym.ID, yytext()); }
 
-/* ----- Comentarios y espacios ------------------------ */
+/* 
+ * ----- Espacios y Comentarios -----
+ * Acción: No retornar nada, simplemente consumir la entrada.
+ */
     {WhiteSpace}      { /* Ignorar */ }
     {LineComment}     { /* Ignorar */ }
+    
+/* Inicio de comentario multilínea: cambia al estado MULTICOMMENT */
     "є"               { yybegin(MULTICOMMENT); }
 }
 
+/*
+ * Estado STRING
+ * Objetivo: Capturar el contenido de una cadena de texto, manejando secuencias de escape.
+ * Entrada: Caracteres dentro de las comillas.
+ * Salida: Token STRING_LITERAL una vez cerrada la comilla.
+ */
 <STRING> {
-    \"                             { string.append('\"'); yybegin(YYINITIAL); 
-                                   return symbol(sym.STRING_LITERAL, 
-                                   string.toString()); }
-    [^\n\r\"\\]+                   { string.append( yytext() ); }
+    /* Cierre de comillas: terminar string y volver a YYINITIAL */
+    \"                             { string.append('\"'); 
+                                     yybegin(YYINITIAL); 
+                                     return symbol(sym.STRING_LITERAL, 
+                                                   string.toString()); }
+    
+    /* Caracteres normales: agregar al buffer */
+    [^\n\r\"\\]+                   { string.append(yytext()); }
+    
+    /* Secuencias de escape: convertir y agregar al buffer */
     \\t                            { string.append('\t'); }
     \\n                            { string.append('\n'); }
     \\r                            { string.append('\r'); }
@@ -155,21 +229,43 @@ FloatLiteral   = [0-9]+ \. [0-9]+
     \\                             { string.append('\\'); }
 }
 
-/* Comentarios multilinea */
+/*
+ * Estado MULTICOMMENT
+ * Objetivo: Consumir todo el texto hasta encontrar el símbolo de cierre 'э'.
+ * Restricción: Debe reportar error si se acaba el archivo (EOF) sin cerrar.
+ */
 <MULTICOMMENT> {
+    /* Símbolo de cierre: volver a estado normal */
     "э"               { yybegin(YYINITIAL); }
+    
+    /* Consumir cualquier cosa que no sea cierre ni saltos de línea (para optimizar) */
     [^\r\nэ]+         { /* ignorar */ }
+    
+    /* Consumir saltos de línea */
     {LineTerminator}  { /* ignorar */ }
-    <<EOF>>           { yybegin(YYINITIAL); return symbol(sym.ERROR, "Comentario multilinea no cerrado"); }
+    
+    /* Error: EOF sin cerrar el comentario */
+    <<EOF>>           { yybegin(YYINITIAL); 
+                        return symbol(sym.ERROR, "Comentario multilinea no cerrado"); }
 }
 
-/* error fallback, maneja errores lexicos causados por elementos desconocidos y continua en la linea siguiente (modo pánico) */
+/*
+ * Manejo de Errores (Recuperación en Modo Pánico)
+ * Regla [^]: Captura cualquier caracter que no haya hecho match con las reglas anteriores.
+ * Objetivo: Reportar el error léxico y saltar al final de la línea actual para intentar 
+ *           recuperarse en la siguiente línea.
+ */
 <YYINITIAL> [^] { 
     String elementoDesconocido = yytext();
-    System.err.println("Error: Elemento desconocido <" + elementoDesconocido + "> en la línea " + (yyline + 1));
+    System.err.println("Error: Elemento desconocido <" + elementoDesconocido + 
+                       "> en la línea " + (yyline + 1));
     yybegin(PANIC_MODE); 
     return symbol(sym.ERROR, elementoDesconocido);
 }
-/* En el estado PANIC_MODE se consumen todos los caracteres hasta el final de la linea */
-<PANIC_MODE> [^\r\n]+ { /* ignorar */ }
-<PANIC_MODE> {LineTerminator} { yybegin(YYINITIAL); }
+
+/*
+ * Estado PANIC_MODE
+ * Objetivo: Consumir el resto de la línea donde ocurrió el error.
+ */
+<PANIC_MODE> [^\r\n]+ { /* consumir basura de la línea actual */ }
+<PANIC_MODE> {LineTerminator} { yybegin(YYINITIAL); /* al cambiar de línea, reiniciar */ }

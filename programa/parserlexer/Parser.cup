@@ -1,19 +1,28 @@
 package parserlexer;
 import java_cup.runtime.*;
-/*Especificación CUP para generar la clase sym, por ahora solo define terminales para el análisis léxico.
- De momento, este archivo solo se usa para generar sym.java, todavía no se parsea*/
+
+/*
+ * Especificación CUP para la definición de terminales (tokens)
+ * Objetivo: Generar la clase 'sym.java' que contiene las constantes numéricas para cada tipo de token.
+ *           Aunque CUP es un generador de parsers, en esta etapa (Lexer) lo usamos solo para definir el vocabulario.
+ * Entrada: Lista de terminales.
+ * Salida: Archivo sym.java (y Parser.java esqueleto).
+ */
 
 parser code {:
-    // Connect this parser to a scanner!
+    // Conectar el parser al scanner (aunque no parseemos aún, es estructura obligatoria)
     scanner s;
     Parser(scanner s){ this.s=s; }
 :}
 
-/* define how to connect to the scanner! */
+/* Inicialización del scanner */
 init with {: s.init(); :};
 scan with {: return s.next_token(); :};
 
-/* ----- Terminales (tokens retornados por el scanner). ----- */
+/* 
+ * ----- Definición de Terminales -----
+ * Estos son los nombres que usa Lexer.jflex en los 'return symbol(sym.NOMBRE)'
+ */
 
 /* Palabras reservadas */
 terminal WORLD, LOCAL, INT, FLOAT, BOOL, CHAR, STRING;
@@ -21,7 +30,8 @@ terminal NAVIDAD, COAL, GIFT;
 terminal DECIDE, OF, ELSE, END, LOOP, EXIT, WHEN, FOR;
 terminal RETURN, BREAK, SHOW, GET, ENDL;
 terminal TRUE, FALSE;
-/* Operadores y delimitadores */
+
+/* Operadores y delimitadores especiales */
 terminal OPEN_BLOCK, CLOSE_BLOCK;        // ¡ !
 terminal OPEN_PAREN, CLOSE_PAREN;        // ¿ ?
 terminal OPEN_BRACKET, CLOSE_BRACKET;    // [ ]
@@ -31,17 +41,25 @@ terminal LTEQ, GTEQ, EQEQ, NEQ, LT, GT;
 terminal AND, OR, NOT;                    // @ ~ Σ
 terminal ASSIGN, ARROW;                   // = ->
 terminal COMMA, SEMICOLON;
-/* Literales con valor */
+
+/* Literales que cargan un valor específico (value) */
 terminal Integer INT_LITERAL;
 terminal Float   FLOAT_LITERAL;
 terminal String  STRING_LITERAL;
 terminal Character CHAR_LITERAL;
 terminal String ID;
-/* Errores */
+
+/* Terminal especial para reportar errores léxicos al Main */
 terminal ERROR;
 
-/* Non terminals */
+/* 
+ * Non terminals
+ * Definimos uno dummy para que CUP compile, aunque no haya gramática real todavía.
+ */
 non terminal expr_list;
 
-/* The grammar rules */
+/* 
+ * Reglas gramaticales (Placeholder)
+ * Solo para que se genere el archivo Parser.java sin errores.
+ */
 expr_list ::= ;

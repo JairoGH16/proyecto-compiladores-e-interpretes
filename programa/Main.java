@@ -2,6 +2,12 @@ import java.io.*;
 import java.util.*;
 import java_cup.runtime.Symbol;
 
+/**
+ * Clase Principal (Main)
+ * Objetivo: Controlar todo el flujo del programa, desde la generación de los archivos del compilador
+ * hasta la ejecución del análisis léxico y la creación de reportes.
+ * Restricciones: Requiere que las carpetas lib/, parserlexer/ y archivos_prueba/ existan y tengan los permisos adecuados.
+ */
 public class Main {
     // Escáner para leer lo que se ocupa por consola
     private static final Scanner sc = new Scanner(System.in);
@@ -13,6 +19,12 @@ public class Main {
     private static final String RUTA_PRUEBAS = RUTA_PROGRAMA + "archivos_prueba/";
     private static final String RUTA_SALIDA = RUTA_PROGRAMA + "archivos_salida/";
 
+    /**
+     * Método main
+     * Objetivo: Mostrar el menú interactivo y dirigir al usuario a la opción que quiera ejecutar.
+     * Entrada: Argumentos de consola (no se usan en este caso).
+     * Salida: Interacción por consola.
+     */
     public static void main(String[] args) {
         while (true) {
             System.out.println("\n----- Menu de análisis léxico -----");
@@ -39,7 +51,13 @@ public class Main {
         }
     }
 
-    // Limpiar los archivos viejos y genera el lexer y sym nuevos con los jar
+    /**
+     * Método generarArchivos
+     * Objetivo: Limpiar los archivos viejos y regenerar el lexer y el parser usando los .jar de JFlex y CUP.
+     * Entrada: Archivos Lexer.jflex y Parser.cup existentes en la carpeta parserlexer.
+     * Salida: Archivos generados Lexer.java, Parser.java y sym.java.
+     * Restricciones: Los .jar deben estar en la ruta correcta y se debe tener java instalado en el path.
+     */
     private static void generarArchivos() {
         System.out.println("Borrando archivos antiguos...");
         String[] archivosABorrar = {"Lexer.java", "Parser.java", "sym.java"};
@@ -64,7 +82,13 @@ public class Main {
         }
     }
 
-    // Buscar los txt disponibles y dejar escoger cual analizar
+    /**
+     * Método menuAnalisisLexico
+     * Objetivo: Buscar los txt disponibles y dejar escoger al usuario cuál analizar.
+     * Entrada: Selección del usuario por consola.
+     * Salida: Llamada al método ejecutarLexer con el archivo seleccionado.
+     * Restricciones: Debe haber archivos .txt en la carpeta archivos_prueba/.
+     */
     private static void menuAnalisisLexico() {
         File folder = new File(RUTA_PRUEBAS);
         File[] listaArchivos = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
@@ -101,7 +125,13 @@ public class Main {
         }
     }
 
-    // Analizar el archivo txt y crear el reporte
+    /**
+     * Método ejecutarLexer
+     * Objetivo: Analizar el archivo txt token por token usando reflexión y crear el reporte final.
+     * Entrada: Objeto File que representa el archivo fuente a analizar.
+     * Salida: Archivo de texto en archivos_salida/ con la tabla de tokens y lista de errores.
+     * Restricciones: El archivo Lexer.java debe haber sido generado previamente (opción 1).
+     */
     private static void ejecutarLexer(File archivoFuente) {
         String nombreSinExt = archivoFuente.getName().replace(".txt", "");
         String rutaReporte = RUTA_SALIDA + "reporte_" + nombreSinExt + ".txt";
@@ -115,7 +145,7 @@ public class Main {
             // Leer el archivo con UTF-8 para que no se caiga con simbolos raros
             Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(archivoFuente), "UTF-8"));
             
-            // Cargar las clases dinamicamente para que el programa compile bien
+            // Cargar las clases dinamicamente para que el programa compile bien aunque no exista Lexer.java aun
             Class<?> lexerClass = Class.forName("parserlexer.Lexer");
             Object scanner = lexerClass.getConstructor(Reader.class).newInstance(reader);
             
@@ -175,7 +205,13 @@ public class Main {
         }
     }
 
-    // Buscar el nombre del token en sym.java
+    /**
+     * Método obtenerNombreToken
+     * Objetivo: Buscar el nombre legible del token (string) a partir de su ID numérico en sym.java.
+     * Entrada: Entero que representa el ID del token.
+     * Salida: String con el nombre del token (ej: "INT_LITERAL") o "UNKNOWN" si falla.
+     * Restricciones: sym.java debe haber sido generado y compilado.
+     */
     private static String obtenerNombreToken(int id) {
         try {
             Class<?> symClass = Class.forName("parserlexer.sym");
