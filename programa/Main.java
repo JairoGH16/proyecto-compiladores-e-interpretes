@@ -68,13 +68,34 @@ public class Main {
         try {
             // Sacar el sym y el parser con CUP
             System.out.println("Generando sym y Parser con CUP...");
-            Process p1 = Runtime.getRuntime().exec("java -jar " + RUTA_LIB + "java-cup-11b.jar -destdir " + RUTA_PARSERLEXER + " -parser Parser " + RUTA_PARSERLEXER + "Parser.cup");
+            ProcessBuilder pb1 = new ProcessBuilder(
+            "java", "-jar",
+            RUTA_LIB + "java-cup-11b.jar",
+            "-destdir", RUTA_PARSERLEXER,
+            "-parser", "Parser",
+            RUTA_PARSERLEXER + "Parser.cup"
+            );
+            pb1.redirectErrorStream(true);
+            pb1.inheritIO();
+            Process p1 = pb1.start();
             p1.waitFor();
+
             
             // Generar el lexer.java forzando UTF-8 para evitar problemas con simbolos raros
             System.out.println("Generando Lexer con JFlex...");
-            Process p2 = Runtime.getRuntime().exec("java -Dfile.encoding=UTF-8 -jar " + RUTA_LIB + "jflex-full-1.9.1.jar --encoding UTF-8 " + RUTA_PARSERLEXER + "Lexer.jflex");
+            ProcessBuilder pb2 = new ProcessBuilder(
+                "java",
+                "-Dfile.encoding=UTF-8",
+                "-jar",
+                RUTA_LIB + "jflex-full-1.9.1.jar",
+                "--encoding", "UTF-8",
+                RUTA_PARSERLEXER + "Lexer.jflex"
+            );
+            pb2.redirectErrorStream(true);
+            pb2.inheritIO();
+            Process p2 = pb2.start();
             p2.waitFor();
+
             
             System.out.println("Archivos generados");
         } catch (Exception e) {

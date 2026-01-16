@@ -13,6 +13,31 @@ parser code {:
     // Conectar el parser al scanner (aunque no parseemos aún, es estructura obligatoria)
     scanner s;
     Parser(scanner s){ this.s=s; }
+
+    // Sobrescribir método de reporte de errores
+        public void report_error(String message, Object info) {
+            StringBuilder m = new StringBuilder("Error sintáctico");
+
+            if (info instanceof Symbol) {
+                Symbol s = (Symbol) info;
+                if (s.left >= 0) {
+                    m.append(" en línea " + (s.left + 1));
+                    if (s.right >= 0) {
+                        m.append(", columna " + (s.right + 1));
+                    }
+                }
+            }
+
+            m.append(": " + message);
+            System.err.println(m);
+        }
+
+        // Error fatal
+        public void report_fatal_error(String message, Object info) {
+            report_error(message, info);
+            System.err.println("No se puede continuar el análisis.");
+            System.exit(1);
+        }
 :}
 
 /* Inicialización del scanner */
@@ -52,14 +77,279 @@ terminal String ID;
 /* Terminal especial para reportar errores léxicos al Main */
 terminal ERROR;
 
-/* 
- * Non terminals
- * Definimos uno dummy para que CUP compile, aunque no haya gramática real todavía.
- */
-non terminal expr_list;
+non terminal programa;
+non terminal declaracionesGlobales;
+non terminal declaracionGlobal;
+non terminal navidad;
+non terminal declaracionesFunciones;
+non terminal declaracionFuncion;
+non terminal parametros;
+non terminal listaParametros;
+non terminal parametro;
+non terminal tipo;
+non terminal array;
+non terminal sentencias;
+non terminal sentencia;
+non terminal declaracionLocal;
+non terminal inicializacionArray;
+non terminal filaArray;
+non terminal listaValores;
+non terminal asignacion;
+non terminal accesoArray;
+non terminal expresion;
+non terminal disyuncion;
+non terminal conjuncion;
+non terminal negacion;
+non terminal comparacion;
+non terminal aditiva;
+non terminal multiplicativa;
+non terminal potencia;
+non terminal unaria;
+non terminal primaria;
+non terminal opRel;
+non terminal opUnario;
+non terminal literal;
+non terminal literalBooleano;
+non terminal estructuraControl;
+non terminal decideOf;
+non terminal casosDecide;
+non terminal caso;
+non terminal casoElseOpt;
+non terminal loop;
+non terminal forLoop;
+non terminal inicializacionFor;
+non terminal actualizacionFor;
+non terminal sentenciaIO;
+non terminal argumentos;
+non terminal listaExpresiones;
 
-/* 
- * Reglas gramaticales (Placeholder)
- * Solo para que se genere el archivo Parser.java sin errores.
- */
-expr_list ::= ;
+/* ========== PRECEDENCIA ========== */
+
+precedence left OR;
+precedence left AND;
+precedence right NOT;
+precedence left EQEQ, NEQ, LT, LTEQ, GT, GTEQ;
+precedence left PLUS, MINUS;
+precedence left MULT, DIV, INT_DIV, MOD;
+precedence right POWER;
+precedence right INCREMENT, DECREMENT;
+precedence left ENDL;
+
+/* ========== SÍMBOLO INICIAL ========== */
+
+start with programa;
+
+/* ========== GRAMÁTICA ========== */
+
+/* Programa principal */
+programa ::= declaracionesGlobales navidad declaracionesFunciones
+    {: System.out.println("✓ Programa sintácticamente correcto"); :}
+    ;
+
+/* Declaraciones globales */
+declaracionesGlobales ::= /* empty */
+    | declaracionesGlobales declaracionGlobal
+    ;
+
+declaracionGlobal ::= WORLD ID:id tipo ENDL
+    | WORLD ID:id tipo ASSIGN expresion ENDL
+    | WORLD ID:id array ASSIGN OPEN_BLOCK inicializacionArray CLOSE_BLOCK ENDL
+    ;
+
+/* Main (navidad) */
+navidad ::= COAL NAVIDAD OPEN_BLOCK sentencias CLOSE_BLOCK
+    ;
+
+/* Declaraciones de funciones */
+declaracionesFunciones ::= /* empty */
+    | declaracionesFunciones declaracionFuncion
+    ;
+
+declaracionFuncion ::= GIFT ID:id OPEN_PAREN parametros CLOSE_PAREN tipo OPEN_BLOCK sentencias CLOSE_BLOCK
+    ;
+
+/* Parámetros */
+parametros ::= listaParametros
+    | /* empty */
+    ;
+
+listaParametros ::= parametro
+    | listaParametros COMMA parametro
+    ;
+
+parametro ::= ID:id tipo
+    ;
+
+/* Tipos */
+tipo ::= INT
+    | FLOAT
+    | BOOL
+    | CHAR
+    | STRING
+    ;
+
+array ::= INT OPEN_BRACKET expresion COMMA expresion CLOSE_BRACKET
+    | CHAR OPEN_BRACKET expresion COMMA expresion CLOSE_BRACKET
+    ;
+
+/* Sentencias */
+sentencias ::= sentencia
+            | sentencias sentencia
+            ;
+
+
+sentencia ::= declaracionLocal
+    | asignacion
+    | expresion ENDL
+    | estructuraControl
+    | ID:id OPEN_PAREN argumentos CLOSE_PAREN ENDL
+    | sentenciaIO
+    | RETURN expresion ENDL
+    | BREAK ENDL
+    ;
+
+/* Declaraciones locales */
+declaracionLocal ::= LOCAL ID:id tipo ENDL
+    | LOCAL ID:id tipo ASSIGN expresion ENDL
+    | LOCAL ID:id array ASSIGN OPEN_BLOCK inicializacionArray CLOSE_BLOCK ENDL
+    ;
+
+/* Inicialización de arrays */
+inicializacionArray ::= filaArray
+    | inicializacionArray COMMA filaArray
+    ;
+
+filaArray ::= OPEN_BLOCK listaValores CLOSE_BLOCK
+    ;
+
+listaValores ::= expresion
+    | listaValores COMMA expresion
+    ;
+
+/* Asignaciones */
+asignacion ::= ID:id ASSIGN expresion ENDL
+    | accesoArray ASSIGN expresion ENDL
+    ;
+
+accesoArray ::= ID:id OPEN_BRACKET expresion COMMA expresion CLOSE_BRACKET
+    ;
+
+/* Expresiones con precedencia */
+expresion ::= disyuncion
+    ;
+
+disyuncion ::= disyuncion OR conjuncion
+    | conjuncion
+    ;
+
+conjuncion ::= conjuncion AND negacion
+    | negacion
+    ;
+
+negacion ::= NOT negacion
+    | comparacion
+    ;
+
+comparacion ::= aditiva opRel aditiva
+    | aditiva
+    ;
+
+opRel ::= LT
+    | LTEQ
+    | GT
+    | GTEQ
+    | EQEQ
+    | NEQ
+    ;
+
+aditiva ::= aditiva PLUS multiplicativa
+    | aditiva MINUS multiplicativa
+    | multiplicativa
+    ;
+
+multiplicativa ::= multiplicativa MULT potencia
+    | multiplicativa DIV potencia
+    | multiplicativa INT_DIV potencia
+    | multiplicativa MOD potencia
+    | potencia
+    ;
+
+potencia ::= unaria POWER potencia
+    | unaria
+    ;
+
+unaria ::= MINUS unaria
+    | opUnario ID:id
+    | primaria
+    ;
+
+opUnario ::= INCREMENT
+    | DECREMENT
+    ;
+
+primaria ::= OPEN_PAREN expresion CLOSE_PAREN
+    | ID:id OPEN_PAREN argumentos CLOSE_PAREN
+    | ID:id
+    | literal
+    | accesoArray
+    ;
+
+/* Literales */
+literal ::= INT_LITERAL:val
+    | FLOAT_LITERAL:val
+    | literalBooleano
+    | CHAR_LITERAL:val
+    | STRING_LITERAL:val
+    ;
+
+literalBooleano ::= TRUE
+    | FALSE
+    ;
+
+/* Estructuras de control */
+estructuraControl ::= decideOf
+    | loop
+    | forLoop
+    ;
+
+decideOf ::= DECIDE OF casosDecide casoElseOpt END DECIDE ENDL
+    ;
+
+casosDecide ::= caso
+    | casosDecide caso
+    ;
+
+caso ::= expresion ARROW OPEN_BLOCK sentencias CLOSE_BLOCK
+    ;
+
+casoElseOpt ::= ELSE ARROW OPEN_BLOCK sentencias CLOSE_BLOCK
+    | /* empty */
+    ;
+
+loop ::= LOOP sentencias EXIT WHEN expresion ENDL sentencias END LOOP ENDL
+    ;
+
+forLoop ::= FOR OPEN_PAREN inicializacionFor SEMICOLON expresion SEMICOLON actualizacionFor CLOSE_PAREN OPEN_BLOCK sentencias CLOSE_BLOCK
+    ;
+
+inicializacionFor ::= ID:id ASSIGN expresion
+    | /* empty */
+    ;
+
+actualizacionFor ::= ID:id ASSIGN expresion
+    | opUnario ID:id
+    | /* empty */
+    ;
+
+/* Entrada/Salida */
+sentenciaIO ::= SHOW OPEN_PAREN expresion CLOSE_PAREN ENDL
+    | GET OPEN_PAREN ID:id CLOSE_PAREN ENDL
+    ;
+
+argumentos ::= listaExpresiones
+    | /* empty */
+    ;
+
+listaExpresiones ::= expresion
+    | listaExpresiones COMMA expresion
+    ;
