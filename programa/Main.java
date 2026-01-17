@@ -27,11 +27,11 @@ public class Main {
      */
     public static void main(String[] args) {
         while (true) {
-            System.out.println("\n----- Menu de análisis léxico -----");
+            System.out.println("\n----- Menu de análisis -----");
             System.out.println("1. Generar Lexer.java, Parser.java y sym.java");
             System.out.println("2. Realizar Análisis Léxico");
+            System.out.println("3. Realizar Análisis Sintáctico");
             System.out.println("0. Salir");
-            System.out.print("Seleccione una opción: ");
             
             String opcion = sc.nextLine();
 
@@ -42,12 +42,50 @@ public class Main {
                 case "2":
                     menuAnalisisLexico();
                     break;
+                case "3":
+                    menuAnalisisSintactico();
+                    break;
                 case "0":
                     System.out.println("Saliendo...");
                     return;
                 default:
                     System.out.println("Opción no válida.");
             }
+        }
+    }
+
+    private static void menuAnalisisSintactico() {
+        File folder = new File(RUTA_PRUEBAS);
+        File[] listaArchivos = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
+        
+        if (listaArchivos == null || listaArchivos.length == 0) {
+            System.err.println("Error: No hay archivos .txt en " + RUTA_PRUEBAS);
+            return;
+        }
+        
+        System.out.println("\n--- Lista de archivos disponibles ---");
+        System.out.println("0. ANALIZAR TODOS");
+        for (int i = 0; i < listaArchivos.length; i++) {
+            System.out.println((i + 1) + ". " + listaArchivos[i].getName());
+        }
+        
+        System.out.print("Escoja una opción: ");
+        int eleccion;
+        try {
+            eleccion = Integer.parseInt(sc.nextLine());
+        } catch (Exception e) {
+            System.out.println("Entrada inválida");
+            return;
+        }
+    
+        if (eleccion == 0) {
+            for (File f : listaArchivos) {
+                ejecutarParser(f);
+            }
+        } else if (eleccion > 0 && eleccion <= listaArchivos.length) {
+            ejecutarParser(listaArchivos[eleccion - 1]);
+        } else {
+            System.out.println("Opción fuera de rango");
         }
     }
 
@@ -223,6 +261,65 @@ public class Main {
             System.err.println("Error: No están los archivos del Lexer. Use la opcion 1 primero.");
         } catch (Exception e) {
             System.err.println("Error analizando " + archivoFuente.getName() + ": " + e.getMessage());
+        }
+    }
+
+    private static void ejecutarParser(File archivoFuente) {
+        String nombreSinExt = archivoFuente.getName().replace(".txt", "");
+        String rutaReporteArbol = RUTA_SALIDA + "arbol_" + nombreSinExt + ".txt";
+        
+        try {
+            System.out.println("\n========== ANÁLISIS SINTÁCTICO ==========");
+            System.out.println("Analizando: " + archivoFuente.getName() + "...");
+            
+            // Leer el archivo con UTF-8
+            Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(archivoFuente), "UTF-8"));
+            
+            // Cargar las clases dinámicamente
+            Class<?> lexerClass = Class.forName("parserlexer.Lexer");
+            Object scanner = lexerClass.getConstructor(Reader.class).newInstance(reader);
+            
+            Class<?> parserClass = Class.forName("parserlexer.Parser");
+            Object parser = parserClass.getConstructor(java_cup.runtime.Scanner.class).newInstance(scanner);
+            
+            // Ejecutar el parser
+            parserClass.getMethod("parse").invoke(parser);
+            
+            // Obtener el árbol sintáctico
+            java.lang.reflect.Field campoArbol = parserClass.getField("arbolSintactico");
+            Object arbol = campoArbol.get(null);
+            
+            if (arbol != null) {
+                System.out.println("\n========== ÁRBOL SINTÁCTICO ==========");
+                
+                // Imprimir en consola
+                arbol.getClass().getMethod("arbol").invoke(arbol);
+                
+                // Guardar en archivo
+                PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(rutaReporteArbol), "UTF-8"));
+                writer.println("ÁRBOL SINTÁCTICO: " + archivoFuente.getName());
+                writer.println("======================================================================");
+                writer.println(arbol.toString());
+                writer.println("======================================================================");
+                
+                // Estadísticas del árbol
+                int numNodos = (int) arbol.getClass().getMethod("contarNodos").invoke(arbol);
+                int altura = (int) arbol.getClass().getMethod("getAltura").invoke(arbol);
+                
+                writer.println("\nESTADÍSTICAS:");
+                writer.println("- Número total de nodos: " + numNodos);
+                writer.println("- Altura del árbol: " + altura);
+                
+                writer.close();
+                
+                System.out.println("\n✓ Árbol sintáctico generado: " + rutaReporteArbol);
+            } else {
+                System.err.println("✗ No se pudo construir el árbol sintáctico");
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Error en análisis sintáctico: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

@@ -1,0 +1,1602 @@
+ÁRBOL SINTÁCTICO: prueba_extensa.txt
+======================================================================
+programa
+  declaracionesGlobales
+    declaracionGlobal
+      world (WORLD)
+      x (ID)
+      tipo
+        int (INT)
+      endl (ENDL)
+    declaracionGlobal
+      world (WORLD)
+      temperatura (ID)
+      tipo
+        float (FLOAT)
+      endl (ENDL)
+    declaracionGlobal
+      world (WORLD)
+      activo (ID)
+      tipo
+        bool (BOOL)
+      endl (ENDL)
+    declaracionGlobal
+      world (WORLD)
+      inicial (ID)
+      tipo
+        char (CHAR)
+      endl (ENDL)
+    declaracionGlobal
+      world (WORLD)
+      mensaje (ID)
+      tipo
+        string (STRING)
+      endl (ENDL)
+    declaracionGlobal
+      world (WORLD)
+      contador (ID)
+      tipo
+        int (INT)
+      = (ASSIGN)
+      literal
+        0 (INT_LITERAL)
+      endl (ENDL)
+    declaracionGlobal
+      world (WORLD)
+      pi (ID)
+      tipo
+        float (FLOAT)
+      = (ASSIGN)
+      literal
+        3.14 (FLOAT_LITERAL)
+      endl (ENDL)
+    declaracionGlobal
+      world (WORLD)
+      estaEncendido (ID)
+      tipo
+        bool (BOOL)
+      = (ASSIGN)
+      literalBooleano
+        true (TRUE)
+      endl (ENDL)
+    declaracionGlobal
+      world (WORLD)
+      letra (ID)
+      tipo
+        char (CHAR)
+      = (ASSIGN)
+      literal
+        'A' (CHAR_LITERAL)
+      endl (ENDL)
+    declaracionGlobal
+      world (WORLD)
+      saludo (ID)
+      tipo
+        string (STRING)
+      = (ASSIGN)
+      literal
+        "Hola Mundo" (STRING_LITERAL)
+      endl (ENDL)
+    declaracionGlobal
+      world (WORLD)
+      matrizEnteros (ID)
+      array
+        int (INT)
+        [ (OPEN_BRACKET)
+        literal
+          3 (INT_LITERAL)
+        , (COMMA)
+        literal
+          3 (INT_LITERAL)
+        ] (CLOSE_BRACKET)
+      = (ASSIGN)
+      ¡ (OPEN_BLOCK)
+      inicializacionArray
+        filaArray
+          ¡ (OPEN_BLOCK)
+          listaValores
+            literal
+              1 (INT_LITERAL)
+            , (COMMA)
+            literal
+              2 (INT_LITERAL)
+            , (COMMA)
+            literal
+              3 (INT_LITERAL)
+          ! (CLOSE_BLOCK)
+        , (COMMA)
+        filaArray
+          ¡ (OPEN_BLOCK)
+          listaValores
+            literal
+              4 (INT_LITERAL)
+            , (COMMA)
+            literal
+              5 (INT_LITERAL)
+            , (COMMA)
+            literal
+              6 (INT_LITERAL)
+          ! (CLOSE_BLOCK)
+        , (COMMA)
+        filaArray
+          ¡ (OPEN_BLOCK)
+          listaValores
+            literal
+              7 (INT_LITERAL)
+            , (COMMA)
+            literal
+              8 (INT_LITERAL)
+            , (COMMA)
+            literal
+              9 (INT_LITERAL)
+          ! (CLOSE_BLOCK)
+      ! (CLOSE_BLOCK)
+      endl (ENDL)
+    declaracionGlobal
+      world (WORLD)
+      tablaBool (ID)
+      array
+        char (CHAR)
+        [ (OPEN_BRACKET)
+        literal
+          2 (INT_LITERAL)
+        , (COMMA)
+        literal
+          2 (INT_LITERAL)
+        ] (CLOSE_BRACKET)
+      = (ASSIGN)
+      ¡ (OPEN_BLOCK)
+      inicializacionArray
+        filaArray
+          ¡ (OPEN_BLOCK)
+          listaValores
+            literal
+              'a' (CHAR_LITERAL)
+            , (COMMA)
+            literal
+              'b' (CHAR_LITERAL)
+          ! (CLOSE_BLOCK)
+        , (COMMA)
+        filaArray
+          ¡ (OPEN_BLOCK)
+          listaValores
+            literal
+              'c' (CHAR_LITERAL)
+            , (COMMA)
+            literal
+              'd' (CHAR_LITERAL)
+          ! (CLOSE_BLOCK)
+      ! (CLOSE_BLOCK)
+      endl (ENDL)
+  navidad
+    navidad (NAVIDAD)
+    coal (COAL)
+    ¡ (OPEN_BLOCK)
+    sentencias
+      declaracionLocal
+        local (LOCAL)
+        y (ID)
+        tipo
+          int (INT)
+        endl (ENDL)
+      declaracionLocal
+        local (LOCAL)
+        suma (ID)
+        tipo
+          int (INT)
+        = (ASSIGN)
+        aditiva
+          literal
+            10 (INT_LITERAL)
+          + (PLUS)
+          literal
+            5 (INT_LITERAL)
+        endl (ENDL)
+      declaracionLocal
+        local (LOCAL)
+        resultado (ID)
+        tipo
+          float (FLOAT)
+        = (ASSIGN)
+        multiplicativa
+          literal
+            2.5 (FLOAT_LITERAL)
+          * (MULT)
+          literal
+            4.0 (FLOAT_LITERAL)
+        endl (ENDL)
+      declaracionLocal
+        local (LOCAL)
+        grid (ID)
+        array
+          int (INT)
+          [ (OPEN_BRACKET)
+          literal
+            2 (INT_LITERAL)
+          , (COMMA)
+          literal
+            2 (INT_LITERAL)
+          ] (CLOSE_BRACKET)
+        = (ASSIGN)
+        ¡ (OPEN_BLOCK)
+        inicializacionArray
+          filaArray
+            ¡ (OPEN_BLOCK)
+            listaValores
+              literal
+                10 (INT_LITERAL)
+              , (COMMA)
+              literal
+                20 (INT_LITERAL)
+            ! (CLOSE_BLOCK)
+          , (COMMA)
+          filaArray
+            ¡ (OPEN_BLOCK)
+            listaValores
+              literal
+                30 (INT_LITERAL)
+              , (COMMA)
+              literal
+                40 (INT_LITERAL)
+            ! (CLOSE_BLOCK)
+        ! (CLOSE_BLOCK)
+        endl (ENDL)
+      asignacion
+        suma (ID)
+        = (ASSIGN)
+        aditiva
+          aditiva
+            literal
+              5 (INT_LITERAL)
+            + (PLUS)
+            literal
+              3 (INT_LITERAL)
+          - (MINUS)
+          literal
+            2 (INT_LITERAL)
+        endl (ENDL)
+      asignacion
+        resultado (ID)
+        = (ASSIGN)
+        multiplicativa
+          multiplicativa
+            literal
+              10 (INT_LITERAL)
+            * (MULT)
+            literal
+              2 (INT_LITERAL)
+          / (DIV)
+          literal
+            4 (INT_LITERAL)
+        endl (ENDL)
+      asignacion
+        y (ID)
+        = (ASSIGN)
+        multiplicativa
+          literal
+            17 (INT_LITERAL)
+          // (INT_DIV)
+          literal
+            5 (INT_LITERAL)
+        endl (ENDL)
+      asignacion
+        y (ID)
+        = (ASSIGN)
+        multiplicativa
+          literal
+            17 (INT_LITERAL)
+          % (MOD)
+          literal
+            5 (INT_LITERAL)
+        endl (ENDL)
+      asignacion
+        y (ID)
+        = (ASSIGN)
+        potencia
+          literal
+            2 (INT_LITERAL)
+          ^ (POWER)
+          literal
+            3 (INT_LITERAL)
+        endl (ENDL)
+      asignacion
+        y (ID)
+        = (ASSIGN)
+        multiplicativa
+          primaria
+            ¿ (OPEN_PAREN)
+            aditiva
+              literal
+                5 (INT_LITERAL)
+              + (PLUS)
+              literal
+                3 (INT_LITERAL)
+            ? (CLOSE_PAREN)
+          * (MULT)
+          potencia
+            literal
+              2 (INT_LITERAL)
+            ^ (POWER)
+            literal
+              2 (INT_LITERAL)
+        endl (ENDL)
+      asignacion
+        y (ID)
+        = (ASSIGN)
+        unaria
+          - (MINUS)
+          literal
+            10 (INT_LITERAL)
+        endl (ENDL)
+      sentencia
+        unaria
+          ++ (INCREMENT)
+          contador (ID)
+        endl (ENDL)
+      sentencia
+        unaria
+          -- (DECREMENT)
+          contador (ID)
+        endl (ENDL)
+      asignacion
+        activo (ID)
+        = (ASSIGN)
+        comparacion
+          literal
+            5 (INT_LITERAL)
+          < (LT)
+          literal
+            10 (INT_LITERAL)
+        endl (ENDL)
+      asignacion
+        activo (ID)
+        = (ASSIGN)
+        comparacion
+          literal
+            5 (INT_LITERAL)
+          <= (LTEQ)
+          literal
+            10 (INT_LITERAL)
+        endl (ENDL)
+      asignacion
+        activo (ID)
+        = (ASSIGN)
+        comparacion
+          literal
+            10 (INT_LITERAL)
+          > (GT)
+          literal
+            5 (INT_LITERAL)
+        endl (ENDL)
+      asignacion
+        activo (ID)
+        = (ASSIGN)
+        comparacion
+          literal
+            10 (INT_LITERAL)
+          >= (GTEQ)
+          literal
+            5 (INT_LITERAL)
+        endl (ENDL)
+      asignacion
+        activo (ID)
+        = (ASSIGN)
+        comparacion
+          literal
+            5 (INT_LITERAL)
+          == (EQEQ)
+          literal
+            5 (INT_LITERAL)
+        endl (ENDL)
+      asignacion
+        activo (ID)
+        = (ASSIGN)
+        comparacion
+          literal
+            5 (INT_LITERAL)
+          Σ= (NEQ)
+          literal
+            3 (INT_LITERAL)
+        endl (ENDL)
+      asignacion
+        activo (ID)
+        = (ASSIGN)
+        conjuncion
+          literalBooleano
+            true (TRUE)
+          @ (AND)
+          literalBooleano
+            false (FALSE)
+        endl (ENDL)
+      asignacion
+        activo (ID)
+        = (ASSIGN)
+        disyuncion
+          literalBooleano
+            true (TRUE)
+          ~ (OR)
+          literalBooleano
+            false (FALSE)
+        endl (ENDL)
+      asignacion
+        activo (ID)
+        = (ASSIGN)
+        negacion
+          Σ (NOT)
+          literalBooleano
+            false (FALSE)
+        endl (ENDL)
+      asignacion
+        activo (ID)
+        = (ASSIGN)
+        disyuncion
+          conjuncion
+            primaria
+              ¿ (OPEN_PAREN)
+              comparacion
+                literal
+                  5 (INT_LITERAL)
+                > (GT)
+                literal
+                  3 (INT_LITERAL)
+              ? (CLOSE_PAREN)
+            @ (AND)
+            primaria
+              ¿ (OPEN_PAREN)
+              comparacion
+                literal
+                  10 (INT_LITERAL)
+                < (LT)
+                literal
+                  20 (INT_LITERAL)
+              ? (CLOSE_PAREN)
+          ~ (OR)
+          negacion
+            Σ (NOT)
+            literalBooleano
+              false (FALSE)
+        endl (ENDL)
+      asignacion
+        y (ID)
+        = (ASSIGN)
+        accesoArray
+          matrizEnteros (ID)
+          [ (OPEN_BRACKET)
+          literal
+            0 (INT_LITERAL)
+          , (COMMA)
+          literal
+            0 (INT_LITERAL)
+          ] (CLOSE_BRACKET)
+        endl (ENDL)
+      asignacion
+        accesoArray
+          matrizEnteros (ID)
+          [ (OPEN_BRACKET)
+          literal
+            1 (INT_LITERAL)
+          , (COMMA)
+          literal
+            1 (INT_LITERAL)
+          ] (CLOSE_BRACKET)
+        = (ASSIGN)
+        literal
+          100 (INT_LITERAL)
+        endl (ENDL)
+      asignacion
+        accesoArray
+          grid (ID)
+          [ (OPEN_BRACKET)
+          literal
+            0 (INT_LITERAL)
+          , (COMMA)
+          literal
+            1 (INT_LITERAL)
+          ] (CLOSE_BRACKET)
+        = (ASSIGN)
+        aditiva
+          accesoArray
+            matrizEnteros (ID)
+            [ (OPEN_BRACKET)
+            literal
+              2 (INT_LITERAL)
+            , (COMMA)
+            literal
+              2 (INT_LITERAL)
+            ] (CLOSE_BRACKET)
+          + (PLUS)
+          literal
+            5 (INT_LITERAL)
+        endl (ENDL)
+      sentenciaIO
+        show (SHOW)
+        ¿ (OPEN_PAREN)
+        literal
+          "Prueba de impresión" (STRING_LITERAL)
+        ? (CLOSE_PAREN)
+        endl (ENDL)
+      sentenciaIO
+        show (SHOW)
+        ¿ (OPEN_PAREN)
+        literal
+          42 (INT_LITERAL)
+        ? (CLOSE_PAREN)
+        endl (ENDL)
+      sentenciaIO
+        show (SHOW)
+        ¿ (OPEN_PAREN)
+        literal
+          3.14 (FLOAT_LITERAL)
+        ? (CLOSE_PAREN)
+        endl (ENDL)
+      sentenciaIO
+        show (SHOW)
+        ¿ (OPEN_PAREN)
+        literalBooleano
+          true (TRUE)
+        ? (CLOSE_PAREN)
+        endl (ENDL)
+      sentenciaIO
+        show (SHOW)
+        ¿ (OPEN_PAREN)
+        literal
+          'X' (CHAR_LITERAL)
+        ? (CLOSE_PAREN)
+        endl (ENDL)
+      sentenciaIO
+        show (SHOW)
+        ¿ (OPEN_PAREN)
+        primaria
+          contador (ID)
+        ? (CLOSE_PAREN)
+        endl (ENDL)
+      sentenciaIO
+        show (SHOW)
+        ¿ (OPEN_PAREN)
+        primaria
+          pi (ID)
+        ? (CLOSE_PAREN)
+        endl (ENDL)
+      sentenciaIO
+        show (SHOW)
+        ¿ (OPEN_PAREN)
+        aditiva
+          literal
+            5 (INT_LITERAL)
+          + (PLUS)
+          literal
+            3 (INT_LITERAL)
+        ? (CLOSE_PAREN)
+        endl (ENDL)
+      sentenciaIO
+        show (SHOW)
+        ¿ (OPEN_PAREN)
+        accesoArray
+          matrizEnteros (ID)
+          [ (OPEN_BRACKET)
+          literal
+            0 (INT_LITERAL)
+          , (COMMA)
+          literal
+            0 (INT_LITERAL)
+          ] (CLOSE_BRACKET)
+        ? (CLOSE_PAREN)
+        endl (ENDL)
+      sentenciaIO
+        get (GET)
+        ¿ (OPEN_PAREN)
+        x (ID)
+        ? (CLOSE_PAREN)
+        endl (ENDL)
+      sentenciaIO
+        get (GET)
+        ¿ (OPEN_PAREN)
+        temperatura (ID)
+        ? (CLOSE_PAREN)
+        endl (ENDL)
+      decideOf
+        decide (DECIDE)
+        of (OF)
+        casosDecide
+          caso
+            comparacion
+              primaria
+                x (ID)
+              > (GT)
+              literal
+                10 (INT_LITERAL)
+            -> (ARROW)
+            ¡ (OPEN_BLOCK)
+            sentencias
+              sentenciaIO
+                show (SHOW)
+                ¿ (OPEN_PAREN)
+                literal
+                  "X es mayor a 10" (STRING_LITERAL)
+                ? (CLOSE_PAREN)
+                endl (ENDL)
+            ! (CLOSE_BLOCK)
+          caso
+            comparacion
+              primaria
+                x (ID)
+              < (LT)
+              literal
+                10 (INT_LITERAL)
+            -> (ARROW)
+            ¡ (OPEN_BLOCK)
+            sentencias
+              sentenciaIO
+                show (SHOW)
+                ¿ (OPEN_PAREN)
+                literal
+                  "X es menor a 10" (STRING_LITERAL)
+                ? (CLOSE_PAREN)
+                endl (ENDL)
+            ! (CLOSE_BLOCK)
+        casoElseOpt
+          else (ELSE)
+          -> (ARROW)
+          ¡ (OPEN_BLOCK)
+          sentencias
+            sentenciaIO
+              show (SHOW)
+              ¿ (OPEN_PAREN)
+              literal
+                "X es igual a 10" (STRING_LITERAL)
+              ? (CLOSE_PAREN)
+              endl (ENDL)
+          ! (CLOSE_BLOCK)
+        end (END)
+        decide (DECIDE)
+        endl (ENDL)
+      decideOf
+        decide (DECIDE)
+        of (OF)
+        casosDecide
+          caso
+            comparacion
+              primaria
+                activo (ID)
+              == (EQEQ)
+              literalBooleano
+                true (TRUE)
+            -> (ARROW)
+            ¡ (OPEN_BLOCK)
+            sentencias
+              sentenciaIO
+                show (SHOW)
+                ¿ (OPEN_PAREN)
+                literal
+                  "Está activo" (STRING_LITERAL)
+                ? (CLOSE_PAREN)
+                endl (ENDL)
+            ! (CLOSE_BLOCK)
+        end (END)
+        decide (DECIDE)
+        endl (ENDL)
+      asignacion
+        y (ID)
+        = (ASSIGN)
+        literal
+          0 (INT_LITERAL)
+        endl (ENDL)
+      loop
+        loop (LOOP)
+        sentencias
+          sentenciaIO
+            show (SHOW)
+            ¿ (OPEN_PAREN)
+            primaria
+              y (ID)
+            ? (CLOSE_PAREN)
+            endl (ENDL)
+          asignacion
+            y (ID)
+            = (ASSIGN)
+            aditiva
+              primaria
+                y (ID)
+              + (PLUS)
+              literal
+                1 (INT_LITERAL)
+            endl (ENDL)
+        exit (EXIT)
+        when (WHEN)
+        comparacion
+          primaria
+            y (ID)
+          > (GT)
+          literal
+            5 (INT_LITERAL)
+        endl (ENDL)
+        sentencias
+          sentenciaIO
+            show (SHOW)
+            ¿ (OPEN_PAREN)
+            literal
+              "Iteración" (STRING_LITERAL)
+            ? (CLOSE_PAREN)
+            endl (ENDL)
+        end (END)
+        loop (LOOP)
+        endl (ENDL)
+      forLoop
+        for (FOR)
+        ¿ (OPEN_PAREN)
+        inicializacionFor
+          y (ID)
+          = (ASSIGN)
+          literal
+            0 (INT_LITERAL)
+        ; (SEMICOLON)
+        comparacion
+          primaria
+            y (ID)
+          < (LT)
+          literal
+            10 (INT_LITERAL)
+        ; (SEMICOLON)
+        actualizacionFor
+          ++ (INCREMENT)
+          y (ID)
+        ? (CLOSE_PAREN)
+        ¡ (OPEN_BLOCK)
+        sentencias
+          sentenciaIO
+            show (SHOW)
+            ¿ (OPEN_PAREN)
+            primaria
+              y (ID)
+            ? (CLOSE_PAREN)
+            endl (ENDL)
+        ! (CLOSE_BLOCK)
+      forLoop
+        for (FOR)
+        ¿ (OPEN_PAREN)
+        inicializacionFor
+          y (ID)
+          = (ASSIGN)
+          literal
+            10 (INT_LITERAL)
+        ; (SEMICOLON)
+        comparacion
+          primaria
+            y (ID)
+          > (GT)
+          literal
+            0 (INT_LITERAL)
+        ; (SEMICOLON)
+        actualizacionFor
+          -- (DECREMENT)
+          y (ID)
+        ? (CLOSE_PAREN)
+        ¡ (OPEN_BLOCK)
+        sentencias
+          sentenciaIO
+            show (SHOW)
+            ¿ (OPEN_PAREN)
+            primaria
+              y (ID)
+            ? (CLOSE_PAREN)
+            endl (ENDL)
+        ! (CLOSE_BLOCK)
+      asignacion
+        y (ID)
+        = (ASSIGN)
+        literal
+          0 (INT_LITERAL)
+        endl (ENDL)
+      forLoop
+        for (FOR)
+        ¿ (OPEN_PAREN)
+        ; (SEMICOLON)
+        comparacion
+          primaria
+            y (ID)
+          < (LT)
+          literal
+            5 (INT_LITERAL)
+        ; (SEMICOLON)
+        actualizacionFor
+          ++ (INCREMENT)
+          y (ID)
+        ? (CLOSE_PAREN)
+        ¡ (OPEN_BLOCK)
+        sentencias
+          sentenciaIO
+            show (SHOW)
+            ¿ (OPEN_PAREN)
+            primaria
+              y (ID)
+            ? (CLOSE_PAREN)
+            endl (ENDL)
+        ! (CLOSE_BLOCK)
+      asignacion
+        y (ID)
+        = (ASSIGN)
+        literal
+          0 (INT_LITERAL)
+        endl (ENDL)
+      forLoop
+        for (FOR)
+        ¿ (OPEN_PAREN)
+        ; (SEMICOLON)
+        comparacion
+          primaria
+            y (ID)
+          < (LT)
+          literal
+            5 (INT_LITERAL)
+        ; (SEMICOLON)
+        ? (CLOSE_PAREN)
+        ¡ (OPEN_BLOCK)
+        sentencias
+          sentenciaIO
+            show (SHOW)
+            ¿ (OPEN_PAREN)
+            primaria
+              y (ID)
+            ? (CLOSE_PAREN)
+            endl (ENDL)
+          asignacion
+            y (ID)
+            = (ASSIGN)
+            aditiva
+              primaria
+                y (ID)
+              + (PLUS)
+              literal
+                1 (INT_LITERAL)
+            endl (ENDL)
+        ! (CLOSE_BLOCK)
+      loop
+        loop (LOOP)
+        sentencias
+          asignacion
+            y (ID)
+            = (ASSIGN)
+            aditiva
+              primaria
+                y (ID)
+              + (PLUS)
+              literal
+                1 (INT_LITERAL)
+            endl (ENDL)
+        exit (EXIT)
+        when (WHEN)
+        comparacion
+          primaria
+            y (ID)
+          > (GT)
+          literal
+            3 (INT_LITERAL)
+        endl (ENDL)
+        sentencias
+          decideOf
+            decide (DECIDE)
+            of (OF)
+            casosDecide
+              caso
+                comparacion
+                  primaria
+                    y (ID)
+                  == (EQEQ)
+                  literal
+                    2 (INT_LITERAL)
+                -> (ARROW)
+                ¡ (OPEN_BLOCK)
+                sentencias
+                  sentencia
+                    break (BREAK)
+                    endl (ENDL)
+                ! (CLOSE_BLOCK)
+            end (END)
+            decide (DECIDE)
+            endl (ENDL)
+        end (END)
+        loop (LOOP)
+        endl (ENDL)
+      sentencia
+        imprimirMensaje (ID)
+        ¿ (OPEN_PAREN)
+        ? (CLOSE_PAREN)
+        endl (ENDL)
+      asignacion
+        y (ID)
+        = (ASSIGN)
+        primaria
+          sumar (ID)
+          ¿ (OPEN_PAREN)
+          listaExpresiones
+            literal
+              5 (INT_LITERAL)
+            , (COMMA)
+            literal
+              3 (INT_LITERAL)
+          ? (CLOSE_PAREN)
+        endl (ENDL)
+      asignacion
+        resultado (ID)
+        = (ASSIGN)
+        primaria
+          multiplicar (ID)
+          ¿ (OPEN_PAREN)
+          listaExpresiones
+            literal
+              2.5 (FLOAT_LITERAL)
+            , (COMMA)
+            literal
+              4.0 (FLOAT_LITERAL)
+          ? (CLOSE_PAREN)
+        endl (ENDL)
+      asignacion
+        y (ID)
+        = (ASSIGN)
+        primaria
+          sumar (ID)
+          ¿ (OPEN_PAREN)
+          listaExpresiones
+            aditiva
+              primaria
+                x (ID)
+              + (PLUS)
+              literal
+                1 (INT_LITERAL)
+            , (COMMA)
+            multiplicativa
+              primaria
+                contador (ID)
+              * (MULT)
+              literal
+                2 (INT_LITERAL)
+          ? (CLOSE_PAREN)
+        endl (ENDL)
+      asignacion
+        y (ID)
+        = (ASSIGN)
+        primaria
+          sumar (ID)
+          ¿ (OPEN_PAREN)
+          listaExpresiones
+            primaria
+              sumar (ID)
+              ¿ (OPEN_PAREN)
+              listaExpresiones
+                literal
+                  1 (INT_LITERAL)
+                , (COMMA)
+                literal
+                  2 (INT_LITERAL)
+              ? (CLOSE_PAREN)
+            , (COMMA)
+            literal
+              3 (INT_LITERAL)
+          ? (CLOSE_PAREN)
+        endl (ENDL)
+      asignacion
+        y (ID)
+        = (ASSIGN)
+        aditiva
+          multiplicativa
+            primaria
+              sumar (ID)
+              ¿ (OPEN_PAREN)
+              listaExpresiones
+                literal
+                  5 (INT_LITERAL)
+                , (COMMA)
+                literal
+                  3 (INT_LITERAL)
+              ? (CLOSE_PAREN)
+            * (MULT)
+            literal
+              2 (INT_LITERAL)
+          + (PLUS)
+          primaria
+            restar (ID)
+            ¿ (OPEN_PAREN)
+            listaExpresiones
+              literal
+                10 (INT_LITERAL)
+              , (COMMA)
+              literal
+                5 (INT_LITERAL)
+            ? (CLOSE_PAREN)
+        endl (ENDL)
+    ! (CLOSE_BLOCK)
+  declaracionesFunciones
+    declaracionFuncion
+      gift (GIFT)
+      imprimirMensaje (ID)
+      ¿ (OPEN_PAREN)
+      ? (CLOSE_PAREN)
+      tipo
+        string (STRING)
+      ¡ (OPEN_BLOCK)
+      sentencias
+        sentenciaIO
+          show (SHOW)
+          ¿ (OPEN_PAREN)
+          literal
+            "Mensaje desde función" (STRING_LITERAL)
+          ? (CLOSE_PAREN)
+          endl (ENDL)
+        sentencia
+          return (RETURN)
+          literal
+            "OK" (STRING_LITERAL)
+          endl (ENDL)
+      ! (CLOSE_BLOCK)
+    declaracionFuncion
+      gift (GIFT)
+      sumar (ID)
+      ¿ (OPEN_PAREN)
+      listaParametros
+        parametro
+          a (ID)
+          tipo
+            int (INT)
+        , (COMMA)
+        parametro
+          b (ID)
+          tipo
+            int (INT)
+      ? (CLOSE_PAREN)
+      tipo
+        int (INT)
+      ¡ (OPEN_BLOCK)
+      sentencias
+        declaracionLocal
+          local (LOCAL)
+          resultado (ID)
+          tipo
+            int (INT)
+          = (ASSIGN)
+          aditiva
+            primaria
+              a (ID)
+            + (PLUS)
+            primaria
+              b (ID)
+          endl (ENDL)
+        sentencia
+          return (RETURN)
+          primaria
+            resultado (ID)
+          endl (ENDL)
+      ! (CLOSE_BLOCK)
+    declaracionFuncion
+      gift (GIFT)
+      multiplicar (ID)
+      ¿ (OPEN_PAREN)
+      listaParametros
+        parametro
+          x (ID)
+          tipo
+            float (FLOAT)
+        , (COMMA)
+        parametro
+          y (ID)
+          tipo
+            float (FLOAT)
+      ? (CLOSE_PAREN)
+      tipo
+        float (FLOAT)
+      ¡ (OPEN_BLOCK)
+      sentencias
+        sentencia
+          return (RETURN)
+          multiplicativa
+            primaria
+              x (ID)
+            * (MULT)
+            primaria
+              y (ID)
+          endl (ENDL)
+      ! (CLOSE_BLOCK)
+    declaracionFuncion
+      gift (GIFT)
+      esMayor (ID)
+      ¿ (OPEN_PAREN)
+      listaParametros
+        parametro
+          a (ID)
+          tipo
+            int (INT)
+        , (COMMA)
+        parametro
+          b (ID)
+          tipo
+            int (INT)
+      ? (CLOSE_PAREN)
+      tipo
+        bool (BOOL)
+      ¡ (OPEN_BLOCK)
+      sentencias
+        sentencia
+          return (RETURN)
+          comparacion
+            primaria
+              a (ID)
+            > (GT)
+            primaria
+              b (ID)
+          endl (ENDL)
+      ! (CLOSE_BLOCK)
+    declaracionFuncion
+      gift (GIFT)
+      obtenerLetra (ID)
+      ¿ (OPEN_PAREN)
+      ? (CLOSE_PAREN)
+      tipo
+        char (CHAR)
+      ¡ (OPEN_BLOCK)
+      sentencias
+        sentencia
+          return (RETURN)
+          literal
+            'Z' (CHAR_LITERAL)
+          endl (ENDL)
+      ! (CLOSE_BLOCK)
+    declaracionFuncion
+      gift (GIFT)
+      restar (ID)
+      ¿ (OPEN_PAREN)
+      listaParametros
+        parametro
+          a (ID)
+          tipo
+            int (INT)
+        , (COMMA)
+        parametro
+          b (ID)
+          tipo
+            int (INT)
+      ? (CLOSE_PAREN)
+      tipo
+        int (INT)
+      ¡ (OPEN_BLOCK)
+      sentencias
+        declaracionLocal
+          local (LOCAL)
+          resultado (ID)
+          tipo
+            int (INT)
+          endl (ENDL)
+        decideOf
+          decide (DECIDE)
+          of (OF)
+          casosDecide
+            caso
+              comparacion
+                primaria
+                  a (ID)
+                > (GT)
+                primaria
+                  b (ID)
+              -> (ARROW)
+              ¡ (OPEN_BLOCK)
+              sentencias
+                asignacion
+                  resultado (ID)
+                  = (ASSIGN)
+                  aditiva
+                    primaria
+                      a (ID)
+                    - (MINUS)
+                    primaria
+                      b (ID)
+                  endl (ENDL)
+              ! (CLOSE_BLOCK)
+          casoElseOpt
+            else (ELSE)
+            -> (ARROW)
+            ¡ (OPEN_BLOCK)
+            sentencias
+              asignacion
+                resultado (ID)
+                = (ASSIGN)
+                aditiva
+                  primaria
+                    b (ID)
+                  - (MINUS)
+                  primaria
+                    a (ID)
+                endl (ENDL)
+            ! (CLOSE_BLOCK)
+          end (END)
+          decide (DECIDE)
+          endl (ENDL)
+        sentencia
+          return (RETURN)
+          primaria
+            resultado (ID)
+          endl (ENDL)
+      ! (CLOSE_BLOCK)
+    declaracionFuncion
+      gift (GIFT)
+      factorial (ID)
+      ¿ (OPEN_PAREN)
+      listaParametros
+        parametro
+          n (ID)
+          tipo
+            int (INT)
+      ? (CLOSE_PAREN)
+      tipo
+        int (INT)
+      ¡ (OPEN_BLOCK)
+      sentencias
+        declaracionLocal
+          local (LOCAL)
+          resultado (ID)
+          tipo
+            int (INT)
+          = (ASSIGN)
+          literal
+            1 (INT_LITERAL)
+          endl (ENDL)
+        declaracionLocal
+          local (LOCAL)
+          i (ID)
+          tipo
+            int (INT)
+          = (ASSIGN)
+          literal
+            1 (INT_LITERAL)
+          endl (ENDL)
+        loop
+          loop (LOOP)
+          sentencias
+            asignacion
+              resultado (ID)
+              = (ASSIGN)
+              multiplicativa
+                primaria
+                  resultado (ID)
+                * (MULT)
+                primaria
+                  i (ID)
+              endl (ENDL)
+            asignacion
+              i (ID)
+              = (ASSIGN)
+              aditiva
+                primaria
+                  i (ID)
+                + (PLUS)
+                literal
+                  1 (INT_LITERAL)
+              endl (ENDL)
+          exit (EXIT)
+          when (WHEN)
+          comparacion
+            primaria
+              i (ID)
+            > (GT)
+            primaria
+              n (ID)
+          endl (ENDL)
+          end (END)
+          loop (LOOP)
+          endl (ENDL)
+        sentencia
+          return (RETURN)
+          primaria
+            resultado (ID)
+          endl (ENDL)
+      ! (CLOSE_BLOCK)
+    declaracionFuncion
+      gift (GIFT)
+      sumarHasta (ID)
+      ¿ (OPEN_PAREN)
+      listaParametros
+        parametro
+          limite (ID)
+          tipo
+            int (INT)
+      ? (CLOSE_PAREN)
+      tipo
+        int (INT)
+      ¡ (OPEN_BLOCK)
+      sentencias
+        declaracionLocal
+          local (LOCAL)
+          suma (ID)
+          tipo
+            int (INT)
+          = (ASSIGN)
+          literal
+            0 (INT_LITERAL)
+          endl (ENDL)
+        forLoop
+          for (FOR)
+          ¿ (OPEN_PAREN)
+          inicializacionFor
+            local (LOCAL)
+            i (ID)
+            tipo
+              int (INT)
+            = (ASSIGN)
+            literal
+              1 (INT_LITERAL)
+          ; (SEMICOLON)
+          comparacion
+            primaria
+              i (ID)
+            <= (LTEQ)
+            primaria
+              limite (ID)
+          ; (SEMICOLON)
+          actualizacionFor
+            ++ (INCREMENT)
+            i (ID)
+          ? (CLOSE_PAREN)
+          ¡ (OPEN_BLOCK)
+          sentencias
+            asignacion
+              suma (ID)
+              = (ASSIGN)
+              aditiva
+                primaria
+                  suma (ID)
+                + (PLUS)
+                primaria
+                  i (ID)
+              endl (ENDL)
+          ! (CLOSE_BLOCK)
+        sentencia
+          return (RETURN)
+          primaria
+            suma (ID)
+          endl (ENDL)
+      ! (CLOSE_BLOCK)
+    declaracionFuncion
+      gift (GIFT)
+      sumarMatriz (ID)
+      ¿ (OPEN_PAREN)
+      listaParametros
+        parametro
+          matriz (ID)
+          array
+            int (INT)
+            [ (OPEN_BRACKET)
+            literal
+              3 (INT_LITERAL)
+            , (COMMA)
+            literal
+              3 (INT_LITERAL)
+            ] (CLOSE_BRACKET)
+      ? (CLOSE_PAREN)
+      tipo
+        int (INT)
+      ¡ (OPEN_BLOCK)
+      sentencias
+        declaracionLocal
+          local (LOCAL)
+          suma (ID)
+          tipo
+            int (INT)
+          = (ASSIGN)
+          literal
+            0 (INT_LITERAL)
+          endl (ENDL)
+        declaracionLocal
+          local (LOCAL)
+          i (ID)
+          tipo
+            int (INT)
+          endl (ENDL)
+        declaracionLocal
+          local (LOCAL)
+          j (ID)
+          tipo
+            int (INT)
+          endl (ENDL)
+        forLoop
+          for (FOR)
+          ¿ (OPEN_PAREN)
+          inicializacionFor
+            i (ID)
+            = (ASSIGN)
+            literal
+              0 (INT_LITERAL)
+          ; (SEMICOLON)
+          comparacion
+            primaria
+              i (ID)
+            < (LT)
+            literal
+              3 (INT_LITERAL)
+          ; (SEMICOLON)
+          actualizacionFor
+            ++ (INCREMENT)
+            i (ID)
+          ? (CLOSE_PAREN)
+          ¡ (OPEN_BLOCK)
+          sentencias
+            forLoop
+              for (FOR)
+              ¿ (OPEN_PAREN)
+              inicializacionFor
+                j (ID)
+                = (ASSIGN)
+                literal
+                  0 (INT_LITERAL)
+              ; (SEMICOLON)
+              comparacion
+                primaria
+                  j (ID)
+                < (LT)
+                literal
+                  3 (INT_LITERAL)
+              ; (SEMICOLON)
+              actualizacionFor
+                ++ (INCREMENT)
+                j (ID)
+              ? (CLOSE_PAREN)
+              ¡ (OPEN_BLOCK)
+              sentencias
+                asignacion
+                  suma (ID)
+                  = (ASSIGN)
+                  aditiva
+                    primaria
+                      suma (ID)
+                    + (PLUS)
+                    accesoArray
+                      matriz (ID)
+                      [ (OPEN_BRACKET)
+                      primaria
+                        i (ID)
+                      , (COMMA)
+                      primaria
+                        j (ID)
+                      ] (CLOSE_BRACKET)
+                  endl (ENDL)
+              ! (CLOSE_BLOCK)
+          ! (CLOSE_BLOCK)
+        sentencia
+          return (RETURN)
+          primaria
+            suma (ID)
+          endl (ENDL)
+      ! (CLOSE_BLOCK)
+    declaracionFuncion
+      gift (GIFT)
+      potenciaRecursiva (ID)
+      ¿ (OPEN_PAREN)
+      listaParametros
+        parametro
+          base (ID)
+          tipo
+            int (INT)
+        , (COMMA)
+        parametro
+          exponente (ID)
+          tipo
+            int (INT)
+      ? (CLOSE_PAREN)
+      tipo
+        int (INT)
+      ¡ (OPEN_BLOCK)
+      sentencias
+        decideOf
+          decide (DECIDE)
+          of (OF)
+          casosDecide
+            caso
+              comparacion
+                primaria
+                  exponente (ID)
+                == (EQEQ)
+                literal
+                  0 (INT_LITERAL)
+              -> (ARROW)
+              ¡ (OPEN_BLOCK)
+              sentencias
+                sentencia
+                  return (RETURN)
+                  literal
+                    1 (INT_LITERAL)
+                  endl (ENDL)
+              ! (CLOSE_BLOCK)
+          casoElseOpt
+            else (ELSE)
+            -> (ARROW)
+            ¡ (OPEN_BLOCK)
+            sentencias
+              sentencia
+                return (RETURN)
+                multiplicativa
+                  primaria
+                    base (ID)
+                  * (MULT)
+                  primaria
+                    potenciaRecursiva (ID)
+                    ¿ (OPEN_PAREN)
+                    listaExpresiones
+                      primaria
+                        base (ID)
+                      , (COMMA)
+                      aditiva
+                        primaria
+                          exponente (ID)
+                        - (MINUS)
+                        literal
+                          1 (INT_LITERAL)
+                    ? (CLOSE_PAREN)
+                endl (ENDL)
+            ! (CLOSE_BLOCK)
+          end (END)
+          decide (DECIDE)
+          endl (ENDL)
+        sentencia
+          return (RETURN)
+          literal
+            0 (INT_LITERAL)
+          endl (ENDL)
+      ! (CLOSE_BLOCK)
+    declaracionFuncion
+      gift (GIFT)
+      valorAbsoluto (ID)
+      ¿ (OPEN_PAREN)
+      listaParametros
+        parametro
+          n (ID)
+          tipo
+            int (INT)
+      ? (CLOSE_PAREN)
+      tipo
+        int (INT)
+      ¡ (OPEN_BLOCK)
+      sentencias
+        decideOf
+          decide (DECIDE)
+          of (OF)
+          casosDecide
+            caso
+              comparacion
+                primaria
+                  n (ID)
+                < (LT)
+                literal
+                  0 (INT_LITERAL)
+              -> (ARROW)
+              ¡ (OPEN_BLOCK)
+              sentencias
+                sentencia
+                  return (RETURN)
+                  unaria
+                    - (MINUS)
+                    primaria
+                      n (ID)
+                  endl (ENDL)
+              ! (CLOSE_BLOCK)
+          casoElseOpt
+            else (ELSE)
+            -> (ARROW)
+            ¡ (OPEN_BLOCK)
+            sentencias
+              sentencia
+                return (RETURN)
+                primaria
+                  n (ID)
+                endl (ENDL)
+            ! (CLOSE_BLOCK)
+          end (END)
+          decide (DECIDE)
+          endl (ENDL)
+        sentencia
+          return (RETURN)
+          literal
+            0 (INT_LITERAL)
+          endl (ENDL)
+      ! (CLOSE_BLOCK)
+
+======================================================================
+
+ESTADÍSTICAS:
+- Número total de nodos: 1594
+- Altura del árbol: 14

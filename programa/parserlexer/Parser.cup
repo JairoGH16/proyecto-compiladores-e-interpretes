@@ -10,9 +10,7 @@ import java_cup.runtime.*;
  */
 
 parser code {:
-    // Conectar el parser al scanner (aunque no parseemos aún, es estructura obligatoria)
-    scanner s;
-    Parser(scanner s){ this.s=s; }
+    public static Nodo arbolSintactico = null;  // Almacena el árbol
 
     // Sobrescribir método de reporte de errores
         public void report_error(String message, Object info) {
@@ -41,8 +39,7 @@ parser code {:
 :}
 
 /* Inicialización del scanner */
-init with {: s.init(); :};
-scan with {: return s.next_token(); :};
+init with {: /* No initialization needed */ :};
 
 /* 
  * ----- Definición de Terminales -----
@@ -139,217 +136,781 @@ precedence left ENDL;
 
 start with programa;
 
-/* ========== GRAMÁTICA ========== */
+/* ========== GRAMÁTICA CON CONSTRUCCIÓN DE ÁRBOL ========== */
 
-/* Programa principal */
-programa ::= declaracionesGlobales navidad declaracionesFunciones
-    {: System.out.println("✓ Programa sintácticamente correcto"); :}
+programa ::= declaracionesGlobales:dg navidad:n declaracionesFunciones:df
+    {:
+        Nodo result = new Nodo("programa");
+        if (dg != null) result.addHijo((Nodo)dg);
+        result.addHijo((Nodo)n);
+        if (df != null) result.addHijo((Nodo)df);
+        
+        parser.arbolSintactico = result;
+        System.out.println("✓ Programa sintácticamente correcto");
+        RESULT = (Nodo)result;
+    :}
     ;
 
-/* Declaraciones globales */
 declaracionesGlobales ::= /* empty */
-    | declaracionesGlobales declaracionGlobal
+    {: RESULT = (Nodo)null; :}
+    | declaracionesGlobales:dgs declaracionGlobal:dg
+    {:
+        Nodo result;
+        if (dgs == null) {
+            result = new Nodo("declaracionesGlobales");
+            result.addHijo((Nodo)dg);
+        } else {
+            result = (Nodo)dgs;
+            result.addHijo((Nodo)dg);
+        }
+        RESULT = result;
+    :}
     ;
 
-declaracionGlobal ::= WORLD ID:id tipo ENDL
-    | WORLD ID:id tipo ASSIGN expresion ENDL
-    | WORLD ID:id array ASSIGN OPEN_BLOCK inicializacionArray CLOSE_BLOCK ENDL
+declaracionGlobal ::= WORLD ID:id tipo:t ENDL
+    {:
+        Nodo result = new Nodo("declaracionGlobal");
+        result.addHijo(new Nodo("world", "WORLD"));
+        result.addHijo(new Nodo(id, "ID"));
+        result.addHijo((Nodo)t);
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
+    | WORLD ID:id tipo:t ASSIGN expresion:e ENDL
+    {:
+        Nodo result = new Nodo("declaracionGlobal");
+        result.addHijo(new Nodo("world", "WORLD"));
+        result.addHijo(new Nodo(id, "ID"));
+        result.addHijo((Nodo)t);
+        result.addHijo(new Nodo("=", "ASSIGN"));
+        result.addHijo((Nodo)e);
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
+    | WORLD ID:id array:a ASSIGN OPEN_BLOCK inicializacionArray:ia CLOSE_BLOCK ENDL
+    {:
+        Nodo result = new Nodo("declaracionGlobal");
+        result.addHijo(new Nodo("world", "WORLD"));
+        result.addHijo(new Nodo(id, "ID"));
+        result.addHijo((Nodo)a);
+        result.addHijo(new Nodo("=", "ASSIGN"));
+        result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
+        result.addHijo((Nodo)ia);
+        result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
     ;
 
-/* Main (navidad) */
-navidad ::= COAL NAVIDAD OPEN_BLOCK sentencias CLOSE_BLOCK
+navidad ::= NAVIDAD COAL OPEN_BLOCK sentencias:s CLOSE_BLOCK
+    {:
+        Nodo result = new Nodo("navidad");
+        result.addHijo(new Nodo("navidad", "NAVIDAD"));
+        result.addHijo(new Nodo("coal", "COAL"));
+        result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
+        if (s != null) result.addHijo((Nodo)s);
+        result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
+        RESULT = (Nodo)result;
+    :}
     ;
 
-/* Declaraciones de funciones */
 declaracionesFunciones ::= /* empty */
-    | declaracionesFunciones declaracionFuncion
+    {: RESULT = (Nodo)null; :}
+    | declaracionesFunciones:dfs declaracionFuncion:df
+    {:
+        Nodo result;
+        if (dfs == null) {
+            result = new Nodo("declaracionesFunciones");
+            result.addHijo((Nodo)df);
+        } else {
+            result = (Nodo)dfs;
+            result.addHijo((Nodo)df);
+        }
+        RESULT = result;
+    :}
     ;
 
-declaracionFuncion ::= GIFT ID:id OPEN_PAREN parametros CLOSE_PAREN tipo OPEN_BLOCK sentencias CLOSE_BLOCK
+declaracionFuncion ::= GIFT ID:id OPEN_PAREN parametros:p CLOSE_PAREN tipo:t OPEN_BLOCK sentencias:s CLOSE_BLOCK
+    {:
+        Nodo result = new Nodo("declaracionFuncion");
+        result.addHijo(new Nodo("gift", "GIFT"));
+        result.addHijo(new Nodo(id, "ID"));
+        result.addHijo(new Nodo("¿", "OPEN_PAREN"));
+        if (p != null) result.addHijo((Nodo)p);
+        result.addHijo(new Nodo("?", "CLOSE_PAREN"));
+        result.addHijo((Nodo)t);
+        result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
+        if (s != null) result.addHijo((Nodo)s);
+        result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
+        RESULT = (Nodo)result;
+    :}
     ;
 
-/* Parámetros */
-parametros ::= listaParametros
+parametros ::= listaParametros:lp
+    {: RESULT = (Nodo)lp; :}
     | /* empty */
+    {: RESULT = (Nodo)null; :}
     ;
 
-listaParametros ::= parametro
-    | listaParametros COMMA parametro
+listaParametros ::= parametro:p
+    {:
+        Nodo result = new Nodo("listaParametros");
+        result.addHijo((Nodo)p);
+        RESULT = (Nodo)result;
+    :}
+    | listaParametros:lp COMMA parametro:p
+    {:
+        Nodo lpNodo = (Nodo)lp;
+        lpNodo.addHijo(new Nodo(",", "COMMA"));
+        lpNodo.addHijo((Nodo)p);
+        RESULT = lpNodo;
+    :}
     ;
 
-parametro ::= ID:id tipo
+parametro ::= ID:id tipo:t
+    {:
+        Nodo result = new Nodo("parametro");
+        result.addHijo(new Nodo(id, "ID"));
+        result.addHijo((Nodo)t);
+        RESULT = (Nodo)result;
+    :}
+    | ID:id array:a
+    {:
+        Nodo result = new Nodo("parametro");
+        result.addHijo(new Nodo(id, "ID"));
+        result.addHijo((Nodo)a);
+        RESULT = (Nodo)result;
+    :}
     ;
 
-/* Tipos */
 tipo ::= INT
+    {:
+        Nodo result = new Nodo("tipo");
+        result.addHijo(new Nodo("int", "INT"));
+        RESULT = (Nodo)result;
+    :}
     | FLOAT
+    {:
+        Nodo result = new Nodo("tipo");
+        result.addHijo(new Nodo("float", "FLOAT"));
+        RESULT = (Nodo)result;
+    :}
     | BOOL
+    {:
+        Nodo result = new Nodo("tipo");
+        result.addHijo(new Nodo("bool", "BOOL"));
+        RESULT = (Nodo)result;
+    :}
     | CHAR
+    {:
+        Nodo result = new Nodo("tipo");
+        result.addHijo(new Nodo("char", "CHAR"));
+        RESULT = (Nodo)result;
+    :}
     | STRING
+    {:
+        Nodo result = new Nodo("tipo");
+        result.addHijo(new Nodo("string", "STRING"));
+        RESULT = (Nodo)result;
+    :}
     ;
 
-array ::= INT OPEN_BRACKET expresion COMMA expresion CLOSE_BRACKET
-    | CHAR OPEN_BRACKET expresion COMMA expresion CLOSE_BRACKET
+array ::= INT OPEN_BRACKET expresion:e1 COMMA expresion:e2 CLOSE_BRACKET
+    {:
+        Nodo result = new Nodo("array");
+        result.addHijo(new Nodo("int", "INT"));
+        result.addHijo(new Nodo("[", "OPEN_BRACKET"));
+        result.addHijo((Nodo)e1);
+        result.addHijo(new Nodo(",", "COMMA"));
+        result.addHijo((Nodo)e2);
+        result.addHijo(new Nodo("]", "CLOSE_BRACKET"));
+        RESULT = (Nodo)result;
+    :}
+    | CHAR OPEN_BRACKET expresion:e1 COMMA expresion:e2 CLOSE_BRACKET
+    {:
+        Nodo result = new Nodo("array");
+        result.addHijo(new Nodo("char", "CHAR"));
+        result.addHijo(new Nodo("[", "OPEN_BRACKET"));
+        result.addHijo((Nodo)e1);
+        result.addHijo(new Nodo(",", "COMMA"));
+        result.addHijo((Nodo)e2);
+        result.addHijo(new Nodo("]", "CLOSE_BRACKET"));
+        RESULT = (Nodo)result;
+    :}
     ;
 
-/* Sentencias */
-sentencias ::= sentencia
-            | sentencias sentencia
-            ;
+sentencias ::= /* empty */
+    {: RESULT = (Nodo)null; :}
+    | sentencias:ss sentencia:s
+    {:
+        if (ss == null) {
+            Nodo result = new Nodo("sentencias");
+            result.addHijo((Nodo)s);
+            RESULT = result;
+        } else {
+            Nodo ssNodo = (Nodo)ss;
+            ssNodo.addHijo((Nodo)s);
+            RESULT = ssNodo;
+        }
+    :}
+    ;
 
-
-sentencia ::= declaracionLocal
-    | asignacion
-    | expresion ENDL
-    | estructuraControl
-    | ID:id OPEN_PAREN argumentos CLOSE_PAREN ENDL
-    | sentenciaIO
-    | RETURN expresion ENDL
+sentencia ::= declaracionLocal:dl
+    {: RESULT = (Nodo)dl; :}
+    | asignacion:a
+    {: RESULT = (Nodo)a; :}
+    | expresion:e ENDL
+    {:
+        Nodo result = new Nodo("sentencia");
+        result.addHijo((Nodo)e);
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
+    | estructuraControl:ec
+    {: RESULT = (Nodo)ec; :}
+    | ID:id OPEN_PAREN argumentos:a CLOSE_PAREN ENDL
+    {:
+        Nodo result = new Nodo("sentencia");
+        result.addHijo(new Nodo(id, "ID"));
+        result.addHijo(new Nodo("¿", "OPEN_PAREN"));
+        if (a != null) result.addHijo((Nodo)a);
+        result.addHijo(new Nodo("?", "CLOSE_PAREN"));
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
+    | sentenciaIO:sio
+    {: RESULT = (Nodo)sio; :}
+    | RETURN expresion:e ENDL
+    {:
+        Nodo result = new Nodo("sentencia");
+        result.addHijo(new Nodo("return", "RETURN"));
+        result.addHijo((Nodo)e);
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
     | BREAK ENDL
+    {:
+        Nodo result = new Nodo("sentencia");
+        result.addHijo(new Nodo("break", "BREAK"));
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
     ;
 
-/* Declaraciones locales */
-declaracionLocal ::= LOCAL ID:id tipo ENDL
-    | LOCAL ID:id tipo ASSIGN expresion ENDL
-    | LOCAL ID:id array ASSIGN OPEN_BLOCK inicializacionArray CLOSE_BLOCK ENDL
+declaracionLocal ::= LOCAL ID:id tipo:t ENDL
+    {:
+        Nodo result = new Nodo("declaracionLocal");
+        result.addHijo(new Nodo("local", "LOCAL"));
+        result.addHijo(new Nodo(id, "ID"));
+        result.addHijo((Nodo)t);
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
+    | LOCAL ID:id tipo:t ASSIGN expresion:e ENDL
+    {:
+        Nodo result = new Nodo("declaracionLocal");
+        result.addHijo(new Nodo("local", "LOCAL"));
+        result.addHijo(new Nodo(id, "ID"));
+        result.addHijo((Nodo)t);
+        result.addHijo(new Nodo("=", "ASSIGN"));
+        result.addHijo((Nodo)e);
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
+    | LOCAL ID:id array:a ASSIGN OPEN_BLOCK inicializacionArray:ia CLOSE_BLOCK ENDL
+    {:
+        Nodo result = new Nodo("declaracionLocal");
+        result.addHijo(new Nodo("local", "LOCAL"));
+        result.addHijo(new Nodo(id, "ID"));
+        result.addHijo((Nodo)a);
+        result.addHijo(new Nodo("=", "ASSIGN"));
+        result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
+        result.addHijo((Nodo)ia);
+        result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
     ;
 
-/* Inicialización de arrays */
-inicializacionArray ::= filaArray
-    | inicializacionArray COMMA filaArray
+inicializacionArray ::= filaArray:fa
+    {:
+        Nodo result = new Nodo("inicializacionArray");
+        result.addHijo((Nodo)fa);
+        RESULT = (Nodo)result;
+    :}
+    | inicializacionArray:ia COMMA filaArray:fa
+    {:
+        Nodo iaNodo = (Nodo)ia;
+        iaNodo.addHijo(new Nodo(",", "COMMA"));
+        iaNodo.addHijo((Nodo)fa);
+        RESULT = iaNodo;
+    :}
     ;
 
-filaArray ::= OPEN_BLOCK listaValores CLOSE_BLOCK
+filaArray ::= OPEN_BLOCK listaValores:lv CLOSE_BLOCK
+    {:
+        Nodo result = new Nodo("filaArray");
+        result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
+        result.addHijo((Nodo)lv);
+        result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
+        RESULT = (Nodo)result;
+    :}
     ;
 
-listaValores ::= expresion
-    | listaValores COMMA expresion
+listaValores ::= expresion:e
+    {:
+        Nodo result = new Nodo("listaValores");
+        result.addHijo((Nodo)e);
+        RESULT = (Nodo)result;
+    :}
+    | listaValores:lv COMMA expresion:e
+    {:
+        Nodo lvNodo = (Nodo)lv;
+        lvNodo.addHijo(new Nodo(",", "COMMA"));
+        lvNodo.addHijo((Nodo)e);
+        RESULT = lvNodo;
+    :}
     ;
 
-/* Asignaciones */
-asignacion ::= ID:id ASSIGN expresion ENDL
-    | accesoArray ASSIGN expresion ENDL
+asignacion ::= ID:id ASSIGN expresion:e ENDL
+    {:
+        Nodo result = new Nodo("asignacion");
+        result.addHijo(new Nodo(id, "ID"));
+        result.addHijo(new Nodo("=", "ASSIGN"));
+        result.addHijo((Nodo)e);
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
+    | accesoArray:aa ASSIGN expresion:e ENDL
+    {:
+        Nodo result = new Nodo("asignacion");
+        result.addHijo((Nodo)aa);
+        result.addHijo(new Nodo("=", "ASSIGN"));
+        result.addHijo((Nodo)e);
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
     ;
 
-accesoArray ::= ID:id OPEN_BRACKET expresion COMMA expresion CLOSE_BRACKET
+accesoArray ::= ID:id OPEN_BRACKET expresion:e1 COMMA expresion:e2 CLOSE_BRACKET
+    {:
+        Nodo result = new Nodo("accesoArray");
+        result.addHijo(new Nodo(id, "ID"));
+        result.addHijo(new Nodo("[", "OPEN_BRACKET"));
+        result.addHijo((Nodo)e1);
+        result.addHijo(new Nodo(",", "COMMA"));
+        result.addHijo((Nodo)e2);
+        result.addHijo(new Nodo("]", "CLOSE_BRACKET"));
+        RESULT = (Nodo)result;
+    :}
     ;
 
-/* Expresiones con precedencia */
-expresion ::= disyuncion
+expresion ::= disyuncion:d
+    {: RESULT = (Nodo)d; :}
     ;
 
-disyuncion ::= disyuncion OR conjuncion
-    | conjuncion
+disyuncion ::= disyuncion:d OR conjuncion:c
+    {:
+        Nodo result = new Nodo("disyuncion");
+        result.addHijo((Nodo)d);
+        result.addHijo(new Nodo("~", "OR"));
+        result.addHijo((Nodo)c);
+        RESULT = (Nodo)result;
+    :}
+    | conjuncion:c
+    {: RESULT = (Nodo)c; :}
     ;
 
-conjuncion ::= conjuncion AND negacion
-    | negacion
+conjuncion ::= conjuncion:c AND negacion:n
+    {:
+        Nodo result = new Nodo("conjuncion");
+        result.addHijo((Nodo)c);
+        result.addHijo(new Nodo("@", "AND"));
+        result.addHijo((Nodo)n);
+        RESULT = (Nodo)result;
+    :}
+    | negacion:n
+    {: RESULT = (Nodo)n; :}
     ;
 
-negacion ::= NOT negacion
-    | comparacion
+negacion ::= NOT negacion:n
+    {:
+        Nodo result = new Nodo("negacion");
+        result.addHijo(new Nodo("Σ", "NOT"));
+        result.addHijo((Nodo)n);
+        RESULT = (Nodo)result;
+    :}
+    | comparacion:c
+    {: RESULT = (Nodo)c; :}
     ;
 
-comparacion ::= aditiva opRel aditiva
-    | aditiva
+comparacion ::= aditiva:a1 opRel:op aditiva:a2
+    {:
+        Nodo result = new Nodo("comparacion");
+        result.addHijo((Nodo)a1);
+        result.addHijo((Nodo)op);
+        result.addHijo((Nodo)a2);
+        RESULT = (Nodo)result;
+    :}
+    | aditiva:a
+    {: RESULT = (Nodo)a; :}
     ;
 
 opRel ::= LT
+    {: RESULT = new Nodo("<", "LT"); :}
     | LTEQ
+    {: RESULT = new Nodo("<=", "LTEQ"); :}
     | GT
+    {: RESULT = new Nodo(">", "GT"); :}
     | GTEQ
+    {: RESULT = new Nodo(">=", "GTEQ"); :}
     | EQEQ
+    {: RESULT = new Nodo("==", "EQEQ"); :}
     | NEQ
+    {: RESULT = new Nodo("Σ=", "NEQ"); :}
     ;
 
-aditiva ::= aditiva PLUS multiplicativa
-    | aditiva MINUS multiplicativa
-    | multiplicativa
+aditiva ::= aditiva:a PLUS multiplicativa:m
+    {:
+        Nodo result = new Nodo("aditiva");
+        result.addHijo((Nodo)a);
+        result.addHijo(new Nodo("+", "PLUS"));
+        result.addHijo((Nodo)m);
+        RESULT = (Nodo)result;
+    :}
+    | aditiva:a MINUS multiplicativa:m
+    {:
+        Nodo result = new Nodo("aditiva");
+        result.addHijo((Nodo)a);
+        result.addHijo(new Nodo("-", "MINUS"));
+        result.addHijo((Nodo)m);
+        RESULT = (Nodo)result;
+    :}
+    | multiplicativa:m
+    {: RESULT = (Nodo)m; :}
     ;
 
-multiplicativa ::= multiplicativa MULT potencia
-    | multiplicativa DIV potencia
-    | multiplicativa INT_DIV potencia
-    | multiplicativa MOD potencia
-    | potencia
+multiplicativa ::= multiplicativa:m MULT potencia:p
+    {:
+        Nodo result = new Nodo("multiplicativa");
+        result.addHijo((Nodo)m);
+        result.addHijo(new Nodo("*", "MULT"));
+        result.addHijo((Nodo)p);
+        RESULT = (Nodo)result;
+    :}
+    | multiplicativa:m DIV potencia:p
+    {:
+        Nodo result = new Nodo("multiplicativa");
+        result.addHijo((Nodo)m);
+        result.addHijo(new Nodo("/", "DIV"));
+        result.addHijo((Nodo)p);
+        RESULT = (Nodo)result;
+    :}
+    | multiplicativa:m INT_DIV potencia:p
+    {:
+        Nodo result = new Nodo("multiplicativa");
+        result.addHijo((Nodo)m);
+        result.addHijo(new Nodo("//", "INT_DIV"));
+        result.addHijo((Nodo)p);
+        RESULT = (Nodo)result;
+    :}
+    | multiplicativa:m MOD potencia:p
+    {:
+        Nodo result = new Nodo("multiplicativa");
+        result.addHijo((Nodo)m);
+        result.addHijo(new Nodo("%", "MOD"));
+        result.addHijo((Nodo)p);
+        RESULT = (Nodo)result;
+    :}
+    | potencia:p
+    {: RESULT = (Nodo)p; :}
     ;
 
-potencia ::= unaria POWER potencia
-    | unaria
+potencia ::= unaria:u POWER potencia:p
+    {:
+        Nodo result = new Nodo("potencia");
+        result.addHijo((Nodo)u);
+        result.addHijo(new Nodo("^", "POWER"));
+        result.addHijo((Nodo)p);
+        RESULT = (Nodo)result;
+    :}
+    | unaria:u
+    {: RESULT = (Nodo)u; :}
     ;
 
-unaria ::= MINUS unaria
-    | opUnario ID:id
-    | primaria
+unaria ::= MINUS unaria:u
+    {:
+        Nodo result = new Nodo("unaria");
+        result.addHijo(new Nodo("-", "MINUS"));
+        result.addHijo((Nodo)u);
+        RESULT = (Nodo)result;
+    :}
+    | opUnario:op ID:id
+    {:
+        Nodo result = new Nodo("unaria");
+        result.addHijo((Nodo)op);
+        result.addHijo(new Nodo(id, "ID"));
+        RESULT = (Nodo)result;
+    :}
+    | primaria:p
+    {: RESULT = (Nodo)p; :}
     ;
 
 opUnario ::= INCREMENT
+    {: RESULT = new Nodo("++", "INCREMENT"); :}
     | DECREMENT
+    {: RESULT = new Nodo("--", "DECREMENT"); :}
     ;
 
-primaria ::= OPEN_PAREN expresion CLOSE_PAREN
-    | ID:id OPEN_PAREN argumentos CLOSE_PAREN
+primaria ::= OPEN_PAREN expresion:e CLOSE_PAREN
+    {:
+        Nodo result = new Nodo("primaria");
+        result.addHijo(new Nodo("¿", "OPEN_PAREN"));
+        result.addHijo((Nodo)e);
+        result.addHijo(new Nodo("?", "CLOSE_PAREN"));
+        RESULT = (Nodo)result;
+    :}
+    | ID:id OPEN_PAREN argumentos:a CLOSE_PAREN
+    {:
+        Nodo result = new Nodo("primaria");
+        result.addHijo(new Nodo(id, "ID"));
+        result.addHijo(new Nodo("¿", "OPEN_PAREN"));
+        if (a != null) result.addHijo((Nodo)a);
+        result.addHijo(new Nodo("?", "CLOSE_PAREN"));
+        RESULT = (Nodo)result;
+    :}
     | ID:id
-    | literal
-    | accesoArray
+    {:
+        Nodo result = new Nodo("primaria");
+        result.addHijo(new Nodo(id, "ID"));
+        RESULT = (Nodo)result;
+    :}
+    | literal:l
+    {: RESULT = (Nodo)l; :}
+    | accesoArray:aa
+    {: RESULT = (Nodo)aa; :}
     ;
 
-/* Literales */
 literal ::= INT_LITERAL:val
+    {:
+        Nodo result = new Nodo("literal");
+        result.addHijo(new Nodo(val.toString(), "INT_LITERAL"));
+        RESULT = (Nodo)result;
+    :}
     | FLOAT_LITERAL:val
-    | literalBooleano
+    {:
+        Nodo result = new Nodo("literal");
+        result.addHijo(new Nodo(val.toString(), "FLOAT_LITERAL"));
+        RESULT = (Nodo)result;
+    :}
+    | literalBooleano:lb
+    {: RESULT = (Nodo)lb; :}
     | CHAR_LITERAL:val
+    {:
+        Nodo result = new Nodo("literal");
+        result.addHijo(new Nodo("'" + val + "'", "CHAR_LITERAL"));
+        RESULT = (Nodo)result;
+    :}
     | STRING_LITERAL:val
+    {:
+        Nodo result = new Nodo("literal");
+        result.addHijo(new Nodo(val, "STRING_LITERAL"));
+        RESULT = (Nodo)result;
+    :}
     ;
 
 literalBooleano ::= TRUE
+    {:
+        Nodo result = new Nodo("literalBooleano");
+        result.addHijo(new Nodo("true", "TRUE"));
+        RESULT = (Nodo)result;
+    :}
     | FALSE
+    {:
+        Nodo result = new Nodo("literalBooleano");
+        result.addHijo(new Nodo("false", "FALSE"));
+        RESULT = (Nodo)result;
+    :}
     ;
 
-/* Estructuras de control */
-estructuraControl ::= decideOf
-    | loop
-    | forLoop
+estructuraControl ::= decideOf:d
+    {: RESULT = (Nodo)d; :}
+    | loop:l
+    {: RESULT = (Nodo)l; :}
+    | forLoop:f
+    {: RESULT = (Nodo)f; :}
     ;
 
-decideOf ::= DECIDE OF casosDecide casoElseOpt END DECIDE ENDL
+decideOf ::= DECIDE OF casosDecide:cd casoElseOpt:ce END DECIDE ENDL
+    {:
+        Nodo result = new Nodo("decideOf");
+        result.addHijo(new Nodo("decide", "DECIDE"));
+        result.addHijo(new Nodo("of", "OF"));
+        result.addHijo((Nodo)cd);
+        if (ce != null) result.addHijo((Nodo)ce);
+        result.addHijo(new Nodo("end", "END"));
+        result.addHijo(new Nodo("decide", "DECIDE"));
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
     ;
 
-casosDecide ::= caso
-    | casosDecide caso
+casosDecide ::= caso:c
+    {:
+        Nodo result = new Nodo("casosDecide");
+        result.addHijo((Nodo)c);
+        RESULT = (Nodo)result;
+    :}
+    | casosDecide:cd caso:c
+    {:
+        Nodo cdNodo = (Nodo)cd;
+        cdNodo.addHijo((Nodo)c);
+        RESULT = cdNodo;
+    :}
     ;
 
-caso ::= expresion ARROW OPEN_BLOCK sentencias CLOSE_BLOCK
+caso ::= expresion:e ARROW OPEN_BLOCK sentencias:s CLOSE_BLOCK
+    {:
+        Nodo result = new Nodo("caso");
+        result.addHijo((Nodo)e);
+        result.addHijo(new Nodo("->", "ARROW"));
+        result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
+        if (s != null) result.addHijo((Nodo)s);
+        result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
+        RESULT = (Nodo)result;
+    :}
     ;
 
-casoElseOpt ::= ELSE ARROW OPEN_BLOCK sentencias CLOSE_BLOCK
+casoElseOpt ::= ELSE ARROW OPEN_BLOCK sentencias:s CLOSE_BLOCK
+    {:
+        Nodo result = new Nodo("casoElseOpt");
+        result.addHijo(new Nodo("else", "ELSE"));
+        result.addHijo(new Nodo("->", "ARROW"));
+        result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
+        if (s != null) result.addHijo((Nodo)s);
+        result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
+        RESULT = (Nodo)result;
+    :}
     | /* empty */
+    {: RESULT = (Nodo)null; :}
     ;
 
-loop ::= LOOP sentencias EXIT WHEN expresion ENDL sentencias END LOOP ENDL
+loop ::= LOOP sentencias:s1 EXIT WHEN expresion:e ENDL sentencias:s2 END LOOP ENDL
+    {:
+        Nodo result = new Nodo("loop");
+        result.addHijo(new Nodo("loop", "LOOP"));
+        if (s1 != null) result.addHijo((Nodo)s1);
+        result.addHijo(new Nodo("exit", "EXIT"));
+        result.addHijo(new Nodo("when", "WHEN"));
+        result.addHijo((Nodo)e);
+        result.addHijo(new Nodo("endl", "ENDL"));
+        if (s2 != null) result.addHijo((Nodo)s2);
+        result.addHijo(new Nodo("end", "END"));
+        result.addHijo(new Nodo("loop", "LOOP"));
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
     ;
 
-forLoop ::= FOR OPEN_PAREN inicializacionFor SEMICOLON expresion SEMICOLON actualizacionFor CLOSE_PAREN OPEN_BLOCK sentencias CLOSE_BLOCK
+forLoop ::= FOR OPEN_PAREN inicializacionFor:i SEMICOLON expresion:e SEMICOLON actualizacionFor:a CLOSE_PAREN OPEN_BLOCK sentencias:s CLOSE_BLOCK
+    {:
+        Nodo result = new Nodo("forLoop");
+        result.addHijo(new Nodo("for", "FOR"));
+        result.addHijo(new Nodo("¿", "OPEN_PAREN"));
+        if (i != null) result.addHijo((Nodo)i);
+        result.addHijo(new Nodo(";", "SEMICOLON"));
+        result.addHijo((Nodo)e);
+        result.addHijo(new Nodo(";", "SEMICOLON"));
+        if (a != null) result.addHijo((Nodo)a);
+        result.addHijo(new Nodo("?", "CLOSE_PAREN"));
+        result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
+        if (s != null) result.addHijo((Nodo)s);
+        result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
+        RESULT = (Nodo)result;
+    :}
     ;
 
-inicializacionFor ::= ID:id ASSIGN expresion
+inicializacionFor ::= LOCAL ID:id tipo:t ASSIGN expresion:e
+    {:
+        Nodo result = new Nodo("inicializacionFor");
+        result.addHijo(new Nodo("local", "LOCAL"));
+        result.addHijo(new Nodo(id, "ID"));
+        result.addHijo((Nodo)t);
+        result.addHijo(new Nodo("=", "ASSIGN"));
+        result.addHijo((Nodo)e);
+        RESULT = (Nodo)result;
+    :}
+    | ID:id ASSIGN expresion:e
+    {:
+        Nodo result = new Nodo("inicializacionFor");
+        result.addHijo(new Nodo(id, "ID"));
+        result.addHijo(new Nodo("=", "ASSIGN"));
+        result.addHijo((Nodo)e);
+        RESULT = (Nodo)result;
+    :}
     | /* empty */
+    {: RESULT = (Nodo)null; :}
     ;
 
-actualizacionFor ::= ID:id ASSIGN expresion
-    | opUnario ID:id
+
+actualizacionFor ::= ID:id ASSIGN expresion:e
+    {:
+        Nodo result = new Nodo("actualizacionFor");
+        result.addHijo(new Nodo(id, "ID"));
+        result.addHijo(new Nodo("=", "ASSIGN"));
+        result.addHijo((Nodo)e);
+        RESULT = (Nodo)result;
+    :}
+    | opUnario:op ID:id
+    {:
+        Nodo result = new Nodo("actualizacionFor");
+        result.addHijo((Nodo)op);
+        result.addHijo(new Nodo(id, "ID"));
+        RESULT = (Nodo)result;
+    :}
     | /* empty */
+    {: RESULT = (Nodo)null; :}
     ;
 
-/* Entrada/Salida */
-sentenciaIO ::= SHOW OPEN_PAREN expresion CLOSE_PAREN ENDL
+sentenciaIO ::= SHOW OPEN_PAREN expresion:e CLOSE_PAREN ENDL
+    {:
+        Nodo result = new Nodo("sentenciaIO");
+        result.addHijo(new Nodo("show", "SHOW"));
+        result.addHijo(new Nodo("¿", "OPEN_PAREN"));
+        result.addHijo((Nodo)e);
+        result.addHijo(new Nodo("?", "CLOSE_PAREN"));
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
     | GET OPEN_PAREN ID:id CLOSE_PAREN ENDL
+    {:
+        Nodo result = new Nodo("sentenciaIO");
+        result.addHijo(new Nodo("get", "GET"));
+        result.addHijo(new Nodo("¿", "OPEN_PAREN"));
+        result.addHijo(new Nodo(id, "ID"));
+        result.addHijo(new Nodo("?", "CLOSE_PAREN"));
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
     ;
 
-argumentos ::= listaExpresiones
+argumentos ::= listaExpresiones:le
+    {: RESULT = (Nodo)le; :}
     | /* empty */
+    {: RESULT = (Nodo)null; :}
     ;
 
-listaExpresiones ::= expresion
-    | listaExpresiones COMMA expresion
+listaExpresiones ::= expresion:e
+    {:
+        Nodo result = new Nodo("listaExpresiones");
+        result.addHijo((Nodo)e);
+        RESULT = (Nodo)result;
+    :}
+    | listaExpresiones:le COMMA expresion:e
+    {:
+        Nodo leNodo = (Nodo)le;
+        leNodo.addHijo(new Nodo(",", "COMMA"));
+        leNodo.addHijo((Nodo)e);
+        RESULT = leNodo;
+    :}
     ;
