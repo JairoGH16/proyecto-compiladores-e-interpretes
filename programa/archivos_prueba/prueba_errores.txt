@@ -1,0 +1,20 @@
+world x int endl
+world y float endl
+world x float endl
+
+navidad coal ¡
+    local a int endl
+    local b float endl
+    local a float endl
+!
+
+gift probar ¿ m int , n int , m float ? int ¡
+    local temp int endl
+    local temp2 float endl
+    local temp int endl
+    return 0 endl
+!
+
+gift probar ¿ z int ? int ¡
+    return 0 endl
+!

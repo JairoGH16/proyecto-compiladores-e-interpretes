@@ -1,0 +1,168 @@
+ÁRBOL SINTÁCTICO: prueba_errores.txt
+======================================================================
+└── programa
+    ├── declaracionesGlobales
+    │   ├── declaracionGlobal
+    │   │   ├── world [WORLD]
+    │   │   ├── x [ID]
+    │   │   ├── tipo
+    │   │   │   └── int [INT]
+    │   │   └── endl [ENDL]
+    │   ├── declaracionGlobal
+    │   │   ├── world [WORLD]
+    │   │   ├── y [ID]
+    │   │   ├── tipo
+    │   │   │   └── float [FLOAT]
+    │   │   └── endl [ENDL]
+    │   └── declaracionGlobal
+    │       ├── world [WORLD]
+    │       ├── x [ID]
+    │       ├── tipo
+    │       │   └── float [FLOAT]
+    │       └── endl [ENDL]
+    ├── navidad
+    │   ├── navidad [NAVIDAD]
+    │   ├── coal [COAL]
+    │   ├── ¡ [OPEN_BLOCK]
+    │   ├── sentencias
+    │   │   ├── declaracionLocal
+    │   │   │   ├── local [LOCAL]
+    │   │   │   ├── a [ID]
+    │   │   │   ├── tipo
+    │   │   │   │   └── int [INT]
+    │   │   │   └── endl [ENDL]
+    │   │   ├── declaracionLocal
+    │   │   │   ├── local [LOCAL]
+    │   │   │   ├── b [ID]
+    │   │   │   ├── tipo
+    │   │   │   │   └── float [FLOAT]
+    │   │   │   └── endl [ENDL]
+    │   │   └── declaracionLocal
+    │   │       ├── local [LOCAL]
+    │   │       ├── a [ID]
+    │   │       ├── tipo
+    │   │       │   └── float [FLOAT]
+    │   │       └── endl [ENDL]
+    │   └── ! [CLOSE_BLOCK]
+    └── declaracionesFunciones
+        ├── declaracionFuncion
+        │   ├── gift [GIFT]
+        │   ├── probar [ID]
+        │   ├── ¿ [OPEN_PAREN]
+        │   ├── listaParametros
+        │   │   ├── parametro
+        │   │   │   ├── m [ID]
+        │   │   │   └── tipo
+        │   │   │       └── int [INT]
+        │   │   ├── , [COMMA]
+        │   │   ├── parametro
+        │   │   │   ├── n [ID]
+        │   │   │   └── tipo
+        │   │   │       └── int [INT]
+        │   │   ├── , [COMMA]
+        │   │   └── parametro
+        │   │       ├── m [ID]
+        │   │       └── tipo
+        │   │           └── float [FLOAT]
+        │   ├── ? [CLOSE_PAREN]
+        │   ├── tipo
+        │   │   └── int [INT]
+        │   ├── ¡ [OPEN_BLOCK]
+        │   ├── sentencias
+        │   │   ├── declaracionLocal
+        │   │   │   ├── local [LOCAL]
+        │   │   │   ├── temp [ID]
+        │   │   │   ├── tipo
+        │   │   │   │   └── int [INT]
+        │   │   │   └── endl [ENDL]
+        │   │   ├── declaracionLocal
+        │   │   │   ├── local [LOCAL]
+        │   │   │   ├── temp2 [ID]
+        │   │   │   ├── tipo
+        │   │   │   │   └── float [FLOAT]
+        │   │   │   └── endl [ENDL]
+        │   │   ├── declaracionLocal
+        │   │   │   ├── local [LOCAL]
+        │   │   │   ├── temp [ID]
+        │   │   │   ├── tipo
+        │   │   │   │   └── int [INT]
+        │   │   │   └── endl [ENDL]
+        │   │   └── sentencia
+        │   │       ├── return [RETURN]
+        │   │       ├── literal
+        │   │       │   └── 0 [INT_LITERAL]
+        │   │       └── endl [ENDL]
+        │   └── ! [CLOSE_BLOCK]
+        └── declaracionFuncion
+            ├── gift [GIFT]
+            ├── probar [ID]
+            ├── ¿ [OPEN_PAREN]
+            ├── listaParametros
+            │   └── parametro
+            │       ├── z [ID]
+            │       └── tipo
+            │           └── int [INT]
+            ├── ? [CLOSE_PAREN]
+            ├── tipo
+            │   └── int [INT]
+            ├── ¡ [OPEN_BLOCK]
+            ├── sentencias
+            │   └── sentencia
+            │       ├── return [RETURN]
+            │       ├── literal
+            │       │   └── 0 [INT_LITERAL]
+            │       └── endl [ENDL]
+            └── ! [CLOSE_BLOCK]
+
+======================================================================
+
+ESTADÍSTICAS:
+- Número total de nodos: 113
+- Altura del árbol: 7
+
+
+======================================================================
+
+╔════════════════════════════════════════════════════════════════════════╗
+║                        TABLA DE SÍMBOLOS                               ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ ALCANCE: GLOBAL                                                     │
+├─────────────────────────────────────────────────────────────────────┤
+│ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
+├─────────────────┼─────────────────┼──────────┼──────────────┤
+│ x               │ int             │ 0        │ variable     │
+│ y               │ float           │ 0        │ variable     │
+│ probar          │ int             │ 0        │ funcion      │
+└─────────────────┴─────────────────┴──────────┴──────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ ALCANCE: NAVIDAD                                                    │
+├─────────────────────────────────────────────────────────────────────┤
+│ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
+├─────────────────┼─────────────────┼──────────┼──────────────┤
+│ a               │ int             │ 0        │ variable     │
+│ b               │ float           │ 0        │ variable     │
+└─────────────────┴─────────────────┴──────────┴──────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ ALCANCE: probar                                                     │
+├─────────────────────────────────────────────────────────────────────┤
+│ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
+├─────────────────┼─────────────────┼──────────┼──────────────┤
+│ m               │ int             │ 0        │ parametro    │
+│ n               │ int             │ 0        │ parametro    │
+│ temp            │ int             │ 0        │ variable     │
+│ temp2           │ float           │ 0        │ variable     │
+│ z               │ int             │ 0        │ parametro    │
+└─────────────────┴─────────────────┴──────────┴──────────────┘
+
+
+
+⚠️ ERRORES SEMÁNTICOS:
+  - Variable global duplicada 'x' en línea 0
+  - Variable local duplicada 'a' en alcance 'NAVIDAD', línea 0
+  - Parámetro duplicado 'm' en línea 0
+  - Variable local duplicada 'temp' en alcance 'probar', línea 0
+  - Función duplicada 'probar' en línea 0

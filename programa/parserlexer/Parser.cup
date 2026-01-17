@@ -171,7 +171,11 @@ declaracionGlobal ::= WORLD ID:id tipo:t ENDL
     {:
         Nodo result = new Nodo("declaracionGlobal");
         result.addHijo(new Nodo("world", "WORLD"));
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)t);
         result.addHijo(new Nodo("endl", "ENDL"));
         RESULT = (Nodo)result;
@@ -180,7 +184,11 @@ declaracionGlobal ::= WORLD ID:id tipo:t ENDL
     {:
         Nodo result = new Nodo("declaracionGlobal");
         result.addHijo(new Nodo("world", "WORLD"));
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)t);
         result.addHijo(new Nodo("=", "ASSIGN"));
         result.addHijo((Nodo)e);
@@ -191,7 +199,11 @@ declaracionGlobal ::= WORLD ID:id tipo:t ENDL
     {:
         Nodo result = new Nodo("declaracionGlobal");
         result.addHijo(new Nodo("world", "WORLD"));
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)a);
         result.addHijo(new Nodo("=", "ASSIGN"));
         result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
@@ -234,7 +246,11 @@ declaracionFuncion ::= GIFT ID:id OPEN_PAREN parametros:p CLOSE_PAREN tipo:t OPE
     {:
         Nodo result = new Nodo("declaracionFuncion");
         result.addHijo(new Nodo("gift", "GIFT"));
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo(new Nodo("¿", "OPEN_PAREN"));
         if (p != null) result.addHijo((Nodo)p);
         result.addHijo(new Nodo("?", "CLOSE_PAREN"));
@@ -270,14 +286,22 @@ listaParametros ::= parametro:p
 parametro ::= ID:id tipo:t
     {:
         Nodo result = new Nodo("parametro");
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)t);
         RESULT = (Nodo)result;
     :}
     | ID:id array:a
     {:
         Nodo result = new Nodo("parametro");
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)a);
         RESULT = (Nodo)result;
     :}
@@ -401,7 +425,11 @@ declaracionLocal ::= LOCAL ID:id tipo:t ENDL
     {:
         Nodo result = new Nodo("declaracionLocal");
         result.addHijo(new Nodo("local", "LOCAL"));
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)t);
         result.addHijo(new Nodo("endl", "ENDL"));
         RESULT = (Nodo)result;
@@ -410,7 +438,11 @@ declaracionLocal ::= LOCAL ID:id tipo:t ENDL
     {:
         Nodo result = new Nodo("declaracionLocal");
         result.addHijo(new Nodo("local", "LOCAL"));
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)t);
         result.addHijo(new Nodo("=", "ASSIGN"));
         result.addHijo((Nodo)e);
@@ -421,7 +453,11 @@ declaracionLocal ::= LOCAL ID:id tipo:t ENDL
     {:
         Nodo result = new Nodo("declaracionLocal");
         result.addHijo(new Nodo("local", "LOCAL"));
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)a);
         result.addHijo(new Nodo("=", "ASSIGN"));
         result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
@@ -834,7 +870,11 @@ inicializacionFor ::= LOCAL ID:id tipo:t ASSIGN expresion:e
     {:
         Nodo result = new Nodo("inicializacionFor");
         result.addHijo(new Nodo("local", "LOCAL"));
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)t);
         result.addHijo(new Nodo("=", "ASSIGN"));
         result.addHijo((Nodo)e);

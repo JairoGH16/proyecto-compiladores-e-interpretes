@@ -859,7 +859,11 @@ class CUP$Parser$actions {
 		
         Nodo result = new Nodo("declaracionGlobal");
         result.addHijo(new Nodo("world", "WORLD"));
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)t);
         result.addHijo(new Nodo("endl", "ENDL"));
         RESULT = (Nodo)result;
@@ -884,7 +888,11 @@ class CUP$Parser$actions {
 		
         Nodo result = new Nodo("declaracionGlobal");
         result.addHijo(new Nodo("world", "WORLD"));
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)t);
         result.addHijo(new Nodo("=", "ASSIGN"));
         result.addHijo((Nodo)e);
@@ -911,7 +919,11 @@ class CUP$Parser$actions {
 		
         Nodo result = new Nodo("declaracionGlobal");
         result.addHijo(new Nodo("world", "WORLD"));
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)a);
         result.addHijo(new Nodo("=", "ASSIGN"));
         result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
@@ -997,7 +1009,11 @@ class CUP$Parser$actions {
 		
         Nodo result = new Nodo("declaracionFuncion");
         result.addHijo(new Nodo("gift", "GIFT"));
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo(new Nodo("¿", "OPEN_PAREN"));
         if (p != null) result.addHijo((Nodo)p);
         result.addHijo(new Nodo("?", "CLOSE_PAREN"));
@@ -1080,7 +1096,11 @@ class CUP$Parser$actions {
 		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
         Nodo result = new Nodo("parametro");
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)t);
         RESULT = (Nodo)result;
     
@@ -1100,7 +1120,11 @@ class CUP$Parser$actions {
 		Object a = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
         Nodo result = new Nodo("parametro");
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)a);
         RESULT = (Nodo)result;
     
@@ -1388,7 +1412,11 @@ class CUP$Parser$actions {
 		
         Nodo result = new Nodo("declaracionLocal");
         result.addHijo(new Nodo("local", "LOCAL"));
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)t);
         result.addHijo(new Nodo("endl", "ENDL"));
         RESULT = (Nodo)result;
@@ -1413,7 +1441,11 @@ class CUP$Parser$actions {
 		
         Nodo result = new Nodo("declaracionLocal");
         result.addHijo(new Nodo("local", "LOCAL"));
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)t);
         result.addHijo(new Nodo("=", "ASSIGN"));
         result.addHijo((Nodo)e);
@@ -1440,7 +1472,11 @@ class CUP$Parser$actions {
 		
         Nodo result = new Nodo("declaracionLocal");
         result.addHijo(new Nodo("local", "LOCAL"));
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)a);
         result.addHijo(new Nodo("=", "ASSIGN"));
         result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
@@ -2473,7 +2509,11 @@ class CUP$Parser$actions {
 		
         Nodo result = new Nodo("inicializacionFor");
         result.addHijo(new Nodo("local", "LOCAL"));
-        result.addHijo(new Nodo(id, "ID"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
         result.addHijo((Nodo)t);
         result.addHijo(new Nodo("=", "ASSIGN"));
         result.addHijo((Nodo)e);

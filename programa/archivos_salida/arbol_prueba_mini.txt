@@ -1,0 +1,152 @@
+ÁRBOL SINTÁCTICO: prueba_mini.txt
+======================================================================
+└── programa
+    ├── declaracionesGlobales
+    │   ├── declaracionGlobal
+    │   │   ├── world [WORLD]
+    │   │   ├── x [ID]
+    │   │   ├── tipo
+    │   │   │   └── int [INT]
+    │   │   └── endl [ENDL]
+    │   ├── declaracionGlobal
+    │   │   ├── world [WORLD]
+    │   │   ├── y [ID]
+    │   │   ├── tipo
+    │   │   │   └── float [FLOAT]
+    │   │   └── endl [ENDL]
+    │   └── declaracionGlobal
+    │       ├── world [WORLD]
+    │       ├── activo [ID]
+    │       ├── tipo
+    │       │   └── bool [BOOL]
+    │       └── endl [ENDL]
+    ├── navidad
+    │   ├── navidad [NAVIDAD]
+    │   ├── coal [COAL]
+    │   ├── ¡ [OPEN_BLOCK]
+    │   ├── sentencias
+    │   │   ├── declaracionLocal
+    │   │   │   ├── local [LOCAL]
+    │   │   │   ├── suma [ID]
+    │   │   │   ├── tipo
+    │   │   │   │   └── int [INT]
+    │   │   │   └── endl [ENDL]
+    │   │   └── declaracionLocal
+    │   │       ├── local [LOCAL]
+    │   │       ├── resultado [ID]
+    │   │       ├── tipo
+    │   │       │   └── float [FLOAT]
+    │   │       └── endl [ENDL]
+    │   └── ! [CLOSE_BLOCK]
+    └── declaracionesFunciones
+        ├── declaracionFuncion
+        │   ├── gift [GIFT]
+        │   ├── sumar [ID]
+        │   ├── ¿ [OPEN_PAREN]
+        │   ├── listaParametros
+        │   │   ├── parametro
+        │   │   │   ├── a [ID]
+        │   │   │   └── tipo
+        │   │   │       └── int [INT]
+        │   │   ├── , [COMMA]
+        │   │   └── parametro
+        │   │       ├── b [ID]
+        │   │       └── tipo
+        │   │           └── int [INT]
+        │   ├── ? [CLOSE_PAREN]
+        │   ├── tipo
+        │   │   └── int [INT]
+        │   ├── ¡ [OPEN_BLOCK]
+        │   ├── sentencias
+        │   │   ├── declaracionLocal
+        │   │   │   ├── local [LOCAL]
+        │   │   │   ├── temp [ID]
+        │   │   │   ├── tipo
+        │   │   │   │   └── int [INT]
+        │   │   │   └── endl [ENDL]
+        │   │   └── sentencia
+        │   │       ├── return [RETURN]
+        │   │       ├── primaria
+        │   │       │   └── a [ID]
+        │   │       └── endl [ENDL]
+        │   └── ! [CLOSE_BLOCK]
+        └── declaracionFuncion
+            ├── gift [GIFT]
+            ├── multiplicar [ID]
+            ├── ¿ [OPEN_PAREN]
+            ├── listaParametros
+            │   ├── parametro
+            │   │   ├── x [ID]
+            │   │   └── tipo
+            │   │       └── float [FLOAT]
+            │   ├── , [COMMA]
+            │   └── parametro
+            │       ├── y [ID]
+            │       └── tipo
+            │           └── float [FLOAT]
+            ├── ? [CLOSE_PAREN]
+            ├── tipo
+            │   └── float [FLOAT]
+            ├── ¡ [OPEN_BLOCK]
+            ├── sentencias
+            │   └── sentencia
+            │       ├── return [RETURN]
+            │       ├── primaria
+            │       │   └── x [ID]
+            │       └── endl [ENDL]
+            └── ! [CLOSE_BLOCK]
+
+======================================================================
+
+ESTADÍSTICAS:
+- Número total de nodos: 95
+- Altura del árbol: 7
+
+
+======================================================================
+
+╔════════════════════════════════════════════════════════════════════════╗
+║                        TABLA DE SÍMBOLOS                               ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ ALCANCE: GLOBAL                                                     │
+├─────────────────────────────────────────────────────────────────────┤
+│ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
+├─────────────────┼─────────────────┼──────────┼──────────────┤
+│ x               │ int             │ 1        │ variable     │
+│ y               │ float           │ 2        │ variable     │
+│ activo          │ bool            │ 3        │ variable     │
+│ sumar           │ int             │ 10       │ funcion      │
+│ multiplicar     │ float           │ 15       │ funcion      │
+└─────────────────┴─────────────────┴──────────┴──────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ ALCANCE: NAVIDAD                                                    │
+├─────────────────────────────────────────────────────────────────────┤
+│ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
+├─────────────────┼─────────────────┼──────────┼──────────────┤
+│ suma            │ int             │ 6        │ variable     │
+│ resultado       │ float           │ 7        │ variable     │
+└─────────────────┴─────────────────┴──────────┴──────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ ALCANCE: sumar                                                      │
+├─────────────────────────────────────────────────────────────────────┤
+│ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
+├─────────────────┼─────────────────┼──────────┼──────────────┤
+│ a               │ int             │ 10       │ parametro    │
+│ b               │ int             │ 10       │ parametro    │
+│ temp            │ int             │ 11       │ variable     │
+└─────────────────┴─────────────────┴──────────┴──────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ ALCANCE: multiplicar                                                │
+├─────────────────────────────────────────────────────────────────────┤
+│ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
+├─────────────────┼─────────────────┼──────────┼──────────────┤
+│ x               │ float           │ 15       │ parametro    │
+│ y               │ float           │ 15       │ parametro    │
+└─────────────────┴─────────────────┴──────────┴──────────────┘
+
+

@@ -1,0 +1,17 @@
+world x int endl
+world y float endl
+world activo bool endl
+
+navidad coal ¡
+    local suma int endl
+    local resultado float endl
+!
+
+gift sumar ¿ a int , b int ? int ¡
+    local temp int endl
+    return a endl
+!
+
+gift multiplicar ¿ x float , y float ? float ¡
+    return x endl
+!

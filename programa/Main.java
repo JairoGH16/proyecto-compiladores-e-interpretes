@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.*;
 import java_cup.runtime.Symbol;
+import parserlexer.Nodo;
 
 /**
  * Clase Principal (Main)
@@ -309,6 +310,31 @@ public class Main {
                 writer.println("\nESTADÍSTICAS:");
                 writer.println("- Número total de nodos: " + numNodos);
                 writer.println("- Altura del árbol: " + altura);
+                
+                // ========== CONSTRUIR TABLA DE SÍMBOLOS ==========
+                RecorredorAST recorredor = new RecorredorAST();
+                recorredor.recorrer((Nodo) arbol);
+                
+                TablaSimbolos tablaSimbolos = recorredor.getTablaSimbolos();
+                
+                // Imprimir tabla de símbolos en consola
+                System.out.println(tablaSimbolos.generarReporte());
+                
+                // Guardar tabla de símbolos en el archivo
+                writer.println("\n");
+                writer.println("======================================================================");
+                writer.println(tablaSimbolos.generarReporte());
+                
+                // Mostrar errores semánticos si los hay
+                if (recorredor.tieneErrores()) {
+                    System.out.println("\n⚠️ ERRORES SEMÁNTICOS:");
+                    writer.println("\n⚠️ ERRORES SEMÁNTICOS:");
+                    
+                    for (String error : recorredor.getErrores()) {
+                        System.err.println("  - " + error);
+                        writer.println("  - " + error);
+                    }
+                }
                 
                 writer.close();
                 

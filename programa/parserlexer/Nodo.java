@@ -3,63 +3,59 @@ package parserlexer;
 import java.util.ArrayList;
 
 /**
- * Clase Nodo para construir el Árbol Sintáctico Concreto (Parse Tree)
- * Proyecto 2 - Compiladores e Intérpretes
- * Estudiantes: Rafael Odio Mendoza, Jairo González Hidalgo
- * 
- * Representa tanto terminales como no-terminales de la gramática
- * Construcción descendente: se crea desde la raíz (programa) hacia las hojas (terminales)
+ * Clase Nodo
+ * Representa un nodo en el árbol sintáctico
  */
 public class Nodo {
-    private String lexema;  // Texto del nodo (nombre del símbolo o valor del token)
-    private String tipo;    // Tipo del nodo (nombre de la producción o terminal)
-    private ArrayList<Nodo> hijos;  // Hijos del nodo
+    private String etiqueta;     // Nombre del nodo (ej: "programa", "declaracionGlobal")
+    private String lexema;       // Valor del token (ej: "x", "int", "5")
+    private String tipo;         // Tipo del token (ej: "ID", "INT", "INT_LITERAL")
+    private int linea;           // Línea en el código fuente
+    private int columna;         // Columna en el código fuente
+    private ArrayList<Nodo> hijos;  // Lista de nodos hijos
     
     /**
-     * Constructor para nodos con lexema y tipo
-     * @param lexema Texto del nodo
-     * @param tipo Tipo del símbolo (terminal o no-terminal)
+     * Constructor principal: nodo con etiqueta solamente
+     * Usado para nodos no terminales (ej: "programa", "expresion")
+     */
+    public Nodo(String etiqueta) {
+        this.etiqueta = etiqueta;
+        this.lexema = null;
+        this.tipo = null;
+        this.linea = -1;
+        this.columna = -1;
+        this.hijos = new ArrayList<>();
+    }
+    
+    /**
+     * Constructor para nodos terminales (tokens)
+     * Usado para hojas del árbol (ej: ID, literales, palabras reservadas)
      */
     public Nodo(String lexema, String tipo) {
+        this.etiqueta = lexema;
         this.lexema = lexema;
         this.tipo = tipo;
+        this.linea = -1;
+        this.columna = -1;
         this.hijos = new ArrayList<>();
     }
     
     /**
-     * Constructor simplificado (solo lexema)
-     * @param lexema Texto del nodo
+     * Constructor completo con línea y columna
      */
-    public Nodo(String lexema) {
+    public Nodo(String lexema, String tipo, int linea, int columna) {
+        this.etiqueta = lexema;
         this.lexema = lexema;
-        this.tipo = "";
+        this.tipo = tipo;
+        this.linea = linea;
+        this.columna = columna;
         this.hijos = new ArrayList<>();
     }
     
-    // Getters y Setters
-    public String getLexema() {
-        return lexema;
-    }
-    
-    public void setLexema(String lexema) {
-        this.lexema = lexema;
-    }
-    
-    public String getTipo() {
-        return tipo;
-    }
-    
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-    
-    public ArrayList<Nodo> getHijos() {
-        return hijos;
-    }
+    // ========== MÉTODOS PARA CONSTRUIR EL ÁRBOL ==========
     
     /**
-     * Agrega un hijo al nodo
-     * @param hijo Nodo hijo a agregar
+     * Agregar un hijo al nodo
      */
     public void addHijo(Nodo hijo) {
         if (hijo != null) {
@@ -68,94 +64,118 @@ public class Nodo {
     }
     
     /**
-     * Imprime el árbol de forma jerárquica
-     * Muestra primero el padre, luego todos sus hijos recursivamente
+     * Agregar múltiples hijos
+     */
+    public void addHijos(ArrayList<Nodo> nuevosHijos) {
+        if (nuevosHijos != null) {
+            this.hijos.addAll(nuevosHijos);
+        }
+    }
+    
+    // ========== GETTERS ==========
+    
+    public String getEtiqueta() {
+        return etiqueta;
+    }
+    
+    public String getLexema() {
+        return lexema;
+    }
+    
+    public String getTipo() {
+        return tipo;
+    }
+    
+    public int getLinea() {
+        return linea;
+    }
+    
+    public int getColumna() {
+        return columna;
+    }
+    
+    public ArrayList<Nodo> getHijos() {
+        return hijos;
+    }
+    
+    // ========== SETTERS ==========
+    
+    public void setLinea(int linea) {
+        this.linea = linea;
+    }
+    
+    public void setColumna(int columna) {
+        this.columna = columna;
+    }
+    
+    // ========== MÉTODOS PARA VISUALIZACIÓN ==========
+    
+    /**
+     * Imprimir el árbol en consola con formato jerárquico
      */
     public void arbol() {
-        imprimirArbol(0);
+        imprimirArbol("", true);
     }
     
     /**
-     * Método recursivo para imprimir el árbol con indentación
-     * @param nivel Nivel de profundidad en el árbol
+     * Método auxiliar recursivo para imprimir el árbol
      */
-    private void imprimirArbol(int nivel) {
-        // Imprimir indentación
-        String indent = "";
-        for (int i = 0; i < nivel; i++) {
-            indent += "  ";
-        }
-        
+    private void imprimirArbol(String prefijo, boolean esUltimo) {
         // Imprimir el nodo actual
-        if (tipo != null && !tipo.isEmpty()) {
-            System.out.println(indent + "Nodo: " + lexema + " (tipo: " + tipo + ")");
-        } else {
-            System.out.println(indent + "Nodo: " + lexema);
-        }
-        
-        // Imprimir hijos si existen
-        if (!hijos.isEmpty()) {
-            System.out.println(indent + "Hijos:");
-            for (Nodo hijo : hijos) {
-                hijo.imprimirArbol(nivel + 1);
-            }
-        }
-    }
-    
-    public void imprimirCompacto() {
-        imprimirCompactoHelper("", true);
-    }
-    
-    private void imprimirCompactoHelper(String prefix, boolean esUltimo) {
-        // Imprimir el nodo actual
-        System.out.print(prefix);
+        System.out.print(prefijo);
         System.out.print(esUltimo ? "└── " : "├── ");
         
+        // Mostrar etiqueta y tipo si existe
         if (tipo != null && !tipo.isEmpty()) {
-            System.out.println(lexema + " (" + tipo + ")");
+            System.out.println(etiqueta + " [" + tipo + "]");
         } else {
-            System.out.println(lexema);
+            System.out.println(etiqueta);
         }
         
-        // Imprimir hijos
+        // Imprimir los hijos
         for (int i = 0; i < hijos.size(); i++) {
-            boolean ultimo = (i == hijos.size() - 1);
-            String nuevoPrefix = prefix + (esUltimo ? "    " : "│   ");
-            hijos.get(i).imprimirCompactoHelper(nuevoPrefix, ultimo);
+            boolean esUltimoHijo = (i == hijos.size() - 1);
+            String nuevoPrefijo = prefijo + (esUltimo ? "    " : "│   ");
+            hijos.get(i).imprimirArbol(nuevoPrefijo, esUltimoHijo);
         }
     }
     
     /**
-     * Genera una representación en String del árbol
-     * Útil para guardar en archivos
+     * Representación en String del árbol (para guardar en archivo)
      */
     @Override
     public String toString() {
-        return toStringHelper("");
-    }
-    
-    private String toStringHelper(String indent) {
         StringBuilder sb = new StringBuilder();
-        sb.append(indent).append(lexema);
-        
-        if (tipo != null && !tipo.isEmpty()) {
-            sb.append(" (").append(tipo).append(")");
-        }
-        sb.append("\n");
-        
-        for (Nodo hijo : hijos) {
-            sb.append(hijo.toStringHelper(indent + "  "));
-        }
-        
+        toStringRecursivo(sb, "", true);
         return sb.toString();
     }
     
     /**
-     * Cuenta el número total de nodos en el árbol
-     * @return Cantidad de nodos
+     * Método auxiliar recursivo para toString
+     */
+    private void toStringRecursivo(StringBuilder sb, String prefijo, boolean esUltimo) {
+        sb.append(prefijo);
+        sb.append(esUltimo ? "└── " : "├── ");
+        
+        if (tipo != null && !tipo.isEmpty()) {
+            sb.append(etiqueta).append(" [").append(tipo).append("]");
+        } else {
+            sb.append(etiqueta);
+        }
+        sb.append("\n");
+        
+        for (int i = 0; i < hijos.size(); i++) {
+            boolean esUltimoHijo = (i == hijos.size() - 1);
+            String nuevoPrefijo = prefijo + (esUltimo ? "    " : "│   ");
+            hijos.get(i).toStringRecursivo(sb, nuevoPrefijo, esUltimoHijo);
+        }
+    }
+    
+    /**
+     * Contar el número total de nodos en el árbol
      */
     public int contarNodos() {
-        int total = 1; // Este nodo
+        int total = 1; // Contar este nodo
         for (Nodo hijo : hijos) {
             total += hijo.contarNodos();
         }
@@ -163,19 +183,52 @@ public class Nodo {
     }
     
     /**
-     * Obtiene la altura del árbol
-     * @return Altura del árbol
+     * Calcular la altura del árbol
      */
     public int getAltura() {
         if (hijos.isEmpty()) {
             return 1;
         }
         
-        int maxAltura = 0;
+        int maxAlturaHijo = 0;
         for (Nodo hijo : hijos) {
-            maxAltura = Math.max(maxAltura, hijo.getAltura());
+            int alturaHijo = hijo.getAltura();
+            if (alturaHijo > maxAlturaHijo) {
+                maxAlturaHijo = alturaHijo;
+            }
         }
         
-        return 1 + maxAltura;
+        return 1 + maxAlturaHijo;
+    }
+    
+    /**
+     * Verificar si el nodo es una hoja (no tiene hijos)
+     */
+    public boolean esHoja() {
+        return hijos.isEmpty();
+    }
+    
+    /**
+     * Verificar si el nodo es un terminal (tiene tipo)
+     */
+    public boolean esTerminal() {
+        return tipo != null && !tipo.isEmpty();
+    }
+    
+    /**
+     * Obtener el número de hijos
+     */
+    public int getNumHijos() {
+        return hijos.size();
+    }
+    
+    /**
+     * Obtener un hijo por índice
+     */
+    public Nodo getHijo(int indice) {
+        if (indice >= 0 && indice < hijos.size()) {
+            return hijos.get(indice);
+        }
+        return null;
     }
 }
