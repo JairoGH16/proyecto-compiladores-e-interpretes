@@ -1,6 +1,0 @@
-world int = local float x = 3.14 endl
-| # para ver error
-gift coal # navidad ¿ ? ¡
-    show "Hola mundo 123"    Σ endl
-#
-! world

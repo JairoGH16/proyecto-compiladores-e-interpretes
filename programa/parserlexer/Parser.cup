@@ -11,6 +11,8 @@ import java_cup.runtime.*;
 
 parser code {:
     public static Nodo arbolSintactico = null;  // Almacena el árbol
+    public static java.util.ArrayList<String> erroresSintacticos = new java.util.ArrayList<>();
+    public static int contadorErrores = 0;
 
     // Sobrescribir método de reporte de errores
         public void report_error(String message, Object info) {
@@ -19,22 +21,35 @@ parser code {:
             if (info instanceof Symbol) {
                 Symbol s = (Symbol) info;
                 if (s.left >= 0) {
-                    m.append(" en línea " + (s.left + 1));
+                    m.append(" en línea " + (s.left));
                     if (s.right >= 0) {
-                        m.append(", columna " + (s.right + 1));
+                        m.append(", columna " + (s.right));
                     }
                 }
             }
 
             m.append(": " + message);
-            System.err.println(m);
+            String errorMsg = m.toString();
+            System.err.println(errorMsg);
+            erroresSintacticos.add(errorMsg);
+            contadorErrores++;
         }
 
-        // Error fatal
+        // Error fatal - YA NO detiene el programa
         public void report_fatal_error(String message, Object info) {
             report_error(message, info);
-            System.err.println("No se puede continuar el análisis.");
-            System.exit(1);
+            // NO llamamos a System.exit(1) para permitir recuperación
+        }
+        
+        // Método para obtener errores
+        public static java.util.ArrayList<String> getErrores() {
+            return erroresSintacticos;
+        }
+        
+        // Método para limpiar errores (llamar antes de parsear)
+        public static void limpiarErrores() {
+            erroresSintacticos.clear();
+            contadorErrores = 0;
         }
 :}
 
@@ -113,6 +128,7 @@ non terminal casosDecide;
 non terminal caso;
 non terminal casoElseOpt;
 non terminal loop;
+non terminal cierreLoop;
 non terminal forLoop;
 non terminal inicializacionFor;
 non terminal actualizacionFor;
@@ -146,7 +162,6 @@ programa ::= declaracionesGlobales:dg navidad:n declaracionesFunciones:df
         if (df != null) result.addHijo((Nodo)df);
         
         parser.arbolSintactico = result;
-        System.out.println("✓ Programa sintácticamente correcto");
         RESULT = (Nodo)result;
     :}
     ;
@@ -212,6 +227,16 @@ declaracionGlobal ::= WORLD ID:id tipo:t ENDL
         result.addHijo(new Nodo("endl", "ENDL"));
         RESULT = (Nodo)result;
     :}
+    | WORLD error ENDL
+    {:
+        parser.report_error("Error en declaración global", null);
+        RESULT = new Nodo("error_declaracionGlobal");
+    :}
+    | ID error ENDL
+    {:
+        parser.report_error("Error en declaración global", null);
+        RESULT = new Nodo("error_declaracionGlobal");
+    :}
     ;
 
 navidad ::= NAVIDAD COAL OPEN_BLOCK sentencias:s CLOSE_BLOCK
@@ -223,6 +248,28 @@ navidad ::= NAVIDAD COAL OPEN_BLOCK sentencias:s CLOSE_BLOCK
         if (s != null) result.addHijo((Nodo)s);
         result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
         RESULT = (Nodo)result;
+    :}
+    | ID error OPEN_BLOCK sentencias:s CLOSE_BLOCK
+    {:
+        parser.report_error("Error en bloque NAVIDAD (navidad), continuando", null);
+        Nodo result = new Nodo("navidad");
+        result.addHijo(new Nodo("navidad", "NAVIDAD"));
+        result.addHijo(new Nodo("coal", "COAL"));
+        result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
+        if (s != null) result.addHijo((Nodo)s);
+        result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
+        RESULT = result;
+    :}
+    | NAVIDAD ID OPEN_BLOCK sentencias:s CLOSE_BLOCK
+    {:
+        parser.report_error("Error en bloque NAVIDAD (coal), continuando", null);
+        Nodo result = new Nodo("navidad");
+        result.addHijo(new Nodo("navidad", "NAVIDAD"));
+        result.addHijo(new Nodo("coal", "COAL"));
+        result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
+        if (s != null) result.addHijo((Nodo)s);
+        result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
+        RESULT = result;
     :}
     ;
 
@@ -259,6 +306,65 @@ declaracionFuncion ::= GIFT ID:id OPEN_PAREN parametros:p CLOSE_PAREN tipo:t OPE
         if (s != null) result.addHijo((Nodo)s);
         result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
         RESULT = (Nodo)result;
+    :}
+    | GIFT ID:id OPEN_PAREN error OPEN_BLOCK sentencias:s CLOSE_BLOCK
+    {:
+        parser.report_error("Error en parametros de funcion '" + id + "', procesando cuerpo", null);
+        
+        Nodo result = new Nodo("declaracionFuncion");
+        result.addHijo(new Nodo("gift", "GIFT"));
+        
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        
+        result.addHijo(new Nodo("¿", "OPEN_PAREN"));
+        // Parámetros con error - no agregar nada o nodo de error
+        result.addHijo(new Nodo("?", "CLOSE_PAREN"));
+        
+        result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
+        if (s != null) result.addHijo((Nodo)s);
+        result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
+        
+        RESULT = result;
+    :}
+    | GIFT error OPEN_BLOCK sentencias:s CLOSE_BLOCK
+    {:
+        parser.report_error("Error en declaracion de la funcion, procesando cuerpo", null);
+        
+        Nodo result = new Nodo("declaracionFuncion");
+        result.addHijo(new Nodo("gift", "GIFT"));
+        
+        Nodo nodoID = new Nodo("", "ID");
+        result.addHijo(nodoID);
+        
+        result.addHijo(new Nodo("¿", "OPEN_PAREN"));
+        result.addHijo(new Nodo("?", "CLOSE_PAREN"));
+        
+        result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
+        if (s != null) result.addHijo((Nodo)s);
+        result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
+        
+        RESULT = result;
+    :}
+    | ID error OPEN_BLOCK sentencias:s CLOSE_BLOCK
+    {:
+        parser.report_error("Error en declaracion de la funcion, procesando cuerpo", null);
+        
+        Nodo result = new Nodo("declaracionFuncion");
+        result.addHijo(new Nodo("gift", "GIFT"));
+        
+        Nodo nodoID = new Nodo("", "ID");
+        result.addHijo(nodoID);
+        
+        result.addHijo(new Nodo("¿", "OPEN_PAREN"));
+        result.addHijo(new Nodo("?", "CLOSE_PAREN"));
+        
+        result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
+        if (s != null) result.addHijo((Nodo)s);
+        result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
+        
+        RESULT = result;
     :}
     ;
 
@@ -419,6 +525,11 @@ sentencia ::= declaracionLocal:dl
         result.addHijo(new Nodo("endl", "ENDL"));
         RESULT = (Nodo)result;
     :}
+    | error ENDL
+    {:
+        parser.report_error("Error en sentencia, recuperando en siguiente línea", null);
+        RESULT = new Nodo("error_sentencia");
+    :}
     ;
 
 declaracionLocal ::= LOCAL ID:id tipo:t ENDL
@@ -465,6 +576,16 @@ declaracionLocal ::= LOCAL ID:id tipo:t ENDL
         result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
         result.addHijo(new Nodo("endl", "ENDL"));
         RESULT = (Nodo)result;
+    :}
+    | LOCAL error ENDL
+    {:
+        parser.report_error("Error en declaración local", null);
+        RESULT = new Nodo("error_declaracionLocal");
+    :}
+    | ID error ENDL
+    {:
+        parser.report_error("Error en declaración local (local)", null);
+        RESULT = new Nodo("error_declaracionLocal");
     :}
     ;
 
@@ -525,6 +646,11 @@ asignacion ::= ID:id ASSIGN expresion:e ENDL
         result.addHijo((Nodo)e);
         result.addHijo(new Nodo("endl", "ENDL"));
         RESULT = (Nodo)result;
+    :}
+    | ID ASSIGN error ENDL
+    {:
+        parser.report_error("Error en asignación", null);
+        RESULT = new Nodo("error_asignacion");
     :}
     ;
 
@@ -789,6 +915,24 @@ decideOf ::= DECIDE OF casosDecide:cd casoElseOpt:ce END DECIDE ENDL
         result.addHijo(new Nodo("endl", "ENDL"));
         RESULT = (Nodo)result;
     :}
+    | DECIDE OF error casosDecide:cd casoElseOpt:ce END DECIDE ENDL
+    {:
+        parser.report_error("Error en estructura decide of, continuando en el cuerpo", null);
+        Nodo result = new Nodo("error_decideOf");
+        result.addHijo(new Nodo("decide", "DECIDE"));
+        result.addHijo(new Nodo("of", "OF"));
+        result.addHijo((Nodo)cd);
+        if (ce != null) result.addHijo((Nodo)ce);
+        result.addHijo(new Nodo("end", "END"));
+        result.addHijo(new Nodo("decide", "DECIDE"));
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
+    | DECIDE OF error END DECIDE ENDL
+    {:
+        parser.report_error("Error en estructura decide of, saltando decide of", null);
+        RESULT = new Nodo("error_decideOf");
+    :}
     ;
 
 casosDecide ::= caso:c
@@ -831,7 +975,7 @@ casoElseOpt ::= ELSE ARROW OPEN_BLOCK sentencias:s CLOSE_BLOCK
     {: RESULT = (Nodo)null; :}
     ;
 
-loop ::= LOOP sentencias:s1 EXIT WHEN expresion:e ENDL sentencias:s2 END LOOP ENDL
+loop ::= LOOP sentencias:s1 EXIT WHEN expresion:e ENDL sentencias:s2 cierreLoop
     {:
         Nodo result = new Nodo("loop");
         result.addHijo(new Nodo("loop", "LOOP"));
@@ -846,7 +990,24 @@ loop ::= LOOP sentencias:s1 EXIT WHEN expresion:e ENDL sentencias:s2 END LOOP EN
         result.addHijo(new Nodo("endl", "ENDL"));
         RESULT = (Nodo)result;
     :}
+    | LOOP sentencias error cierreLoop
+    {:
+        parser.report_error("Error en estructura loop", null);
+        RESULT = new Nodo("error_loop");
+    :}
     ;
+
+cierreLoop ::=
+    END LOOP ENDL
+    | END error ENDL
+    {:
+        parser.report_error("Error: se esperaba 'END LOOP'", null);
+    :}
+    | ID LOOP ENDL
+    {:
+        parser.report_error("Error: se esperaba 'END LOOP'", null);
+    :}
+;
 
 forLoop ::= FOR OPEN_PAREN inicializacionFor:i SEMICOLON expresion:e SEMICOLON actualizacionFor:a CLOSE_PAREN OPEN_BLOCK sentencias:s CLOSE_BLOCK
     {:
@@ -863,6 +1024,18 @@ forLoop ::= FOR OPEN_PAREN inicializacionFor:i SEMICOLON expresion:e SEMICOLON a
         if (s != null) result.addHijo((Nodo)s);
         result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
         RESULT = (Nodo)result;
+    :}
+    | FOR error OPEN_BLOCK sentencias:s CLOSE_BLOCK
+    {:
+        parser.report_error("Error en encabezado de for, procesando cuerpo", null);
+        Nodo result = new Nodo("forLoop");
+        result.addHijo(new Nodo("for", "FOR"));
+        result.addHijo(new Nodo("¿", "OPEN_PAREN"));
+        result.addHijo(new Nodo("?", "CLOSE_PAREN"));
+        result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
+        if (s != null) result.addHijo((Nodo)s);
+        result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
+        RESULT = result;
     :}
     ;
 

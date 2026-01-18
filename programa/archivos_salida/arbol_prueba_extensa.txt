@@ -1,4 +1,10 @@
-ÁRBOL SINTÁCTICO: prueba_extensa.txt
+ANÁLISIS SINTÁCTICO: prueba_extensa.txt
+======================================================================
+
+ ARCHIVO SINTÁCTICAMENTE CORRECTO
+
+======================================================================
+ÁRBOL SINTÁCTICO:
 ======================================================================
 └── programa
     ├── declaracionesGlobales

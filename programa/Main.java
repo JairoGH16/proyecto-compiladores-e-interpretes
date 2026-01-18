@@ -283,12 +283,39 @@ public class Main {
             Class<?> parserClass = Class.forName("parserlexer.Parser");
             Object parser = parserClass.getConstructor(java_cup.runtime.Scanner.class).newInstance(scanner);
             
+            // Limpiar errores previos
+            parserClass.getMethod("limpiarErrores").invoke(null);
+            
             // Ejecutar el parser
             parserClass.getMethod("parse").invoke(parser);
+            
+            // Obtener errores sintácticos
+            @SuppressWarnings("unchecked")
+            java.util.ArrayList<String> erroresSintacticos = 
+                (java.util.ArrayList<String>) parserClass.getMethod("getErrores").invoke(null);
             
             // Obtener el árbol sintáctico
             java.lang.reflect.Field campoArbol = parserClass.getField("arbolSintactico");
             Object arbol = campoArbol.get(null);
+            
+            // Guardar en archivo
+            PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(rutaReporteArbol), "UTF-8"));
+            writer.println("ANÁLISIS SINTÁCTICO: " + archivoFuente.getName());
+            writer.println("======================================================================");
+            
+            // Reportar estado sintáctico
+            if (erroresSintacticos.isEmpty()) {
+                System.out.println("\n Archivo sintácticamente correcto");
+                writer.println("\n ARCHIVO SINTÁCTICAMENTE CORRECTO");
+            } else {
+                System.out.println("\n✗ Se encontraron " + erroresSintacticos.size() + " error(es) sintáctico(s)");
+                writer.println("\n✗ SE ENCONTRARON " + erroresSintacticos.size() + " ERROR(ES) SINTÁCTICO(S)");
+                writer.println("\nERRORES SINTÁCTICOS:");
+                for (String error : erroresSintacticos) {
+                    writer.println("  - " + error);
+                }
+                writer.println();
+            }
             
             if (arbol != null) {
                 System.out.println("\n========== ÁRBOL SINTÁCTICO ==========");
@@ -296,9 +323,8 @@ public class Main {
                 // Imprimir en consola
                 arbol.getClass().getMethod("arbol").invoke(arbol);
                 
-                // Guardar en archivo
-                PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(rutaReporteArbol), "UTF-8"));
-                writer.println("ÁRBOL SINTÁCTICO: " + archivoFuente.getName());
+                writer.println("\n======================================================================");
+                writer.println("ÁRBOL SINTÁCTICO:");
                 writer.println("======================================================================");
                 writer.println(arbol.toString());
                 writer.println("======================================================================");
@@ -327,8 +353,8 @@ public class Main {
                 
                 // Mostrar errores semánticos si los hay
                 if (recorredor.tieneErrores()) {
-                    System.out.println("\n⚠️ ERRORES SEMÁNTICOS:");
-                    writer.println("\n⚠️ ERRORES SEMÁNTICOS:");
+                    System.out.println("\n ERRORES SEMÁNTICOS:");
+                    writer.println("\n ERRORES SEMÁNTICOS:");
                     
                     for (String error : recorredor.getErrores()) {
                         System.err.println("  - " + error);
@@ -338,9 +364,11 @@ public class Main {
                 
                 writer.close();
                 
-                System.out.println("\n✓ Árbol sintáctico generado: " + rutaReporteArbol);
+                System.out.println("\n Reporte generado: " + rutaReporteArbol);
             } else {
-                System.err.println("✗ No se pudo construir el árbol sintáctico");
+                writer.println("\n No se pudo construir el árbol sintáctico");
+                writer.close();
+                System.err.println(" No se pudo construir el árbol sintáctico");
             }
             
         } catch (Exception e) {

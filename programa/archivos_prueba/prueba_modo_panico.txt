@@ -1,0 +1,23 @@
+world x int endl
+world y endl
+world z float endl
+
+navidad coal ¡
+    local a int endl
+    local b endl
+    local c float = 5.5 endl
+!
+
+gift sumar ¿ x int y int ? int ¡
+    local suma int endl
+    return x endl
+!
+
+gift restar ¿ a int , b ? int ¡
+    return a endl
+!
+
+gift multiplicar ¿ x float , y float ? float ¡
+    local resultado endl
+    return x endl
+!

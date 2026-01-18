@@ -15,3 +15,31 @@ gift sumar ¿ a int , b int ? int ¡
 gift multiplicar ¿ x float , y float ? float ¡
     return x endl
 !
+
+gift factorial ¿n int? int ¡
+    local resultado int = 1 endl
+    local i int = 1 endl
+    
+    loop
+        resultado = resultado * i endl
+        i = i + 1 endl
+        exit when i > n endl
+    end loop endl
+
+    return resultado endl
+!
+
+gift multiplicarrrr ¿ x float , y float ? float ¡
+    return x endl
+!
+
+| Función que usa for
+gift sumarHasta ¿limite int? int ¡
+    local suma int = 0 endl
+    
+    for ¿loc i <= limite; ++i? ¡
+        suma = suma + i endl
+    !
+    
+    return suma endl
+!
