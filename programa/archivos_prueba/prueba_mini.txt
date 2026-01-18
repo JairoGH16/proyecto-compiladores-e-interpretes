@@ -32,14 +32,3 @@ gift factorial ¿n int? int ¡
 gift multiplicarrrr ¿ x float , y float ? float ¡
     return x endl
 !
-
-| Función que usa for
-gift sumarHasta ¿limite int? int ¡
-    local suma int = 0 endl
-    
-    for ¿loc i <= limite; ++i? ¡
-        suma = suma + i endl
-    !
-    
-    return suma endl
-!

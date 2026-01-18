@@ -50,14 +50,15 @@ WhiteSpace     = {LineTerminator} | [ \t\f]
 
 /* Comentarios: de una línea (|) y multilínea (empieza con є y termina con э) */
 LineComment    = "|" [^\r\n]*
-MultiLineComment = "є" ~"э"
 
 /* Identificadores: empiezan con letra/guion bajo, siguen letras/numeros/guion bajo */
 Identifier = [a-zA-Z_][a-zA-Z0-9_]*
 
 /* Literales numéricos: Enteros y Flotantes (con punto decimal obligatorio) */
-IntegerLiteral = [0-9]+
-FloatLiteral   = [0-9]+ \. [0-9]+
+FloatLiteral = ([0-9]+ "." [0-9]+)
+
+IntegerLiteral = 0 | [1-9][0-9]*
+
 
 /*
  * Estados léxicos:
@@ -172,12 +173,14 @@ FloatLiteral   = [0-9]+ \. [0-9]+
  */
 
 /* Flotantes */
-    {FloatLiteral}    { return symbol(sym.FLOAT_LITERAL, 
-                               Float.parseFloat(yytext())); }
+{FloatLiteral} {
+    return symbol(sym.FLOAT_LITERAL, Double.parseDouble(yytext()));
+}
 
 /* Enteros */
-    {IntegerLiteral}  { return symbol(sym.INT_LITERAL, 
-                               Integer.parseInt(yytext())); }
+{IntegerLiteral} {
+    return symbol(sym.INT_LITERAL, Integer.parseInt(yytext()));
+}
 
 /* Char literal: captura un solo caracter entre comillas simples */
     \'[^\']\'         { return symbol(sym.CHAR_LITERAL, 
@@ -235,18 +238,14 @@ FloatLiteral   = [0-9]+ \. [0-9]+
  * Restricción: Debe reportar error si se acaba el archivo (EOF) sin cerrar.
  */
 <MULTICOMMENT> {
-    /* Símbolo de cierre: volver a estado normal */
     "э"               { yybegin(YYINITIAL); }
-    
-    /* Consumir cualquier cosa que no sea cierre ni saltos de línea (para optimizar) */
-    [^\r\nэ]+         { /* ignorar */ }
-    
-    /* Consumir saltos de línea */
+    [^э\r\n]+         { /* ignorar */ }
     {LineTerminator}  { /* ignorar */ }
-    
-    /* Error: EOF sin cerrar el comentario */
-    <<EOF>>           { yybegin(YYINITIAL); 
-                        return symbol(sym.ERROR, "Comentario multilinea no cerrado"); }
+
+    <<EOF>> {
+        yybegin(YYINITIAL);
+        return symbol(sym.ERROR, "Comentario multilinea no cerrado");
+    }
 }
 
 /*

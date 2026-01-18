@@ -1,9 +1,9 @@
 Compiladores e intérpretes
-Verano 2025
+Verano 2025-2026
 Jairo Jesús González Hidalgo - Rafael Odio Mendoza
 2024178535 - 2024083499
-Proyecto programado #1
-26 de diciembre de 2025
+Proyecto programado #2
+17 de enero del 2026
 Estatus de la entrega: Excelente
 
 Enlace al repositorio: https://github.com/JairoGH16/proyecto-compiladores-e-interpretes
