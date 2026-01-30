@@ -90,10 +90,10 @@ terminal String ID;
 terminal ERROR;
 
 non terminal programa;
-non terminal declaracionesGlobales;
+non terminal declaracion;
 non terminal declaracionGlobal;
 non terminal navidad;
-non terminal declaracionesFunciones;
+non terminal declaraciones;
 non terminal declaracionFuncion;
 non terminal parametros;
 non terminal listaParametros;
@@ -154,32 +154,37 @@ start with programa;
 
 /* ========== GRAMÁTICA CON CONSTRUCCIÓN DE ÁRBOL ========== */
 
-programa ::= declaracionesGlobales:dg navidad:n declaracionesFunciones:df
+programa ::= declaraciones:d navidad:n
     {:
         Nodo result = new Nodo("programa");
-        if (dg != null) result.addHijo((Nodo)dg);
+        if (d != null) result.addHijo((Nodo)d);
         result.addHijo((Nodo)n);
-        if (df != null) result.addHijo((Nodo)df);
         
         parser.arbolSintactico = result;
         RESULT = (Nodo)result;
     :}
     ;
 
-declaracionesGlobales ::= /* empty */
+declaraciones ::= /* empty */
     {: RESULT = (Nodo)null; :}
-    | declaracionesGlobales:dgs declaracionGlobal:dg
+    | declaraciones:ds declaracion:d
     {:
         Nodo result;
-        if (dgs == null) {
-            result = new Nodo("declaracionesGlobales");
-            result.addHijo((Nodo)dg);
+        if (ds == null) {
+            result = new Nodo("declaraciones");
+            result.addHijo((Nodo)d);
         } else {
-            result = (Nodo)dgs;
-            result.addHijo((Nodo)dg);
+            result = (Nodo)ds;
+            result.addHijo((Nodo)d);
         }
         RESULT = result;
     :}
+    ;
+
+declaracion ::= declaracionGlobal:dg
+    {: RESULT = (Nodo)dg; :}
+    | declaracionFuncion:df
+    {: RESULT = (Nodo)df; :}
     ;
 
 declaracionGlobal ::= WORLD ID:id tipo:t ENDL
@@ -269,22 +274,6 @@ navidad ::= NAVIDAD COAL OPEN_BLOCK sentencias:s CLOSE_BLOCK
         result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
         if (s != null) result.addHijo((Nodo)s);
         result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
-        RESULT = result;
-    :}
-    ;
-
-declaracionesFunciones ::= /* empty */
-    {: RESULT = (Nodo)null; :}
-    | declaracionesFunciones:dfs declaracionFuncion:df
-    {:
-        Nodo result;
-        if (dfs == null) {
-            result = new Nodo("declaracionesFunciones");
-            result.addHijo((Nodo)df);
-        } else {
-            result = (Nodo)dfs;
-            result.addHijo((Nodo)df);
-        }
         RESULT = result;
     :}
     ;

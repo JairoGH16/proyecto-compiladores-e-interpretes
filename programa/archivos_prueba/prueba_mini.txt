@@ -1,34 +1,13 @@
-world x int endl
-world y float endl
-world activo bool endl
+gift suma ¿ a int , b int ? int ¡
+    return a + b endl
+!
+
+gift error1 ¿ ? int ¡
+    return "texto" endl
+!
 
 navidad coal ¡
-    local suma int endl
-    local resultado float endl
-!
-
-gift sumar ¿ a int , b int ? int ¡
-    local temp int endl
-    return a endl
-!
-
-gift multiplicar ¿ x float , y float ? float ¡
-    return x endl
-!
-
-gift factorial ¿n int? int ¡
-    local resultado int = 1 endl
-    local i int = 1 endl
-    
-    loop
-        resultado = resultado * i endl
-        i = i + 1 endl
-        exit when i > n endl
-    end loop endl
-
-    return resultado endl
-!
-
-gift multiplicarrrr ¿ x float , y float ? float ¡
-    return x endl
+    local x int = suma¿5, 3? endl
+    local y int = suma¿5? endl
+    local z int = noExiste¿5? endl
 !

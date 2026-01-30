@@ -7,204 +7,108 @@ ANÁLISIS SINTÁCTICO: prueba_mini.txt
 ÁRBOL SINTÁCTICO:
 ======================================================================
 └── programa
-    ├── declaracionesGlobales
-    │   ├── declaracionGlobal
-    │   │   ├── world [WORLD]
-    │   │   ├── x [ID]
+    ├── declaraciones
+    │   ├── declaracionFuncion
+    │   │   ├── gift [GIFT]
+    │   │   ├── suma [ID]
+    │   │   ├── ¿ [OPEN_PAREN]
+    │   │   ├── listaParametros
+    │   │   │   ├── parametro
+    │   │   │   │   ├── a [ID]
+    │   │   │   │   └── tipo
+    │   │   │   │       └── int [INT]
+    │   │   │   ├── , [COMMA]
+    │   │   │   └── parametro
+    │   │   │       ├── b [ID]
+    │   │   │       └── tipo
+    │   │   │           └── int [INT]
+    │   │   ├── ? [CLOSE_PAREN]
     │   │   ├── tipo
     │   │   │   └── int [INT]
-    │   │   └── endl [ENDL]
-    │   ├── declaracionGlobal
-    │   │   ├── world [WORLD]
-    │   │   ├── y [ID]
-    │   │   ├── tipo
-    │   │   │   └── float [FLOAT]
-    │   │   └── endl [ENDL]
-    │   └── declaracionGlobal
-    │       ├── world [WORLD]
-    │       ├── activo [ID]
+    │   │   ├── ¡ [OPEN_BLOCK]
+    │   │   ├── sentencias
+    │   │   │   └── sentencia
+    │   │   │       ├── return [RETURN]
+    │   │   │       ├── aditiva
+    │   │   │       │   ├── primaria
+    │   │   │       │   │   └── a [ID]
+    │   │   │       │   ├── + [PLUS]
+    │   │   │       │   └── primaria
+    │   │   │       │       └── b [ID]
+    │   │   │       └── endl [ENDL]
+    │   │   └── ! [CLOSE_BLOCK]
+    │   └── declaracionFuncion
+    │       ├── gift [GIFT]
+    │       ├── error1 [ID]
+    │       ├── ¿ [OPEN_PAREN]
+    │       ├── ? [CLOSE_PAREN]
     │       ├── tipo
-    │       │   └── bool [BOOL]
-    │       └── endl [ENDL]
-    ├── navidad
-    │   ├── navidad [NAVIDAD]
-    │   ├── coal [COAL]
-    │   ├── ¡ [OPEN_BLOCK]
-    │   ├── sentencias
-    │   │   ├── declaracionLocal
-    │   │   │   ├── local [LOCAL]
-    │   │   │   ├── suma [ID]
-    │   │   │   ├── tipo
-    │   │   │   │   └── int [INT]
-    │   │   │   └── endl [ENDL]
-    │   │   └── declaracionLocal
-    │   │       ├── local [LOCAL]
-    │   │       ├── resultado [ID]
-    │   │       ├── tipo
-    │   │       │   └── float [FLOAT]
-    │   │       └── endl [ENDL]
-    │   └── ! [CLOSE_BLOCK]
-    └── declaracionesFunciones
-        ├── declaracionFuncion
-        │   ├── gift [GIFT]
-        │   ├── sumar [ID]
-        │   ├── ¿ [OPEN_PAREN]
-        │   ├── listaParametros
-        │   │   ├── parametro
-        │   │   │   ├── a [ID]
-        │   │   │   └── tipo
-        │   │   │       └── int [INT]
-        │   │   ├── , [COMMA]
-        │   │   └── parametro
-        │   │       ├── b [ID]
-        │   │       └── tipo
-        │   │           └── int [INT]
-        │   ├── ? [CLOSE_PAREN]
-        │   ├── tipo
-        │   │   └── int [INT]
-        │   ├── ¡ [OPEN_BLOCK]
-        │   ├── sentencias
-        │   │   ├── declaracionLocal
-        │   │   │   ├── local [LOCAL]
-        │   │   │   ├── temp [ID]
-        │   │   │   ├── tipo
-        │   │   │   │   └── int [INT]
-        │   │   │   └── endl [ENDL]
-        │   │   └── sentencia
-        │   │       ├── return [RETURN]
-        │   │       ├── primaria
-        │   │       │   └── a [ID]
-        │   │       └── endl [ENDL]
-        │   └── ! [CLOSE_BLOCK]
-        ├── declaracionFuncion
-        │   ├── gift [GIFT]
-        │   ├── multiplicar [ID]
-        │   ├── ¿ [OPEN_PAREN]
-        │   ├── listaParametros
-        │   │   ├── parametro
-        │   │   │   ├── x [ID]
-        │   │   │   └── tipo
-        │   │   │       └── float [FLOAT]
-        │   │   ├── , [COMMA]
-        │   │   └── parametro
-        │   │       ├── y [ID]
-        │   │       └── tipo
-        │   │           └── float [FLOAT]
-        │   ├── ? [CLOSE_PAREN]
-        │   ├── tipo
-        │   │   └── float [FLOAT]
-        │   ├── ¡ [OPEN_BLOCK]
-        │   ├── sentencias
-        │   │   └── sentencia
-        │   │       ├── return [RETURN]
-        │   │       ├── primaria
-        │   │       │   └── x [ID]
-        │   │       └── endl [ENDL]
-        │   └── ! [CLOSE_BLOCK]
-        ├── declaracionFuncion
-        │   ├── gift [GIFT]
-        │   ├── factorial [ID]
-        │   ├── ¿ [OPEN_PAREN]
-        │   ├── listaParametros
-        │   │   └── parametro
-        │   │       ├── n [ID]
-        │   │       └── tipo
-        │   │           └── int [INT]
-        │   ├── ? [CLOSE_PAREN]
-        │   ├── tipo
-        │   │   └── int [INT]
-        │   ├── ¡ [OPEN_BLOCK]
-        │   ├── sentencias
-        │   │   ├── declaracionLocal
-        │   │   │   ├── local [LOCAL]
-        │   │   │   ├── resultado [ID]
-        │   │   │   ├── tipo
-        │   │   │   │   └── int [INT]
-        │   │   │   ├── = [ASSIGN]
-        │   │   │   ├── literal
-        │   │   │   │   └── 1 [INT_LITERAL]
-        │   │   │   └── endl [ENDL]
-        │   │   ├── declaracionLocal
-        │   │   │   ├── local [LOCAL]
-        │   │   │   ├── i [ID]
-        │   │   │   ├── tipo
-        │   │   │   │   └── int [INT]
-        │   │   │   ├── = [ASSIGN]
-        │   │   │   ├── literal
-        │   │   │   │   └── 1 [INT_LITERAL]
-        │   │   │   └── endl [ENDL]
-        │   │   ├── loop
-        │   │   │   ├── loop [LOOP]
-        │   │   │   ├── sentencias
-        │   │   │   │   ├── asignacion
-        │   │   │   │   │   ├── resultado [ID]
-        │   │   │   │   │   ├── = [ASSIGN]
-        │   │   │   │   │   ├── multiplicativa
-        │   │   │   │   │   │   ├── primaria
-        │   │   │   │   │   │   │   └── resultado [ID]
-        │   │   │   │   │   │   ├── * [MULT]
-        │   │   │   │   │   │   └── primaria
-        │   │   │   │   │   │       └── i [ID]
-        │   │   │   │   │   └── endl [ENDL]
-        │   │   │   │   └── asignacion
-        │   │   │   │       ├── i [ID]
-        │   │   │   │       ├── = [ASSIGN]
-        │   │   │   │       ├── aditiva
-        │   │   │   │       │   ├── primaria
-        │   │   │   │       │   │   └── i [ID]
-        │   │   │   │       │   ├── + [PLUS]
-        │   │   │   │       │   └── literal
-        │   │   │   │       │       └── 1 [INT_LITERAL]
-        │   │   │   │       └── endl [ENDL]
-        │   │   │   ├── exit [EXIT]
-        │   │   │   ├── when [WHEN]
-        │   │   │   ├── comparacion
-        │   │   │   │   ├── primaria
-        │   │   │   │   │   └── i [ID]
-        │   │   │   │   ├── > [GT]
-        │   │   │   │   └── primaria
-        │   │   │   │       └── n [ID]
-        │   │   │   ├── endl [ENDL]
-        │   │   │   ├── end [END]
-        │   │   │   ├── loop [LOOP]
-        │   │   │   └── endl [ENDL]
-        │   │   └── sentencia
-        │   │       ├── return [RETURN]
-        │   │       ├── primaria
-        │   │       │   └── resultado [ID]
-        │   │       └── endl [ENDL]
-        │   └── ! [CLOSE_BLOCK]
-        └── declaracionFuncion
-            ├── gift [GIFT]
-            ├── multiplicarrrr [ID]
-            ├── ¿ [OPEN_PAREN]
-            ├── listaParametros
-            │   ├── parametro
-            │   │   ├── x [ID]
-            │   │   └── tipo
-            │   │       └── float [FLOAT]
-            │   ├── , [COMMA]
-            │   └── parametro
-            │       ├── y [ID]
-            │       └── tipo
-            │           └── float [FLOAT]
-            ├── ? [CLOSE_PAREN]
-            ├── tipo
-            │   └── float [FLOAT]
-            ├── ¡ [OPEN_BLOCK]
-            ├── sentencias
-            │   └── sentencia
-            │       ├── return [RETURN]
-            │       ├── primaria
-            │       │   └── x [ID]
-            │       └── endl [ENDL]
-            └── ! [CLOSE_BLOCK]
+    │       │   └── int [INT]
+    │       ├── ¡ [OPEN_BLOCK]
+    │       ├── sentencias
+    │       │   └── sentencia
+    │       │       ├── return [RETURN]
+    │       │       ├── literal
+    │       │       │   └── "texto" [STRING_LITERAL]
+    │       │       └── endl [ENDL]
+    │       └── ! [CLOSE_BLOCK]
+    └── navidad
+        ├── navidad [NAVIDAD]
+        ├── coal [COAL]
+        ├── ¡ [OPEN_BLOCK]
+        ├── sentencias
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── x [ID]
+        │   │   ├── tipo
+        │   │   │   └── int [INT]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── primaria
+        │   │   │   ├── suma [ID]
+        │   │   │   ├── ¿ [OPEN_PAREN]
+        │   │   │   ├── listaExpresiones
+        │   │   │   │   ├── literal
+        │   │   │   │   │   └── 5 [INT_LITERAL]
+        │   │   │   │   ├── , [COMMA]
+        │   │   │   │   └── literal
+        │   │   │   │       └── 3 [INT_LITERAL]
+        │   │   │   └── ? [CLOSE_PAREN]
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── y [ID]
+        │   │   ├── tipo
+        │   │   │   └── int [INT]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── primaria
+        │   │   │   ├── suma [ID]
+        │   │   │   ├── ¿ [OPEN_PAREN]
+        │   │   │   ├── listaExpresiones
+        │   │   │   │   └── literal
+        │   │   │   │       └── 5 [INT_LITERAL]
+        │   │   │   └── ? [CLOSE_PAREN]
+        │   │   └── endl [ENDL]
+        │   └── declaracionLocal
+        │       ├── local [LOCAL]
+        │       ├── z [ID]
+        │       ├── tipo
+        │       │   └── int [INT]
+        │       ├── = [ASSIGN]
+        │       ├── primaria
+        │       │   ├── noExiste [ID]
+        │       │   ├── ¿ [OPEN_PAREN]
+        │       │   ├── listaExpresiones
+        │       │   │   └── literal
+        │       │   │       └── 5 [INT_LITERAL]
+        │       │   └── ? [CLOSE_PAREN]
+        │       └── endl [ENDL]
+        └── ! [CLOSE_BLOCK]
 
 ======================================================================
 
 ESTADÍSTICAS:
-- Número total de nodos: 193
-- Altura del árbol: 10
+- Número total de nodos: 97
+- Altura del árbol: 8
 
 
 ======================================================================
@@ -218,13 +122,8 @@ ESTADÍSTICAS:
 ├─────────────────────────────────────────────────────────────────────┤
 │ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
 ├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ x               │ int             │ 1        │ variable     │
-│ y               │ float           │ 2        │ variable     │
-│ activo          │ bool            │ 3        │ variable     │
-│ sumar           │ int             │ 10       │ funcion      │
-│ multiplicar     │ float           │ 15       │ funcion      │
-│ factorial       │ int             │ 19       │ funcion      │
-│ multiplicarrrr  │ float           │ 32       │ funcion      │
+│ suma            │ int             │ 1        │ funcion      │
+│ error1          │ int             │ 5        │ funcion      │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -232,46 +131,20 @@ ESTADÍSTICAS:
 ├─────────────────────────────────────────────────────────────────────┤
 │ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
 ├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ suma            │ int             │ 6        │ variable     │
-│ resultado       │ float           │ 7        │ variable     │
+│ x               │ int             │ 10       │ variable     │
+│ y               │ int             │ 11       │ variable     │
+│ z               │ int             │ 12       │ variable     │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────┐
-│ ALCANCE: sumar                                                      │
+│ ALCANCE: suma                                                       │
 ├─────────────────────────────────────────────────────────────────────┤
 │ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
 ├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ a               │ int             │ 10       │ parametro    │
-│ b               │ int             │ 10       │ parametro    │
-│ temp            │ int             │ 11       │ variable     │
-└─────────────────┴─────────────────┴──────────┴──────────────┘
-
-┌─────────────────────────────────────────────────────────────────────┐
-│ ALCANCE: factorial                                                  │
-├─────────────────────────────────────────────────────────────────────┤
-│ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
-├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ n               │ int             │ 19       │ parametro    │
-│ resultado       │ int             │ 20       │ variable     │
-│ i               │ int             │ 21       │ variable     │
-└─────────────────┴─────────────────┴──────────┴──────────────┘
-
-┌─────────────────────────────────────────────────────────────────────┐
-│ ALCANCE: multiplicar                                                │
-├─────────────────────────────────────────────────────────────────────┤
-│ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
-├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ x               │ float           │ 15       │ parametro    │
-│ y               │ float           │ 15       │ parametro    │
-└─────────────────┴─────────────────┴──────────┴──────────────┘
-
-┌─────────────────────────────────────────────────────────────────────┐
-│ ALCANCE: multiplicarrrr                                             │
-├─────────────────────────────────────────────────────────────────────┤
-│ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
-├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ x               │ float           │ 32       │ parametro    │
-│ y               │ float           │ 32       │ parametro    │
+│ a               │ int             │ 1        │ parametro    │
+│ b               │ int             │ 1        │ parametro    │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 
+
+ ERRORES SEMÁNTICOS:
