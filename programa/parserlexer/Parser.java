@@ -2573,7 +2573,7 @@ class CUP$Parser$actions {
               Object RESULT =null;
 		int valleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		Integer val = (Integer)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		Object val = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
         Nodo result = new Nodo("literal");
         result.addHijo(new Nodo(val.toString(), "INT_LITERAL"));
@@ -2589,7 +2589,7 @@ class CUP$Parser$actions {
               Object RESULT =null;
 		int valleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		Float val = (Float)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		Object val = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
         Nodo result = new Nodo("literal");
         result.addHijo(new Nodo(val.toString(), "FLOAT_LITERAL"));
@@ -2617,10 +2617,10 @@ class CUP$Parser$actions {
               Object RESULT =null;
 		int valleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		Character val = (Character)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		Object val = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
         Nodo result = new Nodo("literal");
-        result.addHijo(new Nodo("'" + val + "'", "CHAR_LITERAL"));
+        result.addHijo(new Nodo("'" + val.toString() + "'", "CHAR_LITERAL"));
         RESULT = (Nodo)result;
     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("literal",31, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -2633,10 +2633,10 @@ class CUP$Parser$actions {
               Object RESULT =null;
 		int valleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
 		int valright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
-		String val = (String)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
+		Object val = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
         Nodo result = new Nodo("literal");
-        result.addHijo(new Nodo(val, "STRING_LITERAL"));
+        result.addHijo(new Nodo(val.toString(), "STRING_LITERAL"));
         RESULT = (Nodo)result;
     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("literal",31, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);

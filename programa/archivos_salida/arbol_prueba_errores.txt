@@ -1,4 +1,10 @@
-ÁRBOL SINTÁCTICO: prueba_errores.txt
+ANÁLISIS SINTÁCTICO: prueba_errores.txt
+======================================================================
+
+ ARCHIVO SINTÁCTICAMENTE CORRECTO
+
+======================================================================
+ÁRBOL SINTÁCTICO:
 ======================================================================
 └── programa
     ├── declaracionesGlobales
@@ -132,9 +138,9 @@ ESTADÍSTICAS:
 ├─────────────────────────────────────────────────────────────────────┤
 │ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
 ├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ x               │ int             │ 0        │ variable     │
-│ y               │ float           │ 0        │ variable     │
-│ probar          │ int             │ 0        │ funcion      │
+│ x               │ int             │ 1        │ variable     │
+│ y               │ float           │ 2        │ variable     │
+│ probar          │ int             │ 11       │ funcion      │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -142,8 +148,8 @@ ESTADÍSTICAS:
 ├─────────────────────────────────────────────────────────────────────┤
 │ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
 ├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ a               │ int             │ 0        │ variable     │
-│ b               │ float           │ 0        │ variable     │
+│ a               │ int             │ 6        │ variable     │
+│ b               │ float           │ 7        │ variable     │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -151,18 +157,18 @@ ESTADÍSTICAS:
 ├─────────────────────────────────────────────────────────────────────┤
 │ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
 ├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ m               │ int             │ 0        │ parametro    │
-│ n               │ int             │ 0        │ parametro    │
-│ temp            │ int             │ 0        │ variable     │
-│ temp2           │ float           │ 0        │ variable     │
-│ z               │ int             │ 0        │ parametro    │
+│ m               │ int             │ 11       │ parametro    │
+│ n               │ int             │ 11       │ parametro    │
+│ temp            │ int             │ 12       │ variable     │
+│ temp2           │ float           │ 13       │ variable     │
+│ z               │ int             │ 18       │ parametro    │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 
 
-⚠️ ERRORES SEMÁNTICOS:
-  - Variable global duplicada 'x' en línea 0
-  - Variable local duplicada 'a' en alcance 'NAVIDAD', línea 0
-  - Parámetro duplicado 'm' en línea 0
-  - Variable local duplicada 'temp' en alcance 'probar', línea 0
-  - Función duplicada 'probar' en línea 0
+ ERRORES SEMÁNTICOS:
+  - Variable global duplicada 'x' en línea 3
+  - Variable local duplicada 'a' en alcance 'NAVIDAD', línea 8
+  - Parámetro duplicado 'm' en línea 11
+  - Variable local duplicada 'temp' en alcance 'probar', línea 14
+  - Función duplicada 'probar' en línea 18

@@ -80,10 +80,10 @@ terminal ASSIGN, ARROW;                   // = ->
 terminal COMMA, SEMICOLON;
 
 /* Literales que cargan un valor específico (value) */
-terminal Integer INT_LITERAL;
-terminal Float   FLOAT_LITERAL;
-terminal String  STRING_LITERAL;
-terminal Character CHAR_LITERAL;
+terminal INT_LITERAL;
+terminal FLOAT_LITERAL;
+terminal STRING_LITERAL;
+terminal CHAR_LITERAL;
 terminal String ID;
 
 /* Terminal especial para reportar errores léxicos al Main */
@@ -870,13 +870,13 @@ literal ::= INT_LITERAL:val
     | CHAR_LITERAL:val
     {:
         Nodo result = new Nodo("literal");
-        result.addHijo(new Nodo("'" + val + "'", "CHAR_LITERAL"));
+        result.addHijo(new Nodo("'" + val.toString() + "'", "CHAR_LITERAL"));
         RESULT = (Nodo)result;
     :}
     | STRING_LITERAL:val
     {:
         Nodo result = new Nodo("literal");
-        result.addHijo(new Nodo(val, "STRING_LITERAL"));
+        result.addHijo(new Nodo(val.toString(), "STRING_LITERAL"));
         RESULT = (Nodo)result;
     :}
     ;

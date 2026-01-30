@@ -174,17 +174,17 @@ IntegerLiteral = 0 | [1-9][0-9]*
 
 /* Flotantes */
 {FloatLiteral} {
-    return symbol(sym.FLOAT_LITERAL, Double.parseDouble(yytext()));
+    return symbol(sym.FLOAT_LITERAL, (yytext()));
 }
 
 /* Enteros */
 {IntegerLiteral} {
-    return symbol(sym.INT_LITERAL, Integer.parseInt(yytext()));
+    return symbol(sym.INT_LITERAL, (yytext()));
 }
 
 /* Char literal: captura un solo caracter entre comillas simples */
     \'[^\']\'         { return symbol(sym.CHAR_LITERAL, 
-                               yytext().charAt(1)); }
+                               yytext()); }
 
 /* 
  * String literal: detecta comilla doble inicial.
