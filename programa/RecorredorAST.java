@@ -14,24 +14,21 @@ public class RecorredorAST {
         this.funcionActual = null;
     }
     
-    // OPCIÓN 3: Solo construir tabla (SIN análisis semántico)
     public void recorrer(Nodo raiz) {
         if (raiz == null) {
             System.err.println("Error: El árbol sintáctico es nulo");
             return;
         }
-        construirTabla(raiz);
+        construirTabla(raiz, false);
     }
     
-    // OPCIÓN 4: Construir tabla + Análisis semántico
     public void recorrerYAnalizar(Nodo raiz) {
         if (raiz == null) {
             System.err.println("Error: El árbol sintáctico es nulo");
             return;
         }
         
-        construirTabla(raiz);
-        analizarSemantica(raiz);
+        construirTabla(raiz, true);
         
         System.out.println("========== ANÁLISIS SEMÁNTICO ==========\n");
         
@@ -46,26 +43,49 @@ public class RecorredorAST {
         }
     }
     
-    private void construirTabla(Nodo nodo) {
+    private int obtenerLinea(Nodo nodo) {
+        if (nodo == null) return -1;
+        if (nodo.getLinea() > 0) return nodo.getLinea();
+        
+        for (Nodo hijo : nodo.getHijos()) {
+            int linea = obtenerLinea(hijo);
+            if (linea > 0) return linea;
+        }
+        return -1;
+    }
+    
+    private void construirTabla(Nodo nodo, boolean analizarSemantica) {
         if (nodo == null) return;
         String etiqueta = nodo.getEtiqueta();
         
         switch (etiqueta) {
-            case "programa": construirPrograma(nodo); break;
-            case "declaraciones": construirDeclaraciones(nodo); break;
-            case "declaracionGlobal": construirDeclaracionGlobal(nodo); break;
-            case "navidad": construirNavidad(nodo); break;
-            case "declaracionFuncion": construirDeclaracionFuncion(nodo); break;
-            case "declaracionLocal": construirDeclaracionLocal(nodo); break;
+            case "programa": 
+                construirPrograma(nodo, analizarSemantica); 
+                break;
+            case "declaraciones": 
+                construirDeclaraciones(nodo, analizarSemantica); 
+                break;
+            case "declaracionGlobal": 
+                construirDeclaracionGlobal(nodo, analizarSemantica); 
+                break;
+            case "navidad": 
+                construirNavidad(nodo, analizarSemantica); 
+                break;
+            case "declaracionFuncion": 
+                construirDeclaracionFuncion(nodo, analizarSemantica); 
+                break;
+            case "declaracionLocal": 
+                construirDeclaracionLocal(nodo, analizarSemantica); 
+                break;
             default:
                 for (Nodo hijo : nodo.getHijos()) {
-                    construirTabla(hijo);
+                    construirTabla(hijo, analizarSemantica);
                 }
                 break;
         }
     }
     
-    private void analizarSemantica(Nodo nodo) {
+    private void analizarSemanticaNodo(Nodo nodo) {
         if (nodo == null) return;
         
         String etiqueta = nodo.getEtiqueta();
@@ -78,24 +98,20 @@ public class RecorredorAST {
             case "asignacion":
                 verificarAsignacionSimple(nodo);
                 break;
+            case "decideOf":
             case "decide":
-                verificarCondicion(nodo);
+                verificarDecideOf(nodo);
+                break;
+            case "caso":
+                verificarCaso(nodo);
                 break;
             case "loop":
                 verificarLoop(nodo);
                 break;
             case "acceso":
+            case "accesoArray":
                 verificarAccesoArray(nodo);
                 break;
-            case "declaracionFuncion":
-                String nombreFunc = nodo.getHijos().get(1).getLexema();
-                String funcionAnterior = funcionActual;
-                funcionActual = nombreFunc;
-                for (Nodo hijo : nodo.getHijos()) {
-                    analizarSemantica(hijo);
-                }
-                funcionActual = funcionAnterior;
-                return;
             case "sentencia":
                 if (!nodo.getHijos().isEmpty()) {
                     Nodo primerHijo = nodo.getHijos().get(0);
@@ -112,7 +128,7 @@ public class RecorredorAST {
         }
         
         for (Nodo hijo : nodo.getHijos()) {
-            analizarSemantica(hijo);
+            analizarSemanticaNodo(hijo);
         }
     }
     
@@ -137,12 +153,11 @@ public class RecorredorAST {
         if (nodoID.getTipo() == null || !nodoID.getTipo().equals("ID")) return;
         
         String nombreVar = nodoID.getLexema();
-        int linea = nodoID.getLinea();
-        if (linea == -1) linea = 0;
+        int linea = obtenerLinea(nodo);
         
         Simbolo simbolo = tablaSimbolos.buscar(nombreVar);
         if (simbolo == null) {
-            String claveError = nombreVar + "_" + linea;
+            String claveError = "var_notfound_" + nombreVar + "_" + linea;
             if (!erroresReportados.contains(claveError)) {
                 erroresReportados.add(claveError);
                 erroresSemanticos.add("Línea " + linea + ": variable no declarada '" + nombreVar + "'");
@@ -154,26 +169,34 @@ public class RecorredorAST {
         String tipoExpr = inferirTipo(nodoExpresion);
         
         if (!tipoVar.equals(tipoExpr) && !tipoExpr.equals("error")) {
-            erroresSemanticos.add("Línea " + linea + 
-                ": asignación incompatible - variable '" + nombreVar + 
-                "' tipo '" + tipoVar + "' pero asignado '" + tipoExpr + "'");
+            String claveError = "asign_simple_" + nombreVar + "_" + linea;
+            if (!erroresReportados.contains(claveError)) {
+                erroresReportados.add(claveError);
+                erroresSemanticos.add("Línea " + linea + 
+                    ": asignación incompatible - variable '" + nombreVar + 
+                    "' tipo '" + tipoVar + "' pero asignado '" + tipoExpr + "'");
+            }
         }
     }
     
-    private void verificarCondicion(Nodo nodo) {
-        for (Nodo hijo : nodo.getHijos()) {
-            if (hijo.getEtiqueta().startsWith("relacional") || 
-                hijo.getEtiqueta().startsWith("logica") ||
-                hijo.getEtiqueta().equals("expresion") ||
-                hijo.getEtiqueta().equals("comparacion") ||
-                hijo.getEtiqueta().equals("aditiva") ||
-                hijo.getEtiqueta().equals("multiplicativa")) {
-                
-                String tipoCondicion = inferirTipo(hijo);
-                if (!tipoCondicion.equals("bool") && !tipoCondicion.equals("error")) {
-                    erroresSemanticos.add("Condición debe ser tipo 'bool' pero es '" + tipoCondicion + "'");
-                }
-                break;
+    private void verificarDecideOf(Nodo nodo) {
+        // decide of no tiene condición general, los casos individuales se verifican
+    }
+    
+    private void verificarCaso(Nodo nodo) {
+        ArrayList<Nodo> hijos = nodo.getHijos();
+        if (hijos.isEmpty()) return;
+        
+        Nodo expresion = hijos.get(0);
+        String tipoExpr = inferirTipo(expresion);
+        
+        if (!tipoExpr.equals("bool") && !tipoExpr.equals("error")) {
+            int linea = obtenerLinea(nodo);
+            String claveError = "caso_cond_" + linea;
+            if (!erroresReportados.contains(claveError)) {
+                erroresReportados.add(claveError);
+                erroresSemanticos.add("Línea " + linea + 
+                    ": condición debe ser tipo 'bool' pero es '" + tipoExpr + "'");
             }
         }
     }
@@ -185,16 +208,36 @@ public class RecorredorAST {
     private void buscarExitWhen(Nodo nodo) {
         if (nodo == null) return;
         
-        if (nodo.getEtiqueta().equals("exitWhen")) {
-            for (Nodo hijo : nodo.getHijos()) {
-                String tipoHijo = hijo.getTipo();
-                if (tipoHijo == null || (!tipoHijo.equals("EXIT") && !tipoHijo.equals("WHEN") && 
-                    !tipoHijo.equals("ENDL"))) {
-                    String tipoCond = inferirTipo(hijo);
-                    if (!tipoCond.equals("bool") && !tipoCond.equals("error")) {
-                        erroresSemanticos.add("Exit when debe tener condición 'bool' pero es '" + tipoCond + "'");
+        String etiqueta = nodo.getEtiqueta();
+        
+        if (etiqueta.equals("loop")) {
+            ArrayList<Nodo> hijos = nodo.getHijos();
+            boolean encontreExit = false;
+            
+            for (int i = 0; i < hijos.size(); i++) {
+                Nodo hijo = hijos.get(i);
+                
+                if (hijo.getTipo() != null && hijo.getTipo().equals("EXIT")) {
+                    encontreExit = true;
+                }
+                
+                if (encontreExit && hijo.getTipo() != null && hijo.getTipo().equals("WHEN")) {
+                    if (i + 1 < hijos.size()) {
+                        Nodo expresion = hijos.get(i + 1);
+                        if (expresion.getTipo() == null || !expresion.getTipo().equals("ENDL")) {
+                            String tipoCond = inferirTipo(expresion);
+                            if (!tipoCond.equals("bool") && !tipoCond.equals("error")) {
+                                int linea = obtenerLinea(nodo);
+                                String claveError = "exitwhen_" + linea;
+                                if (!erroresReportados.contains(claveError)) {
+                                    erroresReportados.add(claveError);
+                                    erroresSemanticos.add("Línea " + linea + 
+                                        ": exit when debe tener condición 'bool' pero es '" + tipoCond + "'");
+                                }
+                            }
+                            return;
+                        }
                     }
-                    return;
                 }
             }
         }
@@ -214,10 +257,14 @@ public class RecorredorAST {
         String nombreArray = nodoID.getLexema();
         Simbolo array = tablaSimbolos.buscar(nombreArray);
         
+        int linea = obtenerLinea(nodo);
+        
         if (array == null) {
-            int linea = nodoID.getLinea();
-            if (linea == -1) linea = 0;
-            erroresSemanticos.add("Línea " + linea + ": array no declarado '" + nombreArray + "'");
+            String claveError = "arr_notfound_" + nombreArray + "_" + linea;
+            if (!erroresReportados.contains(claveError)) {
+                erroresReportados.add(claveError);
+                erroresSemanticos.add("Línea " + linea + ": array no declarado '" + nombreArray + "'");
+            }
             return;
         }
         
@@ -226,10 +273,15 @@ public class RecorredorAST {
             if (hijo.getEtiqueta().startsWith("expresion") || 
                 hijo.getEtiqueta().equals("literal") ||
                 hijo.getEtiqueta().equals("primaria") ||
-                hijo.getEtiqueta().equals("aditiva")) {
+                hijo.getEtiqueta().equals("aditiva") ||
+                hijo.getEtiqueta().equals("literalBooleano")) {
                 String tipoIndice = inferirTipo(hijo);
                 if (!tipoIndice.equals("int") && !tipoIndice.equals("error")) {
-                    erroresSemanticos.add("Índice de array debe ser 'int' pero es '" + tipoIndice + "'");
+                    String claveError = "arr_idx_" + nombreArray + "_" + linea + "_" + numIndices;
+                    if (!erroresReportados.contains(claveError)) {
+                        erroresReportados.add(claveError);
+                        erroresSemanticos.add("Línea " + linea + ": índice de array debe ser 'int' pero es '" + tipoIndice + "'");
+                    }
                 }
                 numIndices++;
             }
@@ -239,8 +291,12 @@ public class RecorredorAST {
         if (dims != null && !dims.equals("?x?")) {
             int dimsEsperadas = dims.contains("x") ? 2 : 1;
             if (numIndices != dimsEsperadas) {
-                erroresSemanticos.add("Array '" + nombreArray + 
-                    "' tiene " + dimsEsperadas + " dimensiones pero se accede con " + numIndices);
+                String claveError = "arr_dims_" + nombreArray + "_" + linea;
+                if (!erroresReportados.contains(claveError)) {
+                    erroresReportados.add(claveError);
+                    erroresSemanticos.add("Línea " + linea + ": array '" + nombreArray + 
+                        "' tiene " + dimsEsperadas + " dimensiones pero se accede con " + numIndices);
+                }
             }
         }
     }
@@ -275,11 +331,14 @@ public class RecorredorAST {
         String tipoExpresion = inferirTipo(nodoExpresion);
         
         if (!tipoDeclarado.equals(tipoExpresion) && !tipoExpresion.equals("error")) {
-            int linea = nodoID.getLinea();
-            if (linea == -1) linea = 0;
-            erroresSemanticos.add("Línea " + linea + 
-                ": variable '" + nodoID.getLexema() + 
-                "' tipo '" + tipoDeclarado + "' pero asignado '" + tipoExpresion + "'");
+            int linea = obtenerLinea(nodo);
+            String claveError = "asign_decl_" + nodoID.getLexema() + "_" + linea;
+            if (!erroresReportados.contains(claveError)) {
+                erroresReportados.add(claveError);
+                erroresSemanticos.add("Línea " + linea + 
+                    ": variable '" + nodoID.getLexema() + 
+                    "' tipo '" + tipoDeclarado + "' pero asignado '" + tipoExpresion + "'");
+            }
         }
     }
     
@@ -289,13 +348,12 @@ public class RecorredorAST {
         
         Nodo nodoID = hijos.get(0);
         String nombreFunc = nodoID.getLexema();
-        int linea = nodoID.getLinea();
-        if (linea == -1) linea = 0;
+        int linea = obtenerLinea(nodo);
         
         Simbolo funcion = tablaSimbolos.buscar(nombreFunc);
         
         if (funcion == null || !funcion.getCategoria().equals("funcion")) {
-            String claveError = "func_" + nombreFunc + "_" + linea;
+            String claveError = "func_notfound_" + nombreFunc + "_" + linea;
             if (!erroresReportados.contains(claveError)) {
                 erroresReportados.add(claveError);
                 erroresSemanticos.add("Línea " + linea + ": función '" + nombreFunc + "' no declarada");
@@ -322,23 +380,36 @@ public class RecorredorAST {
         }
         
         if (tiposEsperados.size() != tiposReales.size()) {
-            erroresSemanticos.add("Línea " + linea + ": función '" + nombreFunc + "' esperaba " + 
-                tiposEsperados.size() + " argumentos pero recibió " + tiposReales.size());
+            String claveError = "args_count_" + nombreFunc + "_" + linea;
+            if (!erroresReportados.contains(claveError)) {
+                erroresReportados.add(claveError);
+                erroresSemanticos.add("Línea " + linea + ": función '" + nombreFunc + "' esperaba " + 
+                    tiposEsperados.size() + " argumentos pero recibió " + tiposReales.size());
+            }
             return;
         }
         
         for (int i = 0; i < tiposEsperados.size(); i++) {
             if (!tiposEsperados.get(i).equals(tiposReales.get(i)) && 
                 !tiposReales.get(i).equals("error")) {
-                erroresSemanticos.add("Línea " + linea + ": argumento " + (i+1) + " de '" + nombreFunc + 
-                    "' esperaba '" + tiposEsperados.get(i) + "' pero recibió '" + tiposReales.get(i) + "'");
+                String claveError = "args_type_" + nombreFunc + "_" + i + "_" + linea;
+                if (!erroresReportados.contains(claveError)) {
+                    erroresReportados.add(claveError);
+                    erroresSemanticos.add("Línea " + linea + ": argumento " + (i+1) + " de '" + nombreFunc + 
+                        "' esperaba '" + tiposEsperados.get(i) + "' pero recibió '" + tiposReales.get(i) + "'");
+                }
             }
         }
     }
     
     private void verificarReturn(Nodo nodo) {
         if (funcionActual == null) {
-            erroresSemanticos.add("Return fuera de función");
+            int linea = obtenerLinea(nodo);
+            String claveError = "return_nofunction_" + linea;
+            if (!erroresReportados.contains(claveError)) {
+                erroresReportados.add(claveError);
+                erroresSemanticos.add("Línea " + linea + ": return fuera de función");
+            }
             return;
         }
         
@@ -352,10 +423,13 @@ public class RecorredorAST {
                 String tipoReal = inferirTipo(hijo);
                 
                 if (!tipoEsperado.equals(tipoReal) && !tipoReal.equals("error")) {
-                    int linea = nodo.getHijos().get(0).getLinea();
-                    if (linea == -1) linea = 0;
-                    erroresSemanticos.add("Línea " + linea + ": return tipo '" + tipoReal + 
-                        "' pero función '" + funcionActual + "' retorna '" + tipoEsperado + "'");
+                    int linea = obtenerLinea(nodo);
+                    String claveError = "return_type_" + funcionActual + "_" + linea;
+                    if (!erroresReportados.contains(claveError)) {
+                        erroresReportados.add(claveError);
+                        erroresSemanticos.add("Línea " + linea + ": return tipo '" + tipoReal + 
+                            "' pero función '" + funcionActual + "' retorna '" + tipoEsperado + "'");
+                    }
                 }
                 break;
             }
@@ -411,7 +485,12 @@ public class RecorredorAST {
                 }
                 
                 if (!tipo1.equals("error") && !tipo2.equals("error")) {
-                    erroresSemanticos.add("Operación aritmética inválida entre '" + tipo1 + "' y '" + tipo2 + "'");
+                    int linea = obtenerLinea(nodo);
+                    String claveError = "arit_" + linea + "_" + tipo1 + "_" + tipo2;
+                    if (!erroresReportados.contains(claveError)) {
+                        erroresReportados.add(claveError);
+                        erroresSemanticos.add("Línea " + linea + ": operación aritmética inválida entre '" + tipo1 + "' y '" + tipo2 + "'");
+                    }
                 }
                 return "error";
             }
@@ -438,7 +517,13 @@ public class RecorredorAST {
                 }
                 
                 if (!tipo1.equals("error") && !tipo2.equals("error")) {
-                    erroresSemanticos.add("Comparación entre tipos incompatibles: '" + tipo1 + "' y '" + tipo2 + "'");
+                    int linea = obtenerLinea(nodo);
+                    String claveError = "comp_" + linea + "_" + tipo1 + "_" + tipo2;
+                    if (!erroresReportados.contains(claveError)) {
+                        erroresReportados.add(claveError);
+                        erroresSemanticos.add("Línea " + linea + 
+                            ": comparación entre tipos incompatibles: '" + tipo1 + "' y '" + tipo2 + "'");
+                    }
                 }
             }
             nodo.setTipoSemantico("bool");
@@ -452,7 +537,12 @@ public class RecorredorAST {
                 if (nodo.getHijos().size() >= 2) {
                     String tipoOperando = inferirTipo(nodo.getHijos().get(1));
                     if (!tipoOperando.equals("bool") && !tipoOperando.equals("error")) {
-                        erroresSemanticos.add("Operador NOT requiere operando 'bool' pero es '" + tipoOperando + "'");
+                        int linea = obtenerLinea(nodo);
+                        String claveError = "not_" + linea + "_" + tipoOperando;
+                        if (!erroresReportados.contains(claveError)) {
+                            erroresReportados.add(claveError);
+                            erroresSemanticos.add("Línea " + linea + ": operador NOT requiere operando 'bool' pero es '" + tipoOperando + "'");
+                        }
                     }
                 }
             } else {
@@ -461,10 +551,20 @@ public class RecorredorAST {
                     String tipo2 = inferirTipo(nodo.getHijos().get(2));
                     
                     if (!tipo1.equals("bool") && !tipo1.equals("error")) {
-                        erroresSemanticos.add("Operador lógico requiere 'bool' pero lado izquierdo es '" + tipo1 + "'");
+                        int linea = obtenerLinea(nodo);
+                        String claveError = "log_left_" + linea + "_" + tipo1;
+                        if (!erroresReportados.contains(claveError)) {
+                            erroresReportados.add(claveError);
+                            erroresSemanticos.add("Línea " + linea + ": operador lógico requiere 'bool' pero lado izquierdo es '" + tipo1 + "'");
+                        }
                     }
                     if (!tipo2.equals("bool") && !tipo2.equals("error")) {
-                        erroresSemanticos.add("Operador lógico requiere 'bool' pero lado derecho es '" + tipo2 + "'");
+                        int linea = obtenerLinea(nodo);
+                        String claveError = "log_right_" + linea + "_" + tipo2;
+                        if (!erroresReportados.contains(claveError)) {
+                            erroresReportados.add(claveError);
+                            erroresSemanticos.add("Línea " + linea + ": operador lógico requiere 'bool' pero lado derecho es '" + tipo2 + "'");
+                        }
                     }
                 }
             }
@@ -472,7 +572,7 @@ public class RecorredorAST {
             return "bool";
         }
         
-        if (etiqueta.equals("acceso")) {
+        if (etiqueta.equals("acceso") || etiqueta.equals("accesoArray")) {
             ArrayList<Nodo> hijos = nodo.getHijos();
             if (!hijos.isEmpty()) {
                 Nodo nodoID = hijos.get(0);
@@ -509,19 +609,21 @@ public class RecorredorAST {
                         nodo.setTipoSemantico(tipo);
                         return tipo;
                     }
-                    int linea = hijo.getLinea();
-                    if (linea == -1) linea = 0;
-                    String claveError = hijo.getLexema() + "_" + linea;
+                    int linea = obtenerLinea(nodo);
+                    String claveError = "var_notfound_id_" + hijo.getLexema() + "_" + linea;
                     if (!erroresReportados.contains(claveError)) {
                         erroresReportados.add(claveError);
                         erroresSemanticos.add("Línea " + linea + ": variable no declarada '" + hijo.getLexema() + "'");
                     }
                     return "error";
                 }
+                
+                // Primaria con paréntesis: delegar al hijo
                 return inferirTipo(hijo);
             }
         }
         
+        // Recursión en hijos
         for (Nodo hijo : nodo.getHijos()) {
             String tipoHijo = inferirTipo(hijo);
             if (!tipoHijo.equals("error")) {
@@ -545,19 +647,19 @@ public class RecorredorAST {
         }
     }
     
-    private void construirPrograma(Nodo nodo) {
+    private void construirPrograma(Nodo nodo, boolean analizarSemantica) {
         for (Nodo hijo : nodo.getHijos()) {
-            construirTabla(hijo);
+            construirTabla(hijo, analizarSemantica);
         }
     }
     
-    private void construirDeclaraciones(Nodo nodo) {
+    private void construirDeclaraciones(Nodo nodo, boolean analizarSemantica) {
         for (Nodo hijo : nodo.getHijos()) {
-            construirTabla(hijo);
+            construirTabla(hijo, analizarSemantica);
         }
     }
     
-    private void construirDeclaracionGlobal(Nodo nodo) {
+    private void construirDeclaracionGlobal(Nodo nodo, boolean analizarSemantica) {
         ArrayList<Nodo> hijos = nodo.getHijos();
         String nombreVar = hijos.get(1).getLexema();
         int linea = hijos.get(1).getLinea();
@@ -576,19 +678,26 @@ public class RecorredorAST {
                 erroresSemanticos.add("Línea " + linea + ": Array global duplicado '" + nombreVar + "'");
             }
         }
+        
+        if (analizarSemantica) {
+            analizarSemanticaNodo(nodo);
+        }
     }
     
-    private void construirNavidad(Nodo nodo) {
+    private void construirNavidad(Nodo nodo, boolean analizarSemantica) {
         tablaSimbolos.entrarAlcance("NAVIDAD");
         for (Nodo hijo : nodo.getHijos()) {
             if (hijo.getEtiqueta().equals("sentencias")) {
-                construirTabla(hijo);
+                construirTabla(hijo, analizarSemantica);
+                if (analizarSemantica) {
+                    analizarSemanticaNodo(hijo);
+                }
             }
         }
         tablaSimbolos.salirAlcance();
     }
     
-    private void construirDeclaracionFuncion(Nodo nodo) {
+    private void construirDeclaracionFuncion(Nodo nodo, boolean analizarSemantica) {
         ArrayList<Nodo> hijos = nodo.getHijos();
         String nombreFuncion = hijos.get(1).getLexema();
         int linea = hijos.get(1).getLinea();
@@ -615,20 +724,25 @@ public class RecorredorAST {
         }
         
         tablaSimbolos.entrarAlcance(nombreFuncion);
+        funcionActual = nombreFuncion;
         
         for (Nodo hijo : hijos) {
             if (hijo != null && hijo.getEtiqueta().equals("listaParametros")) {
-                construirParametros(hijo);
+                construirParametros(hijo, analizarSemantica);
             }
         }
         
         for (Nodo hijo : hijos) {
             if (hijo != null && hijo.getEtiqueta().equals("sentencias")) {
-                construirTabla(hijo);
+                construirTabla(hijo, analizarSemantica);
+                if (analizarSemantica) {
+                    analizarSemanticaNodo(hijo);
+                }
             }
         }
         
         tablaSimbolos.salirAlcance();
+        funcionActual = null;
     }
     
     private void extraerTiposParametros(Nodo listaParams, Simbolo funcion) {
@@ -649,15 +763,15 @@ public class RecorredorAST {
         }
     }
     
-    private void construirParametros(Nodo nodo) {
+    private void construirParametros(Nodo nodo, boolean analizarSemantica) {
         for (Nodo hijo : nodo.getHijos()) {
             if (hijo.getEtiqueta().equals("parametro")) {
-                construirParametro(hijo);
+                construirParametro(hijo, analizarSemantica);
             }
         }
     }
     
-    private void construirParametro(Nodo nodo) {
+    private void construirParametro(Nodo nodo, boolean analizarSemantica) {
         ArrayList<Nodo> hijos = nodo.getHijos();
         String nombreParam = hijos.get(0).getLexema();
         int linea = hijos.get(0).getLinea();
@@ -680,7 +794,7 @@ public class RecorredorAST {
         }
     }
     
-    private void construirDeclaracionLocal(Nodo nodo) {
+    private void construirDeclaracionLocal(Nodo nodo, boolean analizarSemantica) {
         ArrayList<Nodo> hijos = nodo.getHijos();
         String nombreVar = hijos.get(1).getLexema();
         int linea = hijos.get(1).getLinea();
@@ -702,6 +816,10 @@ public class RecorredorAST {
                 erroresSemanticos.add("Línea " + linea + ": Array local duplicado '" + nombreVar + 
                            "' en alcance '" + alcance + "'");
             }
+        }
+        
+        if (analizarSemantica) {
+            analizarSemanticaNodo(nodo);
         }
     }
     

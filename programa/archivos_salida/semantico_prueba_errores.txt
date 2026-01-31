@@ -1,0 +1,47 @@
+========== REPORTE DE ANÁLISIS SEMÁNTICO ==========
+Archivo: prueba_errores.txt
+Fecha: Sat Jan 31 04:43:31 CST 2026
+
+ERRORES SEMÁNTICOS:
+  - Línea 2: Variable global duplicada 'x'
+  - Línea 9: Función duplicada 'test1'
+  - Línea 10: return tipo 'float' pero función 'test1' retorna 'int'
+  - Línea 13: Parámetro duplicado 'a'
+  - Línea 18: variable 'y' tipo 'int' pero asignado 'string'
+  - Línea 19: variable 'z' tipo 'float' pero asignado 'int'
+  - Línea 20: variable 'w' tipo 'bool' pero asignado 'int'
+  - Línea 21: variable 'v' tipo 'string' pero asignado 'bool'
+  - Línea -1: variable no declarada 'varInexistente'
+  - Línea 32: variable no declarada 'variableInexistente'
+  - Línea 38: asignación incompatible - variable 'num' tipo 'int' pero asignado 'string'
+  - Línea 43: función 'funcionQueNoExiste' no declarada
+  - Línea 52: función 'suma' esperaba 2 argumentos pero recibió 1
+  - Línea 53: función 'suma' esperaba 2 argumentos pero recibió 3
+  - Línea 62: argumento 1 de 'multiply' esperaba 'int' pero recibió 'string'
+  - Línea 63: argumento 2 de 'multiply' esperaba 'int' pero recibió 'bool'
+  - Línea 68: return tipo 'string' pero función 'retornoInt' retorna 'int'
+  - Línea 72: return tipo 'int' pero función 'retornoFloat' retorna 'float'
+  - Línea 76: return tipo 'int' pero función 'retornoBool' retorna 'bool'
+  - Línea 80: operación aritmética inválida entre 'string' y 'int'
+  - Línea 81: operación aritmética inválida entre 'bool' y 'bool'
+  - Línea 86: comparación entre tipos incompatibles: 'int' y 'string'
+  - Línea 93: operador lógico requiere 'bool' pero lado izquierdo es 'int'
+  - Línea 94: operador lógico requiere 'bool' pero lado izquierdo es 'string'
+  - Línea 95: operador lógico requiere 'bool' pero lado izquierdo es 'int'
+  - Línea 95: operador lógico requiere 'bool' pero lado derecho es 'int'
+  - Línea 100: operador NOT requiere operando 'bool' pero es 'int'
+  - Línea 101: operador NOT requiere operando 'bool' pero es 'string'
+  - Línea 107: condición debe ser tipo 'bool' pero es 'int'
+  - Línea 124: array no declarado 'arrayInexistente'
+  - Línea 130: índice de array debe ser 'int' pero es 'string'
+  - Línea 131: índice de array debe ser 'int' pero es 'bool'
+  - Línea 143: Variable local duplicada 'x' en alcance 'duplicadosLocales'
+  - Línea 145: Variable local duplicada 'y' en alcance 'duplicadosLocales'
+  - Línea 150: Array global duplicado 'arrGlobal'
+  - Línea 155: variable 'suma' tipo 'int' pero asignado 'float'
+  - Línea 161: Variable local duplicada 'main1' en alcance 'NAVIDAD'
+  - Línea 163: función 'suma' esperaba 2 argumentos pero recibió 1
+  - Línea 167: función 'funcionFantasma' no declarada
+  - Línea 170: asignación incompatible - variable 'texto' tipo 'string' pero asignado 'int'
+
+Total: 40 errores encontrados

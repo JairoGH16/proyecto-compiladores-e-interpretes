@@ -845,13 +845,17 @@ primaria ::= OPEN_PAREN expresion:e CLOSE_PAREN
 literal ::= INT_LITERAL:val
     {:
         Nodo result = new Nodo("literal");
-        result.addHijo(new Nodo(val.toString(), "INT_LITERAL"));
+        Nodo hijo = new Nodo(val.toString(), "INT_LITERAL");
+        hijo.setLinea(valleft);
+        result.addHijo(hijo);
         RESULT = (Nodo)result;
     :}
     | FLOAT_LITERAL:val
     {:
         Nodo result = new Nodo("literal");
-        result.addHijo(new Nodo(val.toString(), "FLOAT_LITERAL"));
+        Nodo hijo = new Nodo(val.toString(), "FLOAT_LITERAL");
+        hijo.setLinea(valleft);
+        result.addHijo(hijo);
         RESULT = (Nodo)result;
     :}
     | literalBooleano:lb
@@ -859,27 +863,35 @@ literal ::= INT_LITERAL:val
     | CHAR_LITERAL:val
     {:
         Nodo result = new Nodo("literal");
-        result.addHijo(new Nodo("'" + val.toString() + "'", "CHAR_LITERAL"));
+        Nodo hijo = new Nodo("'" + val.toString() + "'", "CHAR_LITERAL");
+        hijo.setLinea(valleft);
+        result.addHijo(hijo);
         RESULT = (Nodo)result;
     :}
     | STRING_LITERAL:val
     {:
         Nodo result = new Nodo("literal");
-        result.addHijo(new Nodo(val.toString(), "STRING_LITERAL"));
+        Nodo hijo = new Nodo(val.toString(), "STRING_LITERAL");
+        hijo.setLinea(valleft);
+        result.addHijo(hijo);
         RESULT = (Nodo)result;
     :}
     ;
 
-literalBooleano ::= TRUE
+literalBooleano ::= TRUE:t
     {:
         Nodo result = new Nodo("literalBooleano");
-        result.addHijo(new Nodo("true", "TRUE"));
+        Nodo hijo = new Nodo("true", "TRUE");
+        hijo.setLinea(tleft);
+        result.addHijo(hijo);
         RESULT = (Nodo)result;
     :}
-    | FALSE
+    | FALSE:f
     {:
         Nodo result = new Nodo("literalBooleano");
-        result.addHijo(new Nodo("false", "FALSE"));
+        Nodo hijo = new Nodo("false", "FALSE");
+        hijo.setLinea(fleft);
+        result.addHijo(hijo);
         RESULT = (Nodo)result;
     :}
     ;

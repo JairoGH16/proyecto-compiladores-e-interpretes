@@ -1,20 +1,170 @@
 world x int endl
-world y float endl
 world x float endl
 
+gift test1 ¿ ? int ¡
+    return 1 endl
+!
+
+gift test1 ¿ ? float ¡
+    return 2.5 endl
+!
+
+gift duplicados ¿ a int , a int ? int ¡
+    return a endl
+!
+
+gift errorTipos ¿ ? int ¡
+    local y int = "texto" endl
+    local z float = 42 endl
+    local w bool = 100 endl
+    local v string = true endl
+    return 0 endl
+!
+
+gift noDeclaradas ¿ ? int ¡
+    local resultado int = noExiste + 5 endl
+    local otro int = varInexistente * 2 endl
+    return resultado endl
+!
+
+gift asignacionError ¿ ? int ¡
+    variableInexistente = 10 endl
+    return 0 endl
+!
+
+gift asignacionIncompatible ¿ ? int ¡
+    local num int = 5 endl
+    num = "hola" endl
+    return num endl
+!
+
+gift llamadaInvalida ¿ ? int ¡
+    local r int = funcionQueNoExiste¿10, 20? endl
+    return r endl
+!
+
+gift suma ¿ a int , b int ? int ¡
+    return a + b endl
+!
+
+gift testArgumentos ¿ ? int ¡
+    local r1 int = suma¿5? endl
+    local r2 int = suma¿1, 2, 3? endl
+    return r1 endl
+!
+
+gift multiply ¿ x int , y int ? int ¡
+    return x * y endl
+!
+
+gift testTiposArgs ¿ ? int ¡
+    local r int = multiply¿"texto", 5? endl
+    local s int = multiply¿10, true? endl
+    return r endl
+!
+
+gift retornoInt ¿ ? int ¡
+    return "string no valido" endl
+!
+
+gift retornoFloat ¿ ? float ¡
+    return 42 endl
+!
+
+gift retornoBool ¿ ? bool ¡
+    return 123 endl
+!
+
+gift aritmeticaInvalida ¿ ? int ¡
+    local s1 string = "hola" + 5 endl
+    local s2 bool = true * false endl
+    return 0 endl
+!
+
+gift comparacionInvalida ¿ ? bool ¡
+    local b1 bool = 5 > "texto" endl
+    local b2 bool = ¿true < 10? endl
+    local b3 bool = ¿"hola" == 42? endl
+    return b1 endl
+!
+
+gift logicaInvalida ¿ ? bool ¡
+    local b1 bool = 5 @ true endl
+    local b2 bool = "texto" ~ false endl
+    local b3 bool = 10 @ 20 endl
+    return b1 endl
+!
+
+gift notInvalido ¿ ? bool ¡
+    local b1 bool = Σ 5 endl
+    local b2 bool = Σ "texto" endl
+    return b1 endl
+!
+
+gift condicionInvalida ¿ ? int ¡
+    decide of
+        5 + 3 -> ¡
+            return 1 endl
+        !
+    end decide endl
+    return 0 endl
+!
+
+gift loopInvalido ¿ ? int ¡
+    local contador int = 0 endl
+    loop
+        contador = contador + 1 endl
+        exit when ¿contador + 5? endl
+    end loop endl
+    return contador endl
+!
+
+gift arrayNoDeclarado ¿ ? int ¡
+    local val int = arrayInexistente[0, 0] endl
+    return val endl
+!
+
+gift indiceInvalido ¿ ? int ¡
+    local arr int[2, 2] = ¡ ¡1, 2!, ¡3, 4! ! endl
+    local val1 int = arr["texto", 0] endl
+    local val2 int = arr[0, true] endl
+    return val1 endl
+!
+
+gift dimensionesIncorrectas ¿ ? int ¡
+    local matriz int[3, 3] = ¡ ¡1, 2, 3!, ¡4, 5, 6!, ¡7, 8, 9! ! endl
+    local val int = matriz[0,0] endl
+    return val endl
+!
+
+gift duplicadosLocales ¿ ? int ¡
+    local x int = 5 endl
+    local x int = 10 endl
+    local y float = 2.5 endl
+    local y float = 3.5 endl
+    return x endl
+!
+
+world arrGlobal int[2, 2] = ¡ ¡1, 2!, ¡3, 4! ! endl
+world arrGlobal int[2, 2] = ¡ ¡5, 6!, ¡7, 8! ! endl
+
+gift mezclaNumeros ¿ ? int ¡
+    local entero int = 10 endl
+    local decimal float = 5.5 endl
+    local suma int = entero + decimal endl
+    return suma endl
+!
+
 navidad coal ¡
-    local a int endl
-    local b float endl
-    local a float endl
-!
-
-gift probar ¿ m int , n int , m float ? int ¡
-    local temp int endl
-    local temp2 float endl
-    local temp int endl
-    return 0 endl
-!
-
-gift probar ¿ z int ? int ¡
-    return 0 endl
+    local main1 int = 5 endl
+    local main1 int = 10 endl
+    
+    local r int = suma¿100? endl
+    
+    noExiste = 42 endl
+    
+    local valor int = funcionFantasma¿1, 2, 3? endl
+    
+    local texto string = "hola" endl
+    texto = 999 endl
 !

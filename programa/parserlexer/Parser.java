@@ -2549,7 +2549,9 @@ class CUP$Parser$actions {
 		Object val = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
         Nodo result = new Nodo("literal");
-        result.addHijo(new Nodo(val.toString(), "INT_LITERAL"));
+        Nodo hijo = new Nodo(val.toString(), "INT_LITERAL");
+        hijo.setLinea(valleft);
+        result.addHijo(hijo);
         RESULT = (Nodo)result;
     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("literal",31, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -2565,7 +2567,9 @@ class CUP$Parser$actions {
 		Object val = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
         Nodo result = new Nodo("literal");
-        result.addHijo(new Nodo(val.toString(), "FLOAT_LITERAL"));
+        Nodo hijo = new Nodo(val.toString(), "FLOAT_LITERAL");
+        hijo.setLinea(valleft);
+        result.addHijo(hijo);
         RESULT = (Nodo)result;
     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("literal",31, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -2593,7 +2597,9 @@ class CUP$Parser$actions {
 		Object val = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
         Nodo result = new Nodo("literal");
-        result.addHijo(new Nodo("'" + val.toString() + "'", "CHAR_LITERAL"));
+        Nodo hijo = new Nodo("'" + val.toString() + "'", "CHAR_LITERAL");
+        hijo.setLinea(valleft);
+        result.addHijo(hijo);
         RESULT = (Nodo)result;
     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("literal",31, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -2609,7 +2615,9 @@ class CUP$Parser$actions {
 		Object val = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
         Nodo result = new Nodo("literal");
-        result.addHijo(new Nodo(val.toString(), "STRING_LITERAL"));
+        Nodo hijo = new Nodo(val.toString(), "STRING_LITERAL");
+        hijo.setLinea(valleft);
+        result.addHijo(hijo);
         RESULT = (Nodo)result;
     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("literal",31, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -2620,9 +2628,14 @@ class CUP$Parser$actions {
           case 96: // literalBooleano ::= TRUE 
             {
               Object RESULT =null;
+		int tleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int tright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Object t = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
         Nodo result = new Nodo("literalBooleano");
-        result.addHijo(new Nodo("true", "TRUE"));
+        Nodo hijo = new Nodo("true", "TRUE");
+        hijo.setLinea(tleft);
+        result.addHijo(hijo);
         RESULT = (Nodo)result;
     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("literalBooleano",32, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
@@ -2633,9 +2646,14 @@ class CUP$Parser$actions {
           case 97: // literalBooleano ::= FALSE 
             {
               Object RESULT =null;
+		int fleft = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).left;
+		int fright = ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()).right;
+		Object f = (Object)((java_cup.runtime.Symbol) CUP$Parser$stack.peek()).value;
 		
         Nodo result = new Nodo("literalBooleano");
-        result.addHijo(new Nodo("false", "FALSE"));
+        Nodo hijo = new Nodo("false", "FALSE");
+        hijo.setLinea(fleft);
+        result.addHijo(hijo);
         RESULT = (Nodo)result;
     
               CUP$Parser$result = parser.getSymbolFactory().newSymbol("literalBooleano",32, ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), ((java_cup.runtime.Symbol)CUP$Parser$stack.peek()), RESULT);
