@@ -2,15 +2,12 @@ gift suma ¿ a int , b int ? int ¡
     return a + b endl
 !
 
-gift error1 ¿ ? int ¡
+gift error1 ¿ ? string ¡
     return "texto" endl
 !
 
 navidad coal ¡
-    local b3 bool = ¿"hola" == 42? endl
+    local b3 bool = ¿4 == 42? endl
     local x int = suma¿5, 3? endl
-    local x int endl
-    local y int endl
-    local y int = suma¿5? endl
-    local z int = noExiste¿5? endl
+    local y int = suma¿5, 2? endl
 !

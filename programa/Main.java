@@ -32,7 +32,8 @@ public class Main {
             System.out.println("1. Generar Lexer.java, Parser.java y sym.java");
             System.out.println("2. Realizar Análisis Léxico");
             System.out.println("3. Realizar Análisis Sintáctico");
-            System.out.println("4. Realizar Análisis Semántico");  // CAMBIO: Opción 4 agregada
+            System.out.println("4. Realizar Análisis Semántico");
+            System.out.println("5. Realizar Análisis Total (Léxico+Sintáctico+Semántico)");
             System.out.println("0. Salir");
             
             String opcion = sc.nextLine();
@@ -49,6 +50,9 @@ public class Main {
                     break;
                 case "4":                                          // CAMBIO: Case 4 agregado
                     menuAnalisisSemantico();
+                    break;
+                case "5":
+                    menuAnalisisCompleto();
                     break;
                 case "0":
                     System.out.println("Saliendo...");
@@ -134,6 +138,43 @@ public class Main {
             ejecutarAnalisisSemantico(listaArchivos[eleccion - 1]);
         } else {
             System.out.println("Opción fuera de rango");
+        }
+    }
+
+    /**
+     * Método menuAnalisisCompleto
+     * Objetivo: Menú para seleccionar archivos y verificar si son 100% válidos (Léxico, Sintáctico y Semántico).
+     * Entrada: Selección del usuario por consola.
+     * Salida: Resultado de validación por consola.
+     * Restricciones: Requiere que los archivos de configuración estén generados.
+     */
+    private static void menuAnalisisCompleto() {
+        File folder = new File(RUTA_PRUEBAS);
+        File[] listaArchivos = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
+        if (listaArchivos == null || listaArchivos.length == 0) {
+            System.err.println("Error: No hay archivos .txt en " + RUTA_PRUEBAS);
+            return;
+        }
+        System.out.println("\n--- Lista de archivos para validación total ---");
+        for (int i = 0; i < listaArchivos.length; i++) {
+            System.out.println((i + 1) + ". " + listaArchivos[i].getName());
+        }
+        System.out.print("Escoja un archivo para validar: ");
+        int eleccion;
+        try {
+            eleccion = Integer.parseInt(sc.nextLine());
+            if (eleccion > 0 && eleccion <= listaArchivos.length) {
+                boolean esValido = validarCodigoCompleto(listaArchivos[eleccion - 1]);
+                if (esValido) {
+                    System.out.println("\nEL ARCHIVO ES VÁLIDO Y PUEDE GENERARSE.");
+                } else {
+                    System.out.println("\nEL ARCHIVO CONTIENE ERRORES Y NO PUEDE GENERARSE.");
+                }
+            } else {
+                System.out.println("Opción fuera de rango");
+            }
+        } catch (Exception e) {
+            System.out.println("Entrada inválida");
         }
     }
 
@@ -226,6 +267,48 @@ public class Main {
         } catch (Exception e) {
             System.err.println("Error en análisis semántico: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Método validarCodigoCompleto
+     * Objetivo: Ejecutar los tres niveles de análisis en cadena para determinar validez total.
+     * Entrada: Objeto File del archivo a validar.
+     * Salida: true si el archivo no tiene errores léxicos, sintácticos ni semánticos, false en caso contrario.
+     * Restricciones: Depende de las clases Lexer, Parser y RecorredorAST.
+     */
+    private static boolean validarCodigoCompleto(File archivoFuente) {
+        try {
+            System.out.println("\nIniciando validación integral de: " + archivoFuente.getName());
+            Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(archivoFuente), "UTF-8"));
+            // 1 y 2. Análisis Léxico y Sintáctico (El parser consume al lexer)
+            Class<?> lexerClass = Class.forName("parserlexer.Lexer");
+            Object scanner = lexerClass.getConstructor(Reader.class).newInstance(reader);
+            Class<?> parserClass = Class.forName("parserlexer.Parser");
+            Object parser = parserClass.getConstructor(java_cup.runtime.Scanner.class).newInstance(scanner);
+            parserClass.getMethod("limpiarErrores").invoke(null);
+            parserClass.getMethod("parse").invoke(parser);
+            @SuppressWarnings("unchecked")
+            java.util.ArrayList<String> errSintacticos = 
+                (java.util.ArrayList<String>) parserClass.getMethod("getErrores").invoke(null);
+            if (!errSintacticos.isEmpty()) {
+                System.err.println("-> Falló análisis sintáctico/léxico.");
+                return false;
+            }
+            // 3. Análisis Semántico
+            java.lang.reflect.Field campoArbol = parserClass.getField("arbolSintactico");
+            Object arbol = campoArbol.get(null);
+            if (arbol == null) return false;
+            RecorredorAST recorredor = new RecorredorAST();
+            recorredor.recorrerYAnalizar((Nodo) arbol);
+            if (recorredor.tieneErrores()) {
+                System.err.println("-> Falló análisis semántico.");
+                return false;
+            }
+            return true; // si no hubo ningun error
+        } catch (Exception e) {
+            System.err.println("Error en validación: " + e.getMessage());
+            return false;
         }
     }
 
