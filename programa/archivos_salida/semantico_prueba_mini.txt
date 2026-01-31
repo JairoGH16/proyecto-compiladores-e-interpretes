@@ -1,12 +1,13 @@
 ========== REPORTE DE ANÁLISIS SEMÁNTICO ==========
 Archivo: prueba_mini.txt
-Fecha: Sat Jan 31 03:42:27 CST 2026
+Fecha: Sat Jan 31 16:08:52 CST 2026
 
 ERRORES SEMÁNTICOS:
   - Línea 6: return tipo 'string' pero función 'error1' retorna 'int'
-  - Línea 11: Variable local duplicada 'x' en alcance 'NAVIDAD'
-  - Línea 13: Variable local duplicada 'y' en alcance 'NAVIDAD'
-  - Línea 13: función 'suma' esperaba 2 argumentos pero recibió 1
-  - Línea 14: función 'noExiste' no declarada
+  - Línea 10: comparación entre tipos incompatibles: 'string' y 'int'
+  - Línea 12: Variable local duplicada 'x' en alcance 'NAVIDAD'
+  - Línea 14: Variable local duplicada 'y' en alcance 'NAVIDAD'
+  - Línea 14: función 'suma' esperaba 2 argumentos pero recibió 1
+  - Línea 15: función 'noExiste' no declarada
 
-Total: 5 errores encontrados
+Total: 6 errores encontrados
