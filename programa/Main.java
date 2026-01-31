@@ -32,6 +32,7 @@ public class Main {
             System.out.println("1. Generar Lexer.java, Parser.java y sym.java");
             System.out.println("2. Realizar Análisis Léxico");
             System.out.println("3. Realizar Análisis Sintáctico");
+            System.out.println("4. Realizar Análisis Semántico");  // CAMBIO: Opción 4 agregada
             System.out.println("0. Salir");
             
             String opcion = sc.nextLine();
@@ -45,6 +46,9 @@ public class Main {
                     break;
                 case "3":
                     menuAnalisisSintactico();
+                    break;
+                case "4":                                          // CAMBIO: Case 4 agregado
+                    menuAnalisisSemantico();
                     break;
                 case "0":
                     System.out.println("Saliendo...");
@@ -87,6 +91,141 @@ public class Main {
             ejecutarParser(listaArchivos[eleccion - 1]);
         } else {
             System.out.println("Opción fuera de rango");
+        }
+    }
+
+    // CAMBIO: Método nuevo agregado para opción 4
+    /**
+     * Método menuAnalisisSemantico
+     * Objetivo: Menú para seleccionar archivos y ejecutar análisis semántico completo.
+     * Entrada: Selección del usuario por consola.
+     * Salida: Llamada al método ejecutarAnalisisSemantico con el archivo seleccionado.
+     * Restricciones: Debe haber archivos .txt en la carpeta archivos_prueba/.
+     */
+    private static void menuAnalisisSemantico() {
+        File folder = new File(RUTA_PRUEBAS);
+        File[] listaArchivos = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
+        
+        if (listaArchivos == null || listaArchivos.length == 0) {
+            System.err.println("Error: No hay archivos .txt en " + RUTA_PRUEBAS);
+            return;
+        }
+        
+        System.out.println("\n--- Lista de archivos disponibles ---");
+        System.out.println("0. ANALIZAR TODOS");
+        for (int i = 0; i < listaArchivos.length; i++) {
+            System.out.println((i + 1) + ". " + listaArchivos[i].getName());
+        }
+        
+        System.out.print("Escoja una opción: ");
+        int eleccion;
+        try {
+            eleccion = Integer.parseInt(sc.nextLine());
+        } catch (Exception e) {
+            System.out.println("Entrada inválida");
+            return;
+        }
+    
+        if (eleccion == 0) {
+            for (File f : listaArchivos) {
+                ejecutarAnalisisSemantico(f);
+            }
+        } else if (eleccion > 0 && eleccion <= listaArchivos.length) {
+            ejecutarAnalisisSemantico(listaArchivos[eleccion - 1]);
+        } else {
+            System.out.println("Opción fuera de rango");
+        }
+    }
+
+    // CAMBIO: Método nuevo agregado para ejecutar análisis semántico
+    /**
+     * Método ejecutarAnalisisSemantico
+     * Objetivo: Realizar análisis sintáctico y semántico completo, reportando solo errores semánticos.
+     * Entrada: Objeto File que representa el archivo fuente a analizar.
+     * Salida: Archivo de texto en archivos_salida/ con errores semánticos encontrados.
+     * Restricciones: El archivo Parser.java debe haber sido generado previamente (opción 1).
+     */
+    private static void ejecutarAnalisisSemantico(File archivoFuente) {
+        String nombreSinExt = archivoFuente.getName().replace(".txt", "");
+        String rutaReporte = RUTA_SALIDA + "semantico_" + nombreSinExt + ".txt";
+        
+        try {
+            System.out.println("Analizando: " + archivoFuente.getName() + "...\n");
+            
+            // Leer el archivo con UTF-8
+            Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(archivoFuente), "UTF-8"));
+            
+            // Cargar las clases dinámicamente
+            Class<?> lexerClass = Class.forName("parserlexer.Lexer");
+            Object scanner = lexerClass.getConstructor(Reader.class).newInstance(reader);
+            
+            Class<?> parserClass = Class.forName("parserlexer.Parser");
+            Object parser = parserClass.getConstructor(java_cup.runtime.Scanner.class).newInstance(scanner);
+            
+            // Limpiar errores previos y ejecutar parser
+            parserClass.getMethod("limpiarErrores").invoke(null);
+            parserClass.getMethod("parse").invoke(parser);
+            
+            // Obtener errores sintácticos
+            @SuppressWarnings("unchecked")
+            java.util.ArrayList<String> erroresSintacticos = 
+                (java.util.ArrayList<String>) parserClass.getMethod("getErrores").invoke(null);
+            
+            // Si hay errores sintácticos, no continuar
+            if (!erroresSintacticos.isEmpty()) {
+                System.err.println("Errores sintácticos encontrados. No se puede continuar.\n");
+                for (String error : erroresSintacticos) {
+                    System.err.println("  - " + error);
+                }
+                return;
+            }
+            
+            // Obtener el árbol sintáctico
+            java.lang.reflect.Field campoArbol = parserClass.getField("arbolSintactico");
+            Object arbol = campoArbol.get(null);
+            
+            if (arbol == null) {
+                System.err.println("Error: No se pudo construir el árbol sintáctico");
+                return;
+            }
+            
+            // ANÁLISIS SEMÁNTICO
+            RecorredorAST recorredor = new RecorredorAST();
+            recorredor.recorrerYAnalizar((Nodo) arbol);
+            
+            // Guardar reporte
+            PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(rutaReporte), "UTF-8"));
+            writer.println("========== REPORTE DE ANÁLISIS SEMÁNTICO ==========");
+            writer.println("Archivo: " + archivoFuente.getName());
+            writer.println("Fecha: " + new java.util.Date());
+            writer.println();
+            
+            // Unificar todos los errores semánticos
+            ArrayList<String> todosLosErrores = new ArrayList<>();
+            todosLosErrores.addAll(recorredor.getErrores());
+            todosLosErrores.addAll(recorredor.getErroresSemanticos());
+            
+            if (!todosLosErrores.isEmpty()) {
+                writer.println("ERRORES SEMÁNTICOS:");
+                for (String error : todosLosErrores) {
+                    writer.println("  - " + error);
+                }
+                writer.println("\nTotal: " + todosLosErrores.size() + " errores encontrados");
+            } else {
+                writer.println("✓ Análisis completado exitosamente - Código válido");
+            }
+            
+            writer.close();
+            
+            if (todosLosErrores.isEmpty()) {
+                System.out.println("✅ CÓDIGO VÁLIDO - Sin errores semánticos");
+            }
+            
+            System.out.println("\nReporte generado: " + rutaReporte);
+            
+        } catch (Exception e) {
+            System.err.println("Error en análisis semántico: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -265,6 +404,7 @@ public class Main {
         }
     }
 
+    // CAMBIO: ejecutarParser sin cambios en funcionalidad
     private static void ejecutarParser(File archivoFuente) {
         String nombreSinExt = archivoFuente.getName().replace(".txt", "");
         String rutaReporteArbol = RUTA_SALIDA + "arbol_" + nombreSinExt + ".txt";
@@ -305,8 +445,8 @@ public class Main {
             
             // Reportar estado sintáctico
             if (erroresSintacticos.isEmpty()) {
-                System.out.println("\n Archivo sintácticamente correcto");
-                writer.println("\n ARCHIVO SINTÁCTICAMENTE CORRECTO");
+                System.out.println("\n✓ Archivo sintácticamente correcto");
+                writer.println("\n✓ ARCHIVO SINTÁCTICAMENTE CORRECTO");
             } else {
                 System.out.println("\n✗ Se encontraron " + erroresSintacticos.size() + " error(es) sintáctico(s)");
                 writer.println("\n✗ SE ENCONTRARON " + erroresSintacticos.size() + " ERROR(ES) SINTÁCTICO(S)");
@@ -351,24 +491,15 @@ public class Main {
                 writer.println("======================================================================");
                 writer.println(tablaSimbolos.generarReporte());
                 
-                // Mostrar errores semánticos si los hay
-                if (recorredor.tieneErrores()) {
-                    System.out.println("\n ERRORES SEMÁNTICOS:");
-                    writer.println("\n ERRORES SEMÁNTICOS:");
-                    
-                    for (String error : recorredor.getErrores()) {
-                        System.err.println("  - " + error);
-                        writer.println("  - " + error);
-                    }
-                }
+                // CAMBIO: Ya no se muestran errores semánticos en opción 3
                 
                 writer.close();
                 
-                System.out.println("\n Reporte generado: " + rutaReporteArbol);
+                System.out.println("\n✓ Reporte generado: " + rutaReporteArbol);
             } else {
-                writer.println("\n No se pudo construir el árbol sintáctico");
+                writer.println("\n✗ No se pudo construir el árbol sintáctico");
                 writer.close();
-                System.err.println(" No se pudo construir el árbol sintáctico");
+                System.err.println("✗ No se pudo construir el árbol sintáctico");
             }
             
         } catch (Exception e) {

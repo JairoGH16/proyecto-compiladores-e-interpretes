@@ -1,0 +1,76 @@
+REPORTE DE TOKENS: prueba_mini.txt
+======================================================================
+IDENTIFICADOR (TIPO)      | LEXEMA                    | LINEA      | COLUMNA   
+----------------------------------------------------------------------
+11 (GIFT)                 | gift                      | 1          | 1         
+59 (ID)                   | suma                      | 1          | 6         
+29 (OPEN_PAREN)           | ¿                         | 1          | 11        
+59 (ID)                   | a                         | 1          | 13        
+4 (INT)                   | int                       | 1          | 15        
+53 (COMMA)                | ,                         | 1          | 19        
+59 (ID)                   | b                         | 1          | 21        
+4 (INT)                   | int                       | 1          | 23        
+30 (CLOSE_PAREN)          | ?                         | 1          | 27        
+4 (INT)                   | int                       | 1          | 29        
+27 (OPEN_BLOCK)           | ¡                         | 1          | 33        
+20 (RETURN)               | return                    | 2          | 5         
+59 (ID)                   | a                         | 2          | 12        
+35 (PLUS)                 | +                         | 2          | 14        
+59 (ID)                   | b                         | 2          | 16        
+24 (ENDL)                 | endl                      | 2          | 18        
+28 (CLOSE_BLOCK)          | !                         | 3          | 1         
+11 (GIFT)                 | gift                      | 5          | 1         
+59 (ID)                   | error1                    | 5          | 6         
+29 (OPEN_PAREN)           | ¿                         | 5          | 13        
+30 (CLOSE_PAREN)          | ?                         | 5          | 15        
+4 (INT)                   | int                       | 5          | 17        
+27 (OPEN_BLOCK)           | ¡                         | 5          | 21        
+20 (RETURN)               | return                    | 6          | 5         
+57 (STRING_LITERAL)       | "texto"                   | 6          | 18        
+24 (ENDL)                 | endl                      | 6          | 20        
+28 (CLOSE_BLOCK)          | !                         | 7          | 1         
+9 (NAVIDAD)               | navidad                   | 9          | 1         
+10 (COAL)                 | coal                      | 9          | 9         
+27 (OPEN_BLOCK)           | ¡                         | 9          | 14        
+3 (LOCAL)                 | local                     | 10         | 5         
+59 (ID)                   | x                         | 10         | 11        
+4 (INT)                   | int                       | 10         | 13        
+51 (ASSIGN)               | =                         | 10         | 17        
+59 (ID)                   | suma                      | 10         | 19        
+29 (OPEN_PAREN)           | ¿                         | 10         | 23        
+55 (INT_LITERAL)          | 5                         | 10         | 24        
+53 (COMMA)                | ,                         | 10         | 25        
+55 (INT_LITERAL)          | 3                         | 10         | 27        
+30 (CLOSE_PAREN)          | ?                         | 10         | 28        
+24 (ENDL)                 | endl                      | 10         | 30        
+3 (LOCAL)                 | local                     | 11         | 5         
+4 (INT)                   | int                       | 11         | 11        
+59 (ID)                   | x                         | 11         | 15        
+24 (ENDL)                 | endl                      | 11         | 17        
+3 (LOCAL)                 | local                     | 12         | 5         
+59 (ID)                   | y                         | 12         | 11        
+4 (INT)                   | int                       | 12         | 13        
+24 (ENDL)                 | endl                      | 12         | 17        
+3 (LOCAL)                 | local                     | 13         | 5         
+59 (ID)                   | y                         | 13         | 11        
+4 (INT)                   | int                       | 13         | 13        
+51 (ASSIGN)               | =                         | 13         | 17        
+59 (ID)                   | suma                      | 13         | 19        
+29 (OPEN_PAREN)           | ¿                         | 13         | 23        
+55 (INT_LITERAL)          | 5                         | 13         | 24        
+30 (CLOSE_PAREN)          | ?                         | 13         | 25        
+24 (ENDL)                 | endl                      | 13         | 27        
+3 (LOCAL)                 | local                     | 14         | 5         
+59 (ID)                   | z                         | 14         | 11        
+4 (INT)                   | int                       | 14         | 13        
+51 (ASSIGN)               | =                         | 14         | 17        
+59 (ID)                   | noExiste                  | 14         | 19        
+29 (OPEN_PAREN)           | ¿                         | 14         | 27        
+55 (INT_LITERAL)          | 5                         | 14         | 28        
+30 (CLOSE_PAREN)          | ?                         | 14         | 29        
+24 (ENDL)                 | endl                      | 14         | 31        
+28 (CLOSE_BLOCK)          | !                         | 15         | 1         
+----------------------------------------------------------------------
+No se encontraron errores léxicos.
+----------------------------------------------------------------------
+FIN DEL ANALISIS

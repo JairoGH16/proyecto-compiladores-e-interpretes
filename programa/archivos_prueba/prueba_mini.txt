@@ -8,6 +8,8 @@ gift error1 ¿ ? int ¡
 
 navidad coal ¡
     local x int = suma¿5, 3? endl
+    local x int endl
+    local y int endl
     local y int = suma¿5? endl
     local z int = noExiste¿5? endl
 !

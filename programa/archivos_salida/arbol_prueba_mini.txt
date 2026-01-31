@@ -1,7 +1,7 @@
 ANÁLISIS SINTÁCTICO: prueba_mini.txt
 ======================================================================
 
- ARCHIVO SINTÁCTICAMENTE CORRECTO
+✓ ARCHIVO SINTÁCTICAMENTE CORRECTO
 
 ======================================================================
 ÁRBOL SINTÁCTICO:
@@ -76,6 +76,18 @@ ANÁLISIS SINTÁCTICO: prueba_mini.txt
         │   │   └── endl [ENDL]
         │   ├── declaracionLocal
         │   │   ├── local [LOCAL]
+        │   │   ├── x [ID]
+        │   │   ├── tipo
+        │   │   │   └── int [INT]
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── y [ID]
+        │   │   ├── tipo
+        │   │   │   └── int [INT]
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
         │   │   ├── y [ID]
         │   │   ├── tipo
         │   │   │   └── int [INT]
@@ -107,7 +119,7 @@ ANÁLISIS SINTÁCTICO: prueba_mini.txt
 ======================================================================
 
 ESTADÍSTICAS:
-- Número total de nodos: 97
+- Número total de nodos: 109
 - Altura del árbol: 8
 
 
@@ -132,8 +144,8 @@ ESTADÍSTICAS:
 │ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
 ├─────────────────┼─────────────────┼──────────┼──────────────┤
 │ x               │ int             │ 10       │ variable     │
-│ y               │ int             │ 11       │ variable     │
-│ z               │ int             │ 12       │ variable     │
+│ y               │ int             │ 12       │ variable     │
+│ z               │ int             │ 14       │ variable     │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -146,5 +158,3 @@ ESTADÍSTICAS:
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 
-
- ERRORES SEMÁNTICOS:

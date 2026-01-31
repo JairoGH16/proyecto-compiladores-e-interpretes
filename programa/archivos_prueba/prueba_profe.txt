@@ -3,23 +3,6 @@
  world ss string  endl 
  world ff float  endl 
  world ii int  endl 
-
- navidad coal ¡ | sintactico
-	local  i float=-0.01 endl  |error sintactico
-	local _miChar_ char ='!' endl  |error sintactico
-	local _miChar2_ char ='!' endl  |sintactico-semantico
-	local _arr_ char[3,3] = ¡¡1,5,10!,¡2,4,5!,¡20,40,50!! endl 
-	_arr_[67+ ++_i_, 23] = -0.01 endl |sintactico
-	local _b1_ bool  endl  
-	local _s1_ string  endl  
-	get ¿ _s1_ ?  endl  
-	show ¿ _b1_ ?  endl  
-	show ¿ true ?  endl  
-	show ¿ -6.7 ?  endl 
-
-	local fl1 float =56.6 endl  
-	local in1 int =--fl1- -14% ++in1 + 7 / 15 endl  |sintactico
-	local fl2 float =3.7 ^ fl1+ ¿ 45.6 % 76 ?  endl  
 	
 |comentario 2
 	arr = 10 - arr[67+i, 23] * func1  ¿ hola, true, "hola mundo", 4.5, 'a' ?  endl  |sintactico arreglo
@@ -87,3 +70,19 @@ gift  _mi_  ¿ _dif_ int , _otra_ char ?   float ¡  |sintactico  ?
 	return -5.6 endl  
   ! 
 
+ navidad coal ¡ | sintactico
+	local  i float=-0.01 endl  |error sintactico
+	local _miChar_ char ='!' endl  |error sintactico
+	local _miChar2_ char ='!' endl  |sintactico-semantico
+	local _arr_ char[3,3] = ¡¡1,5,10!,¡2,4,5!,¡20,40,50!! endl 
+	_arr_[67+ ++_i_, 23] = -0.01 endl |sintactico
+	local _b1_ bool  endl  
+	local _s1_ string  endl  
+	get ¿ _s1_ ?  endl  
+	show ¿ _b1_ ?  endl  
+	show ¿ true ?  endl  
+	show ¿ -6.7 ?  endl 
+
+	local fl1 float =56.6 endl  
+	local in1 int =--fl1- -14% ++in1 + 7 / 15 endl  |sintactico
+	local fl2 float =3.7 ^ fl1+ ¿ 45.6 % 76 ?  endl  

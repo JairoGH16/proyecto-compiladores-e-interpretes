@@ -1,13 +1,20 @@
 ANÁLISIS SINTÁCTICO: prueba_profe.txt
 ======================================================================
 
- ARCHIVO SINTÁCTICAMENTE CORRECTO
+✗ SE ENCONTRARON 4 ERROR(ES) SINTÁCTICO(S)
+
+ERRORES SINTÁCTICOS:
+  - Error sintáctico en línea 8, columna 6: Syntax error
+  - Error sintáctico: Error en declaracion de la funcion, procesando cuerpo
+  - Error sintáctico: Syntax error
+  - Error sintáctico: Couldn't repair and continue parse
+
 
 ======================================================================
 ÁRBOL SINTÁCTICO:
 ======================================================================
 └── programa
-    ├── declaracionesGlobales
+    ├── declaraciones
     │   ├── declaracionGlobal
     │   │   ├── world [WORLD]
     │   │   ├── _s2_ [ID]
@@ -32,662 +39,595 @@ ANÁLISIS SINTÁCTICO: prueba_profe.txt
     │       ├── tipo
     │       │   └── int [INT]
     │       └── endl [ENDL]
-    ├── navidad
-    │   ├── navidad [NAVIDAD]
-    │   ├── coal [COAL]
-    │   ├── ¡ [OPEN_BLOCK]
-    │   ├── sentencias
-    │   │   ├── declaracionLocal
-    │   │   │   ├── local [LOCAL]
-    │   │   │   ├── i [ID]
-    │   │   │   ├── tipo
-    │   │   │   │   └── float [FLOAT]
-    │   │   │   ├── = [ASSIGN]
-    │   │   │   ├── unaria
-    │   │   │   │   ├── - [MINUS]
-    │   │   │   │   └── literal
-    │   │   │   │       └── 0.01 [FLOAT_LITERAL]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── declaracionLocal
-    │   │   │   ├── local [LOCAL]
-    │   │   │   ├── _miChar_ [ID]
-    │   │   │   ├── tipo
-    │   │   │   │   └── char [CHAR]
-    │   │   │   ├── = [ASSIGN]
-    │   │   │   ├── literal
-    │   │   │   │   └── ''!'' [CHAR_LITERAL]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── declaracionLocal
-    │   │   │   ├── local [LOCAL]
-    │   │   │   ├── _miChar2_ [ID]
-    │   │   │   ├── tipo
-    │   │   │   │   └── char [CHAR]
-    │   │   │   ├── = [ASSIGN]
-    │   │   │   ├── literal
-    │   │   │   │   └── ''!'' [CHAR_LITERAL]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── declaracionLocal
-    │   │   │   ├── local [LOCAL]
-    │   │   │   ├── _arr_ [ID]
-    │   │   │   ├── array
-    │   │   │   │   ├── char [CHAR]
-    │   │   │   │   ├── [ [OPEN_BRACKET]
-    │   │   │   │   ├── literal
-    │   │   │   │   │   └── 3 [INT_LITERAL]
-    │   │   │   │   ├── , [COMMA]
-    │   │   │   │   ├── literal
-    │   │   │   │   │   └── 3 [INT_LITERAL]
-    │   │   │   │   └── ] [CLOSE_BRACKET]
-    │   │   │   ├── = [ASSIGN]
-    │   │   │   ├── ¡ [OPEN_BLOCK]
-    │   │   │   ├── inicializacionArray
-    │   │   │   │   ├── filaArray
-    │   │   │   │   │   ├── ¡ [OPEN_BLOCK]
-    │   │   │   │   │   ├── listaValores
-    │   │   │   │   │   │   ├── literal
-    │   │   │   │   │   │   │   └── 1 [INT_LITERAL]
-    │   │   │   │   │   │   ├── , [COMMA]
-    │   │   │   │   │   │   ├── literal
-    │   │   │   │   │   │   │   └── 5 [INT_LITERAL]
-    │   │   │   │   │   │   ├── , [COMMA]
-    │   │   │   │   │   │   └── literal
-    │   │   │   │   │   │       └── 10 [INT_LITERAL]
-    │   │   │   │   │   └── ! [CLOSE_BLOCK]
-    │   │   │   │   ├── , [COMMA]
-    │   │   │   │   ├── filaArray
-    │   │   │   │   │   ├── ¡ [OPEN_BLOCK]
-    │   │   │   │   │   ├── listaValores
-    │   │   │   │   │   │   ├── literal
-    │   │   │   │   │   │   │   └── 2 [INT_LITERAL]
-    │   │   │   │   │   │   ├── , [COMMA]
-    │   │   │   │   │   │   ├── literal
-    │   │   │   │   │   │   │   └── 4 [INT_LITERAL]
-    │   │   │   │   │   │   ├── , [COMMA]
-    │   │   │   │   │   │   └── literal
-    │   │   │   │   │   │       └── 5 [INT_LITERAL]
-    │   │   │   │   │   └── ! [CLOSE_BLOCK]
-    │   │   │   │   ├── , [COMMA]
-    │   │   │   │   └── filaArray
-    │   │   │   │       ├── ¡ [OPEN_BLOCK]
-    │   │   │   │       ├── listaValores
-    │   │   │   │       │   ├── literal
-    │   │   │   │       │   │   └── 20 [INT_LITERAL]
-    │   │   │   │       │   ├── , [COMMA]
-    │   │   │   │       │   ├── literal
-    │   │   │   │       │   │   └── 40 [INT_LITERAL]
-    │   │   │   │       │   ├── , [COMMA]
-    │   │   │   │       │   └── literal
-    │   │   │   │       │       └── 50 [INT_LITERAL]
-    │   │   │   │       └── ! [CLOSE_BLOCK]
-    │   │   │   ├── ! [CLOSE_BLOCK]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── asignacion
-    │   │   │   ├── accesoArray
-    │   │   │   │   ├── _arr_ [ID]
-    │   │   │   │   ├── [ [OPEN_BRACKET]
-    │   │   │   │   ├── aditiva
-    │   │   │   │   │   ├── literal
-    │   │   │   │   │   │   └── 67 [INT_LITERAL]
-    │   │   │   │   │   ├── + [PLUS]
-    │   │   │   │   │   └── unaria
-    │   │   │   │   │       ├── ++ [INCREMENT]
-    │   │   │   │   │       └── _i_ [ID]
-    │   │   │   │   ├── , [COMMA]
-    │   │   │   │   ├── literal
-    │   │   │   │   │   └── 23 [INT_LITERAL]
-    │   │   │   │   └── ] [CLOSE_BRACKET]
-    │   │   │   ├── = [ASSIGN]
-    │   │   │   ├── unaria
-    │   │   │   │   ├── - [MINUS]
-    │   │   │   │   └── literal
-    │   │   │   │       └── 0.01 [FLOAT_LITERAL]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── declaracionLocal
-    │   │   │   ├── local [LOCAL]
-    │   │   │   ├── _b1_ [ID]
-    │   │   │   ├── tipo
-    │   │   │   │   └── bool [BOOL]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── declaracionLocal
-    │   │   │   ├── local [LOCAL]
-    │   │   │   ├── _s1_ [ID]
-    │   │   │   ├── tipo
-    │   │   │   │   └── string [STRING]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── sentenciaIO
-    │   │   │   ├── get [GET]
-    │   │   │   ├── ¿ [OPEN_PAREN]
-    │   │   │   ├── _s1_ [ID]
-    │   │   │   ├── ? [CLOSE_PAREN]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── sentenciaIO
-    │   │   │   ├── show [SHOW]
-    │   │   │   ├── ¿ [OPEN_PAREN]
-    │   │   │   ├── primaria
-    │   │   │   │   └── _b1_ [ID]
-    │   │   │   ├── ? [CLOSE_PAREN]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── sentenciaIO
-    │   │   │   ├── show [SHOW]
-    │   │   │   ├── ¿ [OPEN_PAREN]
-    │   │   │   ├── literalBooleano
-    │   │   │   │   └── true [TRUE]
-    │   │   │   ├── ? [CLOSE_PAREN]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── sentenciaIO
-    │   │   │   ├── show [SHOW]
-    │   │   │   ├── ¿ [OPEN_PAREN]
-    │   │   │   ├── unaria
-    │   │   │   │   ├── - [MINUS]
-    │   │   │   │   └── literal
-    │   │   │   │       └── 6.7 [FLOAT_LITERAL]
-    │   │   │   ├── ? [CLOSE_PAREN]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── declaracionLocal
-    │   │   │   ├── local [LOCAL]
-    │   │   │   ├── fl1 [ID]
-    │   │   │   ├── tipo
-    │   │   │   │   └── float [FLOAT]
-    │   │   │   ├── = [ASSIGN]
-    │   │   │   ├── literal
-    │   │   │   │   └── 56.6 [FLOAT_LITERAL]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── declaracionLocal
-    │   │   │   ├── local [LOCAL]
-    │   │   │   ├── in1 [ID]
-    │   │   │   ├── tipo
-    │   │   │   │   └── int [INT]
-    │   │   │   ├── = [ASSIGN]
-    │   │   │   ├── aditiva
-    │   │   │   │   ├── aditiva
-    │   │   │   │   │   ├── unaria
-    │   │   │   │   │   │   ├── -- [DECREMENT]
-    │   │   │   │   │   │   └── fl1 [ID]
-    │   │   │   │   │   ├── - [MINUS]
-    │   │   │   │   │   └── multiplicativa
-    │   │   │   │   │       ├── unaria
-    │   │   │   │   │       │   ├── - [MINUS]
-    │   │   │   │   │       │   └── literal
-    │   │   │   │   │       │       └── 14 [INT_LITERAL]
-    │   │   │   │   │       ├── % [MOD]
-    │   │   │   │   │       └── unaria
-    │   │   │   │   │           ├── ++ [INCREMENT]
-    │   │   │   │   │           └── in1 [ID]
-    │   │   │   │   ├── + [PLUS]
-    │   │   │   │   └── multiplicativa
-    │   │   │   │       ├── literal
-    │   │   │   │       │   └── 7 [INT_LITERAL]
-    │   │   │   │       ├── / [DIV]
-    │   │   │   │       └── literal
-    │   │   │   │           └── 15 [INT_LITERAL]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── declaracionLocal
-    │   │   │   ├── local [LOCAL]
-    │   │   │   ├── fl2 [ID]
-    │   │   │   ├── tipo
-    │   │   │   │   └── float [FLOAT]
-    │   │   │   ├── = [ASSIGN]
-    │   │   │   ├── aditiva
-    │   │   │   │   ├── potencia
-    │   │   │   │   │   ├── literal
-    │   │   │   │   │   │   └── 3.7 [FLOAT_LITERAL]
-    │   │   │   │   │   ├── ^ [POWER]
-    │   │   │   │   │   └── primaria
-    │   │   │   │   │       └── fl1 [ID]
-    │   │   │   │   ├── + [PLUS]
-    │   │   │   │   └── primaria
-    │   │   │   │       ├── ¿ [OPEN_PAREN]
-    │   │   │   │       ├── multiplicativa
-    │   │   │   │       │   ├── literal
-    │   │   │   │       │   │   └── 45.6 [FLOAT_LITERAL]
-    │   │   │   │       │   ├── % [MOD]
-    │   │   │   │       │   └── literal
-    │   │   │   │       │       └── 76 [INT_LITERAL]
-    │   │   │   │       └── ? [CLOSE_PAREN]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── asignacion
-    │   │   │   ├── arr [ID]
-    │   │   │   ├── = [ASSIGN]
-    │   │   │   ├── aditiva
-    │   │   │   │   ├── literal
-    │   │   │   │   │   └── 10 [INT_LITERAL]
-    │   │   │   │   ├── - [MINUS]
-    │   │   │   │   └── multiplicativa
-    │   │   │   │       ├── accesoArray
-    │   │   │   │       │   ├── arr [ID]
-    │   │   │   │       │   ├── [ [OPEN_BRACKET]
-    │   │   │   │       │   ├── aditiva
-    │   │   │   │       │   │   ├── literal
-    │   │   │   │       │   │   │   └── 67 [INT_LITERAL]
-    │   │   │   │       │   │   ├── + [PLUS]
-    │   │   │   │       │   │   └── primaria
-    │   │   │   │       │   │       └── i [ID]
-    │   │   │   │       │   ├── , [COMMA]
-    │   │   │   │       │   ├── literal
-    │   │   │   │       │   │   └── 23 [INT_LITERAL]
-    │   │   │   │       │   └── ] [CLOSE_BRACKET]
-    │   │   │   │       ├── * [MULT]
-    │   │   │   │       └── primaria
-    │   │   │   │           ├── func1 [ID]
-    │   │   │   │           ├── ¿ [OPEN_PAREN]
-    │   │   │   │           ├── listaExpresiones
-    │   │   │   │           │   ├── primaria
-    │   │   │   │           │   │   └── hola [ID]
-    │   │   │   │           │   ├── , [COMMA]
-    │   │   │   │           │   ├── literalBooleano
-    │   │   │   │           │   │   └── true [TRUE]
-    │   │   │   │           │   ├── , [COMMA]
-    │   │   │   │           │   ├── literal
-    │   │   │   │           │   │   └── "hola mundo" [STRING_LITERAL]
-    │   │   │   │           │   ├── , [COMMA]
-    │   │   │   │           │   ├── literal
-    │   │   │   │           │   │   └── 4.5 [FLOAT_LITERAL]
-    │   │   │   │           │   ├── , [COMMA]
-    │   │   │   │           │   └── literal
-    │   │   │   │           │       └── ''a'' [CHAR_LITERAL]
-    │   │   │   │           └── ? [CLOSE_PAREN]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── asignacion
-    │   │   │   ├── fl1 [ID]
-    │   │   │   ├── = [ASSIGN]
-    │   │   │   ├── multiplicativa
-    │   │   │   │   ├── literal
-    │   │   │   │   │   └── 4.5 [FLOAT_LITERAL]
-    │   │   │   │   ├── % [MOD]
-    │   │   │   │   └── potencia
-    │   │   │   │       ├── primaria
-    │   │   │   │       │   └── miChar [ID]
-    │   │   │   │       ├── ^ [POWER]
-    │   │   │   │       └── unaria
-    │   │   │   │           ├── - [MINUS]
-    │   │   │   │           └── literal
-    │   │   │   │               └── 0.005 [FLOAT_LITERAL]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── sentencia
-    │   │   │   ├── miFunc [ID]
-    │   │   │   ├── ¿ [OPEN_PAREN]
-    │   │   │   ├── listaExpresiones
-    │   │   │   │   ├── primaria
-    │   │   │   │   │   ├── miFunc [ID]
-    │   │   │   │   │   ├── ¿ [OPEN_PAREN]
-    │   │   │   │   │   └── ? [CLOSE_PAREN]
-    │   │   │   │   ├── , [COMMA]
-    │   │   │   │   └── literal
-    │   │   │   │       └── ''a'' [CHAR_LITERAL]
-    │   │   │   ├── ? [CLOSE_PAREN]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── declaracionLocal
-    │   │   │   ├── local [LOCAL]
-    │   │   │   ├── bl0 [ID]
-    │   │   │   ├── tipo
-    │   │   │   │   └── bool [BOOL]
-    │   │   │   ├── = [ASSIGN]
-    │   │   │   ├── comparacion
-    │   │   │   │   ├── literal
-    │   │   │   │   │   └── 6.7 [FLOAT_LITERAL]
-    │   │   │   │   ├── Σ= [NEQ]
-    │   │   │   │   └── literal
-    │   │   │   │       └── 8.9 [FLOAT_LITERAL]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── asignacion
-    │   │   │   ├── bl0 [ID]
-    │   │   │   ├── = [ASSIGN]
-    │   │   │   ├── comparacion
-    │   │   │   │   ├── literalBooleano
-    │   │   │   │   │   └── true [TRUE]
-    │   │   │   │   ├── Σ= [NEQ]
-    │   │   │   │   └── literalBooleano
-    │   │   │   │       └── false [FALSE]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── declaracionLocal
-    │   │   │   ├── local [LOCAL]
-    │   │   │   ├── bl1 [ID]
-    │   │   │   ├── tipo
-    │   │   │   │   └── bool [BOOL]
-    │   │   │   ├── = [ASSIGN]
-    │   │   │   ├── disyuncion
-    │   │   │   │   ├── comparacion
-    │   │   │   │   │   ├── primaria
-    │   │   │   │   │   │   └── in1 [ID]
-    │   │   │   │   │   ├── >= [GTEQ]
-    │   │   │   │   │   └── primaria
-    │   │   │   │   │       └── fl1 [ID]
-    │   │   │   │   ├── ~ [OR]
-    │   │   │   │   └── conjuncion
-    │   │   │   │       ├── literalBooleano
-    │   │   │   │       │   └── false [FALSE]
-    │   │   │   │       ├── @ [AND]
-    │   │   │   │       └── negacion
-    │   │   │   │           ├── Σ [NOT]
-    │   │   │   │           └── primaria
-    │   │   │   │               ├── ¿ [OPEN_PAREN]
-    │   │   │   │               ├── comparacion
-    │   │   │   │               │   ├── primaria
-    │   │   │   │               │   │   ├── func2 [ID]
-    │   │   │   │               │   │   ├── ¿ [OPEN_PAREN]
-    │   │   │   │               │   │   ├── listaExpresiones
-    │   │   │   │               │   │   │   ├── literal
-    │   │   │   │               │   │   │   │   └── 3 [INT_LITERAL]
-    │   │   │   │               │   │   │   ├── , [COMMA]
-    │   │   │   │               │   │   │   └── primaria
-    │   │   │   │               │   │   │       └── in1 [ID]
-    │   │   │   │               │   │   └── ? [CLOSE_PAREN]
-    │   │   │   │               │   ├── > [GT]
-    │   │   │   │               │   └── literal
-    │   │   │   │               │       └── 56 [INT_LITERAL]
-    │   │   │   │               └── ? [CLOSE_PAREN]
-    │   │   │   └── endl [ENDL]
-    │   │   └── sentencia
-    │   │       ├── return [RETURN]
-    │   │       ├── aditiva
-    │   │       │   ├── literal
-    │   │       │   │   └── 1 [INT_LITERAL]
-    │   │       │   ├── + [PLUS]
-    │   │       │   └── primaria
-    │   │       │       ├── _f_ [ID]
-    │   │       │       ├── ¿ [OPEN_PAREN]
-    │   │       │       └── ? [CLOSE_PAREN]
-    │   │       └── endl [ENDL]
-    │   └── ! [CLOSE_BLOCK]
-    └── declaracionesFunciones
-        ├── declaracionFuncion
-        │   ├── gift [GIFT]
-        │   ├── _func2_ [ID]
-        │   ├── ¿ [OPEN_PAREN]
-        │   ├── listaParametros
-        │   │   ├── parametro
-        │   │   │   ├── _b1_ [ID]
-        │   │   │   └── tipo
-        │   │   │       └── bool [BOOL]
-        │   │   ├── , [COMMA]
-        │   │   └── parametro
-        │   │       ├── _i1_ [ID]
-        │   │       └── tipo
-        │   │           └── int [INT]
-        │   ├── ? [CLOSE_PAREN]
-        │   ├── tipo
-        │   │   └── bool [BOOL]
-        │   ├── ¡ [OPEN_BLOCK]
-        │   ├── sentencias
-        │   │   ├── declaracionLocal
-        │   │   │   ├── local [LOCAL]
-        │   │   │   ├── i [ID]
-        │   │   │   ├── tipo
-        │   │   │   │   └── int [INT]
-        │   │   │   └── endl [ENDL]
-        │   │   └── sentencia
-        │   │       ├── return [RETURN]
-        │   │       ├── primaria
-        │   │       │   ├── ¿ [OPEN_PAREN]
-        │   │       │   ├── literal
-        │   │       │   │   └── 1 [INT_LITERAL]
-        │   │       │   └── ? [CLOSE_PAREN]
-        │   │       └── endl [ENDL]
-        │   └── ! [CLOSE_BLOCK]
-        ├── declaracionFuncion
-        │   ├── gift [GIFT]
-        │   ├── _mi_ [ID]
-        │   ├── ¿ [OPEN_PAREN]
-        │   ├── listaParametros
-        │   │   ├── parametro
-        │   │   │   ├── _dif_ [ID]
-        │   │   │   └── tipo
-        │   │   │       └── int [INT]
-        │   │   ├── , [COMMA]
-        │   │   └── parametro
-        │   │       ├── _otra_ [ID]
-        │   │       └── tipo
-        │   │           └── char [CHAR]
-        │   ├── ? [CLOSE_PAREN]
-        │   ├── tipo
-        │   │   └── float [FLOAT]
-        │   ├── ¡ [OPEN_BLOCK]
-        │   ├── sentencias
-        │   │   ├── declaracionLocal
-        │   │   │   ├── local [LOCAL]
-        │   │   │   ├── _otra_ [ID]
-        │   │   │   ├── tipo
-        │   │   │   │   └── int [INT]
-        │   │   │   └── endl [ENDL]
-        │   │   ├── declaracionLocal
-        │   │   │   ├── local [LOCAL]
-        │   │   │   ├── _str_ [ID]
-        │   │   │   ├── tipo
-        │   │   │   │   └── string [STRING]
-        │   │   │   ├── = [ASSIGN]
+    └── navidad
+        ├── navidad [NAVIDAD]
+        ├── coal [COAL]
+        ├── ¡ [OPEN_BLOCK]
+        ├── sentencias
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── i [ID]
+        │   │   ├── tipo
+        │   │   │   └── float [FLOAT]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── unaria {float}
+        │   │   │   ├── - [MINUS]
+        │   │   │   └── literal {float}
+        │   │   │       └── 0.01 [FLOAT_LITERAL] {float}
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── _miChar_ [ID]
+        │   │   ├── tipo
+        │   │   │   └── char [CHAR]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── literal {char}
+        │   │   │   └── ''!'' [CHAR_LITERAL] {char}
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── _miChar2_ [ID]
+        │   │   ├── tipo
+        │   │   │   └── char [CHAR]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── literal {char}
+        │   │   │   └── ''!'' [CHAR_LITERAL] {char}
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── _arr_ [ID]
+        │   │   ├── array
+        │   │   │   ├── char [CHAR]
+        │   │   │   ├── [ [OPEN_BRACKET]
         │   │   │   ├── literal
-        │   │   │   │   └── "Hola  endl ~&|! endl & ?  mundo" [STRING_LITERAL]
-        │   │   │   └── endl [ENDL]
-        │   │   ├── forLoop
-        │   │   │   ├── for [FOR]
-        │   │   │   ├── ¿ [OPEN_PAREN]
-        │   │   │   ├── inicializacionFor
-        │   │   │   │   ├── _i_ [ID]
-        │   │   │   │   ├── = [ASSIGN]
-        │   │   │   │   └── literal
-        │   │   │   │       └── 20 [INT_LITERAL]
-        │   │   │   ├── ; [SEMICOLON]
+        │   │   │   │   └── 3 [INT_LITERAL]
+        │   │   │   ├── , [COMMA]
+        │   │   │   ├── literal
+        │   │   │   │   └── 3 [INT_LITERAL]
+        │   │   │   └── ] [CLOSE_BRACKET]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── ¡ [OPEN_BLOCK]
+        │   │   ├── inicializacionArray
+        │   │   │   ├── filaArray
+        │   │   │   │   ├── ¡ [OPEN_BLOCK]
+        │   │   │   │   ├── listaValores
+        │   │   │   │   │   ├── literal
+        │   │   │   │   │   │   └── 1 [INT_LITERAL]
+        │   │   │   │   │   ├── , [COMMA]
+        │   │   │   │   │   ├── literal
+        │   │   │   │   │   │   └── 5 [INT_LITERAL]
+        │   │   │   │   │   ├── , [COMMA]
+        │   │   │   │   │   └── literal
+        │   │   │   │   │       └── 10 [INT_LITERAL]
+        │   │   │   │   └── ! [CLOSE_BLOCK]
+        │   │   │   ├── , [COMMA]
+        │   │   │   ├── filaArray
+        │   │   │   │   ├── ¡ [OPEN_BLOCK]
+        │   │   │   │   ├── listaValores
+        │   │   │   │   │   ├── literal
+        │   │   │   │   │   │   └── 2 [INT_LITERAL]
+        │   │   │   │   │   ├── , [COMMA]
+        │   │   │   │   │   ├── literal
+        │   │   │   │   │   │   └── 4 [INT_LITERAL]
+        │   │   │   │   │   ├── , [COMMA]
+        │   │   │   │   │   └── literal
+        │   │   │   │   │       └── 5 [INT_LITERAL]
+        │   │   │   │   └── ! [CLOSE_BLOCK]
+        │   │   │   ├── , [COMMA]
+        │   │   │   └── filaArray
+        │   │   │       ├── ¡ [OPEN_BLOCK]
+        │   │   │       ├── listaValores
+        │   │   │       │   ├── literal
+        │   │   │       │   │   └── 20 [INT_LITERAL]
+        │   │   │       │   ├── , [COMMA]
+        │   │   │       │   ├── literal
+        │   │   │       │   │   └── 40 [INT_LITERAL]
+        │   │   │       │   ├── , [COMMA]
+        │   │   │       │   └── literal
+        │   │   │       │       └── 50 [INT_LITERAL]
+        │   │   │       └── ! [CLOSE_BLOCK]
+        │   │   ├── ! [CLOSE_BLOCK]
+        │   │   └── endl [ENDL]
+        │   ├── asignacion
+        │   │   ├── accesoArray
+        │   │   │   ├── _arr_ [ID]
+        │   │   │   ├── [ [OPEN_BRACKET]
+        │   │   │   ├── aditiva
+        │   │   │   │   ├── literal
+        │   │   │   │   │   └── 67 [INT_LITERAL]
+        │   │   │   │   ├── + [PLUS]
+        │   │   │   │   └── unaria
+        │   │   │   │       ├── ++ [INCREMENT]
+        │   │   │   │       └── _i_ [ID]
+        │   │   │   ├── , [COMMA]
+        │   │   │   ├── literal
+        │   │   │   │   └── 23 [INT_LITERAL]
+        │   │   │   └── ] [CLOSE_BRACKET]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── unaria
+        │   │   │   ├── - [MINUS]
+        │   │   │   └── literal
+        │   │   │       └── 0.01 [FLOAT_LITERAL]
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── _b1_ [ID]
+        │   │   ├── tipo
+        │   │   │   └── bool [BOOL]
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── _s1_ [ID]
+        │   │   ├── tipo
+        │   │   │   └── string [STRING]
+        │   │   └── endl [ENDL]
+        │   ├── sentenciaIO
+        │   │   ├── get [GET]
+        │   │   ├── ¿ [OPEN_PAREN]
+        │   │   ├── _s1_ [ID]
+        │   │   ├── ? [CLOSE_PAREN]
+        │   │   └── endl [ENDL]
+        │   ├── sentenciaIO
+        │   │   ├── show [SHOW]
+        │   │   ├── ¿ [OPEN_PAREN]
+        │   │   ├── primaria
+        │   │   │   └── _b1_ [ID]
+        │   │   ├── ? [CLOSE_PAREN]
+        │   │   └── endl [ENDL]
+        │   ├── sentenciaIO
+        │   │   ├── show [SHOW]
+        │   │   ├── ¿ [OPEN_PAREN]
+        │   │   ├── literalBooleano
+        │   │   │   └── true [TRUE]
+        │   │   ├── ? [CLOSE_PAREN]
+        │   │   └── endl [ENDL]
+        │   ├── sentenciaIO
+        │   │   ├── show [SHOW]
+        │   │   ├── ¿ [OPEN_PAREN]
+        │   │   ├── unaria
+        │   │   │   ├── - [MINUS]
+        │   │   │   └── literal
+        │   │   │       └── 6.7 [FLOAT_LITERAL]
+        │   │   ├── ? [CLOSE_PAREN]
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── fl1 [ID]
+        │   │   ├── tipo
+        │   │   │   └── float [FLOAT]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── literal {float}
+        │   │   │   └── 56.6 [FLOAT_LITERAL] {float}
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── in1 [ID]
+        │   │   ├── tipo
+        │   │   │   └── int [INT]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── aditiva {int}
+        │   │   │   ├── aditiva {int}
+        │   │   │   │   ├── unaria
+        │   │   │   │   │   ├── -- [DECREMENT]
+        │   │   │   │   │   └── fl1 [ID]
+        │   │   │   │   ├── - [MINUS]
+        │   │   │   │   └── multiplicativa {int}
+        │   │   │   │       ├── unaria {int}
+        │   │   │   │       │   ├── - [MINUS]
+        │   │   │   │       │   └── literal {int}
+        │   │   │   │       │       └── 14 [INT_LITERAL] {int}
+        │   │   │   │       ├── % [MOD]
+        │   │   │   │       └── unaria
+        │   │   │   │           ├── ++ [INCREMENT]
+        │   │   │   │           └── in1 [ID]
+        │   │   │   ├── + [PLUS]
+        │   │   │   └── multiplicativa {int}
+        │   │   │       ├── literal {int}
+        │   │   │       │   └── 7 [INT_LITERAL] {int}
+        │   │   │       ├── / [DIV]
+        │   │   │       └── literal {int}
+        │   │   │           └── 15 [INT_LITERAL] {int}
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── fl2 [ID]
+        │   │   ├── tipo
+        │   │   │   └── float [FLOAT]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── aditiva {float}
+        │   │   │   ├── potencia {float}
+        │   │   │   │   ├── literal {float}
+        │   │   │   │   │   └── 3.7 [FLOAT_LITERAL] {float}
+        │   │   │   │   ├── ^ [POWER]
+        │   │   │   │   └── primaria
+        │   │   │   │       └── fl1 [ID]
+        │   │   │   ├── + [PLUS]
+        │   │   │   └── primaria
+        │   │   │       ├── ¿ [OPEN_PAREN]
+        │   │   │       ├── multiplicativa
+        │   │   │       │   ├── literal
+        │   │   │       │   │   └── 45.6 [FLOAT_LITERAL]
+        │   │   │       │   ├── % [MOD]
+        │   │   │       │   └── literal
+        │   │   │       │       └── 76 [INT_LITERAL]
+        │   │   │       └── ? [CLOSE_PAREN]
+        │   │   └── endl [ENDL]
+        │   ├── asignacion
+        │   │   ├── arr [ID]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── aditiva
+        │   │   │   ├── literal
+        │   │   │   │   └── 10 [INT_LITERAL]
+        │   │   │   ├── - [MINUS]
+        │   │   │   └── multiplicativa
+        │   │   │       ├── accesoArray
+        │   │   │       │   ├── arr [ID]
+        │   │   │       │   ├── [ [OPEN_BRACKET]
+        │   │   │       │   ├── aditiva
+        │   │   │       │   │   ├── literal
+        │   │   │       │   │   │   └── 67 [INT_LITERAL]
+        │   │   │       │   │   ├── + [PLUS]
+        │   │   │       │   │   └── primaria
+        │   │   │       │   │       └── i [ID]
+        │   │   │       │   ├── , [COMMA]
+        │   │   │       │   ├── literal
+        │   │   │       │   │   └── 23 [INT_LITERAL]
+        │   │   │       │   └── ] [CLOSE_BRACKET]
+        │   │   │       ├── * [MULT]
+        │   │   │       └── primaria
+        │   │   │           ├── func1 [ID]
+        │   │   │           ├── ¿ [OPEN_PAREN]
+        │   │   │           ├── listaExpresiones
+        │   │   │           │   ├── primaria
+        │   │   │           │   │   └── hola [ID]
+        │   │   │           │   ├── , [COMMA]
+        │   │   │           │   ├── literalBooleano
+        │   │   │           │   │   └── true [TRUE]
+        │   │   │           │   ├── , [COMMA]
+        │   │   │           │   ├── literal
+        │   │   │           │   │   └── "hola mundo" [STRING_LITERAL]
+        │   │   │           │   ├── , [COMMA]
+        │   │   │           │   ├── literal
+        │   │   │           │   │   └── 4.5 [FLOAT_LITERAL]
+        │   │   │           │   ├── , [COMMA]
+        │   │   │           │   └── literal
+        │   │   │           │       └── ''a'' [CHAR_LITERAL]
+        │   │   │           └── ? [CLOSE_PAREN]
+        │   │   └── endl [ENDL]
+        │   ├── asignacion
+        │   │   ├── fl1 [ID]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── multiplicativa
+        │   │   │   ├── literal
+        │   │   │   │   └── 4.5 [FLOAT_LITERAL]
+        │   │   │   ├── % [MOD]
+        │   │   │   └── potencia
+        │   │   │       ├── primaria
+        │   │   │       │   └── miChar [ID]
+        │   │   │       ├── ^ [POWER]
+        │   │   │       └── unaria
+        │   │   │           ├── - [MINUS]
+        │   │   │           └── literal
+        │   │   │               └── 0.005 [FLOAT_LITERAL]
+        │   │   └── endl [ENDL]
+        │   ├── sentencia
+        │   │   ├── miFunc [ID]
+        │   │   ├── ¿ [OPEN_PAREN]
+        │   │   ├── listaExpresiones
+        │   │   │   ├── primaria
+        │   │   │   │   ├── miFunc [ID]
+        │   │   │   │   ├── ¿ [OPEN_PAREN]
+        │   │   │   │   └── ? [CLOSE_PAREN]
+        │   │   │   ├── , [COMMA]
+        │   │   │   └── literal
+        │   │   │       └── ''a'' [CHAR_LITERAL]
+        │   │   ├── ? [CLOSE_PAREN]
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── bl0 [ID]
+        │   │   ├── tipo
+        │   │   │   └── bool [BOOL]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── comparacion {float}
+        │   │   │   ├── literal {float}
+        │   │   │   │   └── 6.7 [FLOAT_LITERAL] {float}
+        │   │   │   ├── Σ= [NEQ]
+        │   │   │   └── literal
+        │   │   │       └── 8.9 [FLOAT_LITERAL]
+        │   │   └── endl [ENDL]
+        │   ├── asignacion
+        │   │   ├── bl0 [ID]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── comparacion
+        │   │   │   ├── literalBooleano
+        │   │   │   │   └── true [TRUE]
+        │   │   │   ├── Σ= [NEQ]
+        │   │   │   └── literalBooleano
+        │   │   │       └── false [FALSE]
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── bl1 [ID]
+        │   │   ├── tipo
+        │   │   │   └── bool [BOOL]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── disyuncion {bool}
         │   │   │   ├── comparacion
         │   │   │   │   ├── primaria
-        │   │   │   │   │   └── i [ID]
+        │   │   │   │   │   └── in1 [ID]
         │   │   │   │   ├── >= [GTEQ]
-        │   │   │   │   └── literal
-        │   │   │   │       └── 10 [INT_LITERAL]
-        │   │   │   ├── ; [SEMICOLON]
-        │   │   │   ├── actualizacionFor
-        │   │   │   │   ├── -- [DECREMENT]
+        │   │   │   │   └── primaria
+        │   │   │   │       └── fl1 [ID]
+        │   │   │   ├── ~ [OR]
+        │   │   │   └── conjuncion {bool}
+        │   │   │       ├── literalBooleano {bool}
+        │   │   │       │   └── false [FALSE] {bool}
+        │   │   │       ├── @ [AND]
+        │   │   │       └── negacion
+        │   │   │           ├── Σ [NOT]
+        │   │   │           └── primaria
+        │   │   │               ├── ¿ [OPEN_PAREN]
+        │   │   │               ├── comparacion
+        │   │   │               │   ├── primaria
+        │   │   │               │   │   ├── func2 [ID]
+        │   │   │               │   │   ├── ¿ [OPEN_PAREN]
+        │   │   │               │   │   ├── listaExpresiones
+        │   │   │               │   │   │   ├── literal
+        │   │   │               │   │   │   │   └── 3 [INT_LITERAL]
+        │   │   │               │   │   │   ├── , [COMMA]
+        │   │   │               │   │   │   └── primaria
+        │   │   │               │   │   │       └── in1 [ID]
+        │   │   │               │   │   └── ? [CLOSE_PAREN]
+        │   │   │               │   ├── > [GT]
+        │   │   │               │   └── literal
+        │   │   │               │       └── 56 [INT_LITERAL]
+        │   │   │               └── ? [CLOSE_PAREN]
+        │   │   └── endl [ENDL]
+        │   ├── sentencia
+        │   │   ├── return [RETURN]
+        │   │   ├── aditiva
+        │   │   │   ├── literal
+        │   │   │   │   └── 1 [INT_LITERAL]
+        │   │   │   ├── + [PLUS]
+        │   │   │   └── primaria
+        │   │   │       ├── _f_ [ID]
+        │   │   │       ├── ¿ [OPEN_PAREN]
+        │   │   │       └── ? [CLOSE_PAREN]
+        │   │   └── endl [ENDL]
+        │   ├── error_sentencia
+        │   ├── sentencia
+        │   │   ├── return [RETURN]
+        │   │   ├── primaria
+        │   │   │   ├── ¿ [OPEN_PAREN]
+        │   │   │   ├── literal
+        │   │   │   │   └── 1 [INT_LITERAL]
+        │   │   │   └── ? [CLOSE_PAREN]
+        │   │   └── endl [ENDL]
+        │   ├── error_sentencia
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── _str_ [ID]
+        │   │   ├── tipo
+        │   │   │   └── string [STRING]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── literal {string}
+        │   │   │   └── "Hola  endl ~&|! endl & ?  mundo" [STRING_LITERAL] {string}
+        │   │   └── endl [ENDL]
+        │   ├── forLoop
+        │   │   ├── for [FOR]
+        │   │   ├── ¿ [OPEN_PAREN]
+        │   │   ├── inicializacionFor
+        │   │   │   ├── _i_ [ID]
+        │   │   │   ├── = [ASSIGN]
+        │   │   │   └── literal
+        │   │   │       └── 20 [INT_LITERAL]
+        │   │   ├── ; [SEMICOLON]
+        │   │   ├── comparacion
+        │   │   │   ├── primaria
         │   │   │   │   └── i [ID]
-        │   │   │   ├── ? [CLOSE_PAREN]
-        │   │   │   ├── ¡ [OPEN_BLOCK]
-        │   │   │   ├── sentencias
-        │   │   │   │   ├── loop
-        │   │   │   │   │   ├── loop [LOOP]
-        │   │   │   │   │   ├── sentencias
-        │   │   │   │   │   │   ├── asignacion
-        │   │   │   │   │   │   │   ├── _var_2 [ID]
-        │   │   │   │   │   │   │   ├── = [ASSIGN]
-        │   │   │   │   │   │   │   ├── multiplicativa
-        │   │   │   │   │   │   │   │   ├── primaria
-        │   │   │   │   │   │   │   │   │   └── _var_2 [ID]
-        │   │   │   │   │   │   │   │   ├── // [INT_DIV]
-        │   │   │   │   │   │   │   │   └── literal
-        │   │   │   │   │   │   │   │       └── 1 [INT_LITERAL]
-        │   │   │   │   │   │   │   └── endl [ENDL]
-        │   │   │   │   │   │   └── asignacion
-        │   │   │   │   │   │       ├── _var_ [ID]
-        │   │   │   │   │   │       ├── = [ASSIGN]
-        │   │   │   │   │   │       ├── aditiva
-        │   │   │   │   │   │       │   ├── primaria
-        │   │   │   │   │   │       │   │   └── _var_ [ID]
-        │   │   │   │   │   │       │   ├── - [MINUS]
-        │   │   │   │   │   │       │   └── literal
-        │   │   │   │   │   │       │       └── 1 [INT_LITERAL]
-        │   │   │   │   │   │       └── endl [ENDL]
-        │   │   │   │   │   ├── exit [EXIT]
-        │   │   │   │   │   ├── when [WHEN]
-        │   │   │   │   │   ├── primaria
-        │   │   │   │   │   │   ├── ¿ [OPEN_PAREN]
-        │   │   │   │   │   │   ├── conjuncion
-        │   │   │   │   │   │   │   ├── comparacion
-        │   │   │   │   │   │   │   │   ├── primaria
-        │   │   │   │   │   │   │   │   │   └── _var2_ [ID]
-        │   │   │   │   │   │   │   │   ├── Σ= [NEQ]
-        │   │   │   │   │   │   │   │   └── literal
-        │   │   │   │   │   │   │   │       └── 12.2 [FLOAT_LITERAL]
-        │   │   │   │   │   │   │   ├── @ [AND]
-        │   │   │   │   │   │   │   └── negacion
-        │   │   │   │   │   │   │       ├── Σ [NOT]
-        │   │   │   │   │   │   │       └── primaria
-        │   │   │   │   │   │   │           ├── ¿ [OPEN_PAREN]
-        │   │   │   │   │   │   │           ├── comparacion
-        │   │   │   │   │   │   │           │   ├── literal
-        │   │   │   │   │   │   │           │   │   └── 12 [INT_LITERAL]
-        │   │   │   │   │   │   │           │   ├── == [EQEQ]
-        │   │   │   │   │   │   │           │   └── primaria
-        │   │   │   │   │   │   │           │       ├── ¿ [OPEN_PAREN]
-        │   │   │   │   │   │   │           │       ├── multiplicativa
-        │   │   │   │   │   │   │           │       │   ├── literal
-        │   │   │   │   │   │   │           │       │   │   └── 34 [INT_LITERAL]
-        │   │   │   │   │   │   │           │       │   ├── * [MULT]
-        │   │   │   │   │   │   │           │       │   └── literal
-        │   │   │   │   │   │   │           │       │       └── 35 [INT_LITERAL]
-        │   │   │   │   │   │   │           │       └── ? [CLOSE_PAREN]
-        │   │   │   │   │   │   │           └── ? [CLOSE_PAREN]
-        │   │   │   │   │   │   └── ? [CLOSE_PAREN]
-        │   │   │   │   │   ├── endl [ENDL]
-        │   │   │   │   │   ├── end [END]
-        │   │   │   │   │   ├── loop [LOOP]
-        │   │   │   │   │   └── endl [ENDL]
-        │   │   │   │   ├── decideOf
-        │   │   │   │   │   ├── decide [DECIDE]
-        │   │   │   │   │   ├── of [OF]
-        │   │   │   │   │   ├── casosDecide
-        │   │   │   │   │   │   └── caso
-        │   │   │   │   │   │       ├── comparacion
-        │   │   │   │   │   │       │   ├── primaria
-        │   │   │   │   │   │       │   │   └── x24 [ID]
-        │   │   │   │   │   │       │   ├── >= [GTEQ]
-        │   │   │   │   │   │       │   └── primaria
-        │   │   │   │   │   │       │       └── var [ID]
-        │   │   │   │   │   │       ├── -> [ARROW]
-        │   │   │   │   │   │       ├── ¡ [OPEN_BLOCK]
-        │   │   │   │   │   │       ├── sentencias
-        │   │   │   │   │   │       │   └── sentenciaIO
-        │   │   │   │   │   │       │       ├── show [SHOW]
-        │   │   │   │   │   │       │       ├── ¿ [OPEN_PAREN]
-        │   │   │   │   │   │       │       ├── literal
-        │   │   │   │   │   │       │       │   └── "entra al if" [STRING_LITERAL]
-        │   │   │   │   │   │       │       ├── ? [CLOSE_PAREN]
-        │   │   │   │   │   │       │       └── endl [ENDL]
-        │   │   │   │   │   │       └── ! [CLOSE_BLOCK]
-        │   │   │   │   │   ├── end [END]
-        │   │   │   │   │   ├── decide [DECIDE]
-        │   │   │   │   │   └── endl [ENDL]
-        │   │   │   │   └── decideOf
-        │   │   │   │       ├── decide [DECIDE]
-        │   │   │   │       ├── of [OF]
-        │   │   │   │       ├── casosDecide
-        │   │   │   │       │   └── caso
-        │   │   │   │       │       ├── literalBooleano
-        │   │   │   │       │       │   └── true [TRUE]
-        │   │   │   │       │       ├── -> [ARROW]
-        │   │   │   │       │       ├── ¡ [OPEN_BLOCK]
-        │   │   │   │       │       ├── sentencias
-        │   │   │   │       │       │   └── sentenciaIO
-        │   │   │   │       │       │       ├── show [SHOW]
-        │   │   │   │       │       │       ├── ¿ [OPEN_PAREN]
-        │   │   │   │       │       │       ├── primaria
-        │   │   │   │       │       │       │   └── _var_ [ID]
-        │   │   │   │       │       │       ├── ? [CLOSE_PAREN]
-        │   │   │   │       │       │       └── endl [ENDL]
-        │   │   │   │       │       └── ! [CLOSE_BLOCK]
-        │   │   │   │       ├── casoElseOpt
-        │   │   │   │       │   ├── else [ELSE]
-        │   │   │   │       │   ├── -> [ARROW]
-        │   │   │   │       │   ├── ¡ [OPEN_BLOCK]
-        │   │   │   │       │   ├── sentencias
-        │   │   │   │       │   │   └── decideOf
-        │   │   │   │       │   │       ├── decide [DECIDE]
-        │   │   │   │       │   │       ├── of [OF]
-        │   │   │   │       │   │       ├── casosDecide
-        │   │   │   │       │   │       │   ├── caso
-        │   │   │   │       │   │       │   │   ├── comparacion
-        │   │   │   │       │   │       │   │   │   ├── primaria
-        │   │   │   │       │   │       │   │   │   │   └── _otra_ [ID]
-        │   │   │   │       │   │       │   │   │   ├── == [EQEQ]
-        │   │   │   │       │   │       │   │   │   └── literal
-        │   │   │   │       │   │       │   │   │       └── 1 [INT_LITERAL]
-        │   │   │   │       │   │       │   │   ├── -> [ARROW]
-        │   │   │   │       │   │       │   │   ├── ¡ [OPEN_BLOCK]
-        │   │   │   │       │   │       │   │   ├── sentencias
-        │   │   │   │       │   │       │   │   │   └── sentenciaIO
-        │   │   │   │       │   │       │   │   │       ├── show [SHOW]
-        │   │   │   │       │   │       │   │   │       ├── ¿ [OPEN_PAREN]
-        │   │   │   │       │   │       │   │   │       ├── literal
-        │   │   │   │       │   │       │   │   │       │   └── "!|" [STRING_LITERAL]
-        │   │   │   │       │   │       │   │   │       ├── ? [CLOSE_PAREN]
-        │   │   │   │       │   │       │   │   │       └── endl [ENDL]
-        │   │   │   │       │   │       │   │   └── ! [CLOSE_BLOCK]
-        │   │   │   │       │   │       │   └── caso
-        │   │   │   │       │   │       │       ├── comparacion
-        │   │   │   │       │   │       │       │   ├── primaria
-        │   │   │   │       │   │       │       │   │   └── _otrax_ [ID]
-        │   │   │   │       │   │       │       │   ├── == [EQEQ]
-        │   │   │   │       │   │       │       │   └── literal
-        │   │   │   │       │   │       │       │       └── 2 [INT_LITERAL]
-        │   │   │   │       │   │       │       ├── -> [ARROW]
-        │   │   │   │       │   │       │       ├── ¡ [OPEN_BLOCK]
-        │   │   │   │       │   │       │       ├── sentencias
-        │   │   │   │       │   │       │       │   ├── declaracionLocal
-        │   │   │   │       │   │       │       │   │   ├── local [LOCAL]
-        │   │   │   │       │   │       │       │   │   ├── _otrax_ [ID]
-        │   │   │   │       │   │       │       │   │   ├── tipo
-        │   │   │   │       │   │       │       │   │   │   └── int [INT]
-        │   │   │   │       │   │       │       │   │   ├── = [ASSIGN]
-        │   │   │   │       │   │       │       │   │   ├── literal
-        │   │   │   │       │   │       │       │   │   │   └── 10 [INT_LITERAL]
-        │   │   │   │       │   │       │       │   │   └── endl [ENDL]
-        │   │   │   │       │   │       │       │   └── sentencia
-        │   │   │   │       │   │       │       │       ├── break [BREAK]
-        │   │   │   │       │   │       │       │       └── endl [ENDL]
-        │   │   │   │       │   │       │       └── ! [CLOSE_BLOCK]
-        │   │   │   │       │   │       ├── casoElseOpt
-        │   │   │   │       │   │       │   ├── else [ELSE]
-        │   │   │   │       │   │       │   ├── -> [ARROW]
-        │   │   │   │       │   │       │   ├── ¡ [OPEN_BLOCK]
-        │   │   │   │       │   │       │   ├── sentencias
-        │   │   │   │       │   │       │   │   └── asignacion
-        │   │   │   │       │   │       │   │       ├── _otra_ [ID]
-        │   │   │   │       │   │       │   │       ├── = [ASSIGN]
-        │   │   │   │       │   │       │   │       ├── multiplicativa
-        │   │   │   │       │   │       │   │       │   ├── unaria
-        │   │   │   │       │   │       │   │       │   │   ├── - [MINUS]
-        │   │   │   │       │   │       │   │       │   │   └── literal
-        │   │   │   │       │   │       │   │       │   │       └── 10.5 [FLOAT_LITERAL]
-        │   │   │   │       │   │       │   │       │   ├── * [MULT]
-        │   │   │   │       │   │       │   │       │   └── unaria
-        │   │   │   │       │   │       │   │       │       ├── - [MINUS]
-        │   │   │   │       │   │       │   │       │       └── literal
-        │   │   │   │       │   │       │   │       │           └── 1.9 [FLOAT_LITERAL]
-        │   │   │   │       │   │       │   │       └── endl [ENDL]
-        │   │   │   │       │   │       │   └── ! [CLOSE_BLOCK]
-        │   │   │   │       │   │       ├── end [END]
-        │   │   │   │       │   │       ├── decide [DECIDE]
-        │   │   │   │       │   │       └── endl [ENDL]
-        │   │   │   │       │   └── ! [CLOSE_BLOCK]
-        │   │   │   │       ├── end [END]
-        │   │   │   │       ├── decide [DECIDE]
-        │   │   │   │       └── endl [ENDL]
-        │   │   │   └── ! [CLOSE_BLOCK]
-        │   │   └── sentencia
-        │   │       ├── return [RETURN]
-        │   │       ├── literal
-        │   │       │   └── 1 [INT_LITERAL]
-        │   │       └── endl [ENDL]
-        │   └── ! [CLOSE_BLOCK]
-        └── declaracionFuncion
-            ├── gift [GIFT]
-            ├── _miOtraFun_ [ID]
-            ├── ¿ [OPEN_PAREN]
-            ├── ? [CLOSE_PAREN]
-            ├── tipo
-            │   └── bool [BOOL]
-            ├── ¡ [OPEN_BLOCK]
-            ├── sentencias
-            │   └── sentencia
-            │       ├── return [RETURN]
-            │       ├── unaria
-            │       │   ├── - [MINUS]
-            │       │   └── literal
-            │       │       └── 5.6 [FLOAT_LITERAL]
-            │       └── endl [ENDL]
-            └── ! [CLOSE_BLOCK]
+        │   │   │   ├── >= [GTEQ]
+        │   │   │   └── literal
+        │   │   │       └── 10 [INT_LITERAL]
+        │   │   ├── ; [SEMICOLON]
+        │   │   ├── actualizacionFor
+        │   │   │   ├── -- [DECREMENT]
+        │   │   │   └── i [ID]
+        │   │   ├── ? [CLOSE_PAREN]
+        │   │   ├── ¡ [OPEN_BLOCK]
+        │   │   ├── sentencias
+        │   │   │   ├── loop
+        │   │   │   │   ├── loop [LOOP]
+        │   │   │   │   ├── sentencias
+        │   │   │   │   │   ├── asignacion
+        │   │   │   │   │   │   ├── _var_2 [ID]
+        │   │   │   │   │   │   ├── = [ASSIGN]
+        │   │   │   │   │   │   ├── multiplicativa
+        │   │   │   │   │   │   │   ├── primaria
+        │   │   │   │   │   │   │   │   └── _var_2 [ID]
+        │   │   │   │   │   │   │   ├── // [INT_DIV]
+        │   │   │   │   │   │   │   └── literal
+        │   │   │   │   │   │   │       └── 1 [INT_LITERAL]
+        │   │   │   │   │   │   └── endl [ENDL]
+        │   │   │   │   │   └── asignacion
+        │   │   │   │   │       ├── _var_ [ID]
+        │   │   │   │   │       ├── = [ASSIGN]
+        │   │   │   │   │       ├── aditiva
+        │   │   │   │   │       │   ├── primaria
+        │   │   │   │   │       │   │   └── _var_ [ID]
+        │   │   │   │   │       │   ├── - [MINUS]
+        │   │   │   │   │       │   └── literal
+        │   │   │   │   │       │       └── 1 [INT_LITERAL]
+        │   │   │   │   │       └── endl [ENDL]
+        │   │   │   │   ├── exit [EXIT]
+        │   │   │   │   ├── when [WHEN]
+        │   │   │   │   ├── primaria
+        │   │   │   │   │   ├── ¿ [OPEN_PAREN]
+        │   │   │   │   │   ├── conjuncion
+        │   │   │   │   │   │   ├── comparacion
+        │   │   │   │   │   │   │   ├── primaria
+        │   │   │   │   │   │   │   │   └── _var2_ [ID]
+        │   │   │   │   │   │   │   ├── Σ= [NEQ]
+        │   │   │   │   │   │   │   └── literal
+        │   │   │   │   │   │   │       └── 12.2 [FLOAT_LITERAL]
+        │   │   │   │   │   │   ├── @ [AND]
+        │   │   │   │   │   │   └── negacion
+        │   │   │   │   │   │       ├── Σ [NOT]
+        │   │   │   │   │   │       └── primaria
+        │   │   │   │   │   │           ├── ¿ [OPEN_PAREN]
+        │   │   │   │   │   │           ├── comparacion
+        │   │   │   │   │   │           │   ├── literal
+        │   │   │   │   │   │           │   │   └── 12 [INT_LITERAL]
+        │   │   │   │   │   │           │   ├── == [EQEQ]
+        │   │   │   │   │   │           │   └── primaria
+        │   │   │   │   │   │           │       ├── ¿ [OPEN_PAREN]
+        │   │   │   │   │   │           │       ├── multiplicativa
+        │   │   │   │   │   │           │       │   ├── literal
+        │   │   │   │   │   │           │       │   │   └── 34 [INT_LITERAL]
+        │   │   │   │   │   │           │       │   ├── * [MULT]
+        │   │   │   │   │   │           │       │   └── literal
+        │   │   │   │   │   │           │       │       └── 35 [INT_LITERAL]
+        │   │   │   │   │   │           │       └── ? [CLOSE_PAREN]
+        │   │   │   │   │   │           └── ? [CLOSE_PAREN]
+        │   │   │   │   │   └── ? [CLOSE_PAREN]
+        │   │   │   │   ├── endl [ENDL]
+        │   │   │   │   ├── end [END]
+        │   │   │   │   ├── loop [LOOP]
+        │   │   │   │   └── endl [ENDL]
+        │   │   │   ├── decideOf
+        │   │   │   │   ├── decide [DECIDE]
+        │   │   │   │   ├── of [OF]
+        │   │   │   │   ├── casosDecide
+        │   │   │   │   │   └── caso
+        │   │   │   │   │       ├── comparacion
+        │   │   │   │   │       │   ├── primaria
+        │   │   │   │   │       │   │   └── x24 [ID]
+        │   │   │   │   │       │   ├── >= [GTEQ]
+        │   │   │   │   │       │   └── primaria
+        │   │   │   │   │       │       └── var [ID]
+        │   │   │   │   │       ├── -> [ARROW]
+        │   │   │   │   │       ├── ¡ [OPEN_BLOCK]
+        │   │   │   │   │       ├── sentencias
+        │   │   │   │   │       │   └── sentenciaIO
+        │   │   │   │   │       │       ├── show [SHOW]
+        │   │   │   │   │       │       ├── ¿ [OPEN_PAREN]
+        │   │   │   │   │       │       ├── literal
+        │   │   │   │   │       │       │   └── "entra al if" [STRING_LITERAL]
+        │   │   │   │   │       │       ├── ? [CLOSE_PAREN]
+        │   │   │   │   │       │       └── endl [ENDL]
+        │   │   │   │   │       └── ! [CLOSE_BLOCK]
+        │   │   │   │   ├── end [END]
+        │   │   │   │   ├── decide [DECIDE]
+        │   │   │   │   └── endl [ENDL]
+        │   │   │   └── decideOf
+        │   │   │       ├── decide [DECIDE]
+        │   │   │       ├── of [OF]
+        │   │   │       ├── casosDecide
+        │   │   │       │   └── caso
+        │   │   │       │       ├── literalBooleano
+        │   │   │       │       │   └── true [TRUE]
+        │   │   │       │       ├── -> [ARROW]
+        │   │   │       │       ├── ¡ [OPEN_BLOCK]
+        │   │   │       │       ├── sentencias
+        │   │   │       │       │   └── sentenciaIO
+        │   │   │       │       │       ├── show [SHOW]
+        │   │   │       │       │       ├── ¿ [OPEN_PAREN]
+        │   │   │       │       │       ├── primaria
+        │   │   │       │       │       │   └── _var_ [ID]
+        │   │   │       │       │       ├── ? [CLOSE_PAREN]
+        │   │   │       │       │       └── endl [ENDL]
+        │   │   │       │       └── ! [CLOSE_BLOCK]
+        │   │   │       ├── casoElseOpt
+        │   │   │       │   ├── else [ELSE]
+        │   │   │       │   ├── -> [ARROW]
+        │   │   │       │   ├── ¡ [OPEN_BLOCK]
+        │   │   │       │   ├── sentencias
+        │   │   │       │   │   └── decideOf
+        │   │   │       │   │       ├── decide [DECIDE]
+        │   │   │       │   │       ├── of [OF]
+        │   │   │       │   │       ├── casosDecide
+        │   │   │       │   │       │   ├── caso
+        │   │   │       │   │       │   │   ├── comparacion
+        │   │   │       │   │       │   │   │   ├── primaria
+        │   │   │       │   │       │   │   │   │   └── _otra_ [ID]
+        │   │   │       │   │       │   │   │   ├── == [EQEQ]
+        │   │   │       │   │       │   │   │   └── literal
+        │   │   │       │   │       │   │   │       └── 1 [INT_LITERAL]
+        │   │   │       │   │       │   │   ├── -> [ARROW]
+        │   │   │       │   │       │   │   ├── ¡ [OPEN_BLOCK]
+        │   │   │       │   │       │   │   ├── sentencias
+        │   │   │       │   │       │   │   │   └── sentenciaIO
+        │   │   │       │   │       │   │   │       ├── show [SHOW]
+        │   │   │       │   │       │   │   │       ├── ¿ [OPEN_PAREN]
+        │   │   │       │   │       │   │   │       ├── literal
+        │   │   │       │   │       │   │   │       │   └── "!|" [STRING_LITERAL]
+        │   │   │       │   │       │   │   │       ├── ? [CLOSE_PAREN]
+        │   │   │       │   │       │   │   │       └── endl [ENDL]
+        │   │   │       │   │       │   │   └── ! [CLOSE_BLOCK]
+        │   │   │       │   │       │   └── caso
+        │   │   │       │   │       │       ├── comparacion
+        │   │   │       │   │       │       │   ├── primaria
+        │   │   │       │   │       │       │   │   └── _otrax_ [ID]
+        │   │   │       │   │       │       │   ├── == [EQEQ]
+        │   │   │       │   │       │       │   └── literal
+        │   │   │       │   │       │       │       └── 2 [INT_LITERAL]
+        │   │   │       │   │       │       ├── -> [ARROW]
+        │   │   │       │   │       │       ├── ¡ [OPEN_BLOCK]
+        │   │   │       │   │       │       ├── sentencias
+        │   │   │       │   │       │       │   ├── declaracionLocal
+        │   │   │       │   │       │       │   │   ├── local [LOCAL]
+        │   │   │       │   │       │       │   │   ├── _otrax_ [ID]
+        │   │   │       │   │       │       │   │   ├── tipo
+        │   │   │       │   │       │       │   │   │   └── int [INT]
+        │   │   │       │   │       │       │   │   ├── = [ASSIGN]
+        │   │   │       │   │       │       │   │   ├── literal {int}
+        │   │   │       │   │       │       │   │   │   └── 10 [INT_LITERAL] {int}
+        │   │   │       │   │       │       │   │   └── endl [ENDL]
+        │   │   │       │   │       │       │   └── sentencia
+        │   │   │       │   │       │       │       ├── break [BREAK]
+        │   │   │       │   │       │       │       └── endl [ENDL]
+        │   │   │       │   │       │       └── ! [CLOSE_BLOCK]
+        │   │   │       │   │       ├── casoElseOpt
+        │   │   │       │   │       │   ├── else [ELSE]
+        │   │   │       │   │       │   ├── -> [ARROW]
+        │   │   │       │   │       │   ├── ¡ [OPEN_BLOCK]
+        │   │   │       │   │       │   ├── sentencias
+        │   │   │       │   │       │   │   └── asignacion
+        │   │   │       │   │       │   │       ├── _otra_ [ID]
+        │   │   │       │   │       │   │       ├── = [ASSIGN]
+        │   │   │       │   │       │   │       ├── multiplicativa
+        │   │   │       │   │       │   │       │   ├── unaria
+        │   │   │       │   │       │   │       │   │   ├── - [MINUS]
+        │   │   │       │   │       │   │       │   │   └── literal
+        │   │   │       │   │       │   │       │   │       └── 10.5 [FLOAT_LITERAL]
+        │   │   │       │   │       │   │       │   ├── * [MULT]
+        │   │   │       │   │       │   │       │   └── unaria
+        │   │   │       │   │       │   │       │       ├── - [MINUS]
+        │   │   │       │   │       │   │       │       └── literal
+        │   │   │       │   │       │   │       │           └── 1.9 [FLOAT_LITERAL]
+        │   │   │       │   │       │   │       └── endl [ENDL]
+        │   │   │       │   │       │   └── ! [CLOSE_BLOCK]
+        │   │   │       │   │       ├── end [END]
+        │   │   │       │   │       ├── decide [DECIDE]
+        │   │   │       │   │       └── endl [ENDL]
+        │   │   │       │   └── ! [CLOSE_BLOCK]
+        │   │   │       ├── end [END]
+        │   │   │       ├── decide [DECIDE]
+        │   │   │       └── endl [ENDL]
+        │   │   └── ! [CLOSE_BLOCK]
+        │   ├── sentencia
+        │   │   ├── return [RETURN]
+        │   │   ├── literal
+        │   │   │   └── 1 [INT_LITERAL]
+        │   │   └── endl [ENDL]
+        │   └── error_sentencia
+        └── ! [CLOSE_BLOCK]
 
 ======================================================================
 
 ESTADÍSTICAS:
-- Número total de nodos: 676
-- Altura del árbol: 17
+- Número total de nodos: 609
+- Altura del árbol: 16
 
 
 ======================================================================
@@ -705,9 +645,6 @@ ESTADÍSTICAS:
 │ ss              │ string          │ 3        │ variable     │
 │ ff              │ float           │ 4        │ variable     │
 │ ii              │ int             │ 5        │ variable     │
-│ _func2_         │ bool            │ 35       │ funcion      │
-│ _mi_            │ float           │ 46       │ funcion      │
-│ _miOtraFun_     │ unknown         │ 86       │ funcion      │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -726,25 +663,6 @@ ESTADÍSTICAS:
 │ fl2             │ float           │ 22       │ variable     │
 │ bl0             │ bool            │ 28       │ variable     │
 │ bl1             │ bool            │ 30       │ variable     │
-└─────────────────┴─────────────────┴──────────┴──────────────┘
-
-┌─────────────────────────────────────────────────────────────────────┐
-│ ALCANCE: _func2_                                                    │
-├─────────────────────────────────────────────────────────────────────┤
-│ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
-├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ _b1_            │ bool            │ 35       │ parametro    │
-│ _i1_            │ int             │ 35       │ parametro    │
-│ i               │ int             │ 40       │ variable     │
-└─────────────────┴─────────────────┴──────────┴──────────────┘
-
-┌─────────────────────────────────────────────────────────────────────┐
-│ ALCANCE: _mi_                                                       │
-├─────────────────────────────────────────────────────────────────────┤
-│ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
-├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ _dif_           │ int             │ 46       │ parametro    │
-│ _otra_          │ char            │ 46       │ parametro    │
 │ _str_           │ string          │ 48       │ variable     │
 │ _otrax_         │ int             │ 74       │ variable     │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
@@ -752,4 +670,3 @@ ESTADÍSTICAS:
 
 
  ERRORES SEMÁNTICOS:
-  - Variable local duplicada '_otra_' en alcance '_mi_', línea 47

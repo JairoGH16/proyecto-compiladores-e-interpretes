@@ -1,13 +1,20 @@
 ANÁLISIS SINTÁCTICO: prueba_errores.txt
 ======================================================================
 
- ARCHIVO SINTÁCTICAMENTE CORRECTO
+✗ SE ENCONTRARON 4 ERROR(ES) SINTÁCTICO(S)
+
+ERRORES SINTÁCTICOS:
+  - Error sintáctico en línea 11, columna 1: Syntax error
+  - Error sintáctico: Error en sentencia, recuperando en siguiente línea
+  - Error sintáctico en línea 18, columna 1: Syntax error
+  - Error sintáctico: Error en sentencia, recuperando en siguiente línea
+
 
 ======================================================================
 ÁRBOL SINTÁCTICO:
 ======================================================================
 └── programa
-    ├── declaracionesGlobales
+    ├── declaraciones
     │   ├── declaracionGlobal
     │   │   ├── world [WORLD]
     │   │   ├── x [ID]
@@ -26,105 +33,55 @@ ANÁLISIS SINTÁCTICO: prueba_errores.txt
     │       ├── tipo
     │       │   └── float [FLOAT]
     │       └── endl [ENDL]
-    ├── navidad
-    │   ├── navidad [NAVIDAD]
-    │   ├── coal [COAL]
-    │   ├── ¡ [OPEN_BLOCK]
-    │   ├── sentencias
-    │   │   ├── declaracionLocal
-    │   │   │   ├── local [LOCAL]
-    │   │   │   ├── a [ID]
-    │   │   │   ├── tipo
-    │   │   │   │   └── int [INT]
-    │   │   │   └── endl [ENDL]
-    │   │   ├── declaracionLocal
-    │   │   │   ├── local [LOCAL]
-    │   │   │   ├── b [ID]
-    │   │   │   ├── tipo
-    │   │   │   │   └── float [FLOAT]
-    │   │   │   └── endl [ENDL]
-    │   │   └── declaracionLocal
-    │   │       ├── local [LOCAL]
-    │   │       ├── a [ID]
-    │   │       ├── tipo
-    │   │       │   └── float [FLOAT]
-    │   │       └── endl [ENDL]
-    │   └── ! [CLOSE_BLOCK]
-    └── declaracionesFunciones
-        ├── declaracionFuncion
-        │   ├── gift [GIFT]
-        │   ├── probar [ID]
-        │   ├── ¿ [OPEN_PAREN]
-        │   ├── listaParametros
-        │   │   ├── parametro
-        │   │   │   ├── m [ID]
-        │   │   │   └── tipo
-        │   │   │       └── int [INT]
-        │   │   ├── , [COMMA]
-        │   │   ├── parametro
-        │   │   │   ├── n [ID]
-        │   │   │   └── tipo
-        │   │   │       └── int [INT]
-        │   │   ├── , [COMMA]
-        │   │   └── parametro
-        │   │       ├── m [ID]
-        │   │       └── tipo
-        │   │           └── float [FLOAT]
-        │   ├── ? [CLOSE_PAREN]
-        │   ├── tipo
-        │   │   └── int [INT]
-        │   ├── ¡ [OPEN_BLOCK]
-        │   ├── sentencias
-        │   │   ├── declaracionLocal
-        │   │   │   ├── local [LOCAL]
-        │   │   │   ├── temp [ID]
-        │   │   │   ├── tipo
-        │   │   │   │   └── int [INT]
-        │   │   │   └── endl [ENDL]
-        │   │   ├── declaracionLocal
-        │   │   │   ├── local [LOCAL]
-        │   │   │   ├── temp2 [ID]
-        │   │   │   ├── tipo
-        │   │   │   │   └── float [FLOAT]
-        │   │   │   └── endl [ENDL]
-        │   │   ├── declaracionLocal
-        │   │   │   ├── local [LOCAL]
-        │   │   │   ├── temp [ID]
-        │   │   │   ├── tipo
-        │   │   │   │   └── int [INT]
-        │   │   │   └── endl [ENDL]
-        │   │   └── sentencia
-        │   │       ├── return [RETURN]
-        │   │       ├── literal
-        │   │       │   └── 0 [INT_LITERAL]
-        │   │       └── endl [ENDL]
-        │   └── ! [CLOSE_BLOCK]
-        └── declaracionFuncion
-            ├── gift [GIFT]
-            ├── probar [ID]
-            ├── ¿ [OPEN_PAREN]
-            ├── listaParametros
-            │   └── parametro
-            │       ├── z [ID]
-            │       └── tipo
-            │           └── int [INT]
-            ├── ? [CLOSE_PAREN]
-            ├── tipo
-            │   └── int [INT]
-            ├── ¡ [OPEN_BLOCK]
-            ├── sentencias
-            │   └── sentencia
-            │       ├── return [RETURN]
-            │       ├── literal
-            │       │   └── 0 [INT_LITERAL]
-            │       └── endl [ENDL]
-            └── ! [CLOSE_BLOCK]
+    └── navidad
+        ├── navidad [NAVIDAD]
+        ├── coal [COAL]
+        ├── ¡ [OPEN_BLOCK]
+        ├── sentencias
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── a [ID]
+        │   │   ├── tipo
+        │   │   │   └── int [INT]
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── b [ID]
+        │   │   ├── tipo
+        │   │   │   └── float [FLOAT]
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── a [ID]
+        │   │   ├── tipo
+        │   │   │   └── float [FLOAT]
+        │   │   └── endl [ENDL]
+        │   ├── error_sentencia
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── temp2 [ID]
+        │   │   ├── tipo
+        │   │   │   └── float [FLOAT]
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── temp [ID]
+        │   │   ├── tipo
+        │   │   │   └── int [INT]
+        │   │   └── endl [ENDL]
+        │   ├── sentencia
+        │   │   ├── return [RETURN]
+        │   │   ├── literal
+        │   │   │   └── 0 [INT_LITERAL]
+        │   │   └── endl [ENDL]
+        │   └── error_sentencia
+        └── ! [CLOSE_BLOCK]
 
 ======================================================================
 
 ESTADÍSTICAS:
-- Número total de nodos: 113
-- Altura del árbol: 7
+- Número total de nodos: 63
+- Altura del árbol: 6
 
 
 ======================================================================
@@ -140,7 +97,6 @@ ESTADÍSTICAS:
 ├─────────────────┼─────────────────┼──────────┼──────────────┤
 │ x               │ int             │ 1        │ variable     │
 │ y               │ float           │ 2        │ variable     │
-│ probar          │ int             │ 11       │ funcion      │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -150,18 +106,8 @@ ESTADÍSTICAS:
 ├─────────────────┼─────────────────┼──────────┼──────────────┤
 │ a               │ int             │ 6        │ variable     │
 │ b               │ float           │ 7        │ variable     │
-└─────────────────┴─────────────────┴──────────┴──────────────┘
-
-┌─────────────────────────────────────────────────────────────────────┐
-│ ALCANCE: probar                                                     │
-├─────────────────────────────────────────────────────────────────────┤
-│ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
-├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ m               │ int             │ 11       │ parametro    │
-│ n               │ int             │ 11       │ parametro    │
-│ temp            │ int             │ 12       │ variable     │
 │ temp2           │ float           │ 13       │ variable     │
-│ z               │ int             │ 18       │ parametro    │
+│ temp            │ int             │ 14       │ variable     │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 
@@ -169,6 +115,3 @@ ESTADÍSTICAS:
  ERRORES SEMÁNTICOS:
   - Variable global duplicada 'x' en línea 3
   - Variable local duplicada 'a' en alcance 'NAVIDAD', línea 8
-  - Parámetro duplicado 'm' en línea 11
-  - Variable local duplicada 'temp' en alcance 'probar', línea 14
-  - Función duplicada 'probar' en línea 18

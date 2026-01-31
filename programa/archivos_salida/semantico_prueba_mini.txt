@@ -1,0 +1,14 @@
+========== REPORTE DE ANÁLISIS SEMÁNTICO ==========
+Archivo: prueba_mini.txt
+Fecha: Fri Jan 30 22:16:44 CST 2026
+
+ERRORES SEMÁNTICOS:
+  - Línea 11: Variable local duplicada 'x' en alcance 'NAVIDAD'
+  - Línea 13: Variable local duplicada 'y' en alcance 'NAVIDAD'
+  - Línea 0: variable no declarada 'a'
+  - Línea 0: variable no declarada 'b'
+  - Línea 0: return tipo 'string' pero función 'error1' retorna 'int'
+  - Línea 0: función 'suma' esperaba 2 argumentos pero recibió 1
+  - Línea 0: función 'noExiste' no declarada
+
+Total: 7 errores encontrados
