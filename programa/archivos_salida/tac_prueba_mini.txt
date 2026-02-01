@@ -1,0 +1,65 @@
+========== CÓDIGO INTERMEDIO (THREE-ADDRESS CODE) ==========
+
+    ========== INICIO CÓDIGO INTERMEDIO ==========
+
+    DECLARE mi_lista : int[2x2]
+    mi_lista[0][0] = 10
+    mi_lista[0][1] = 20
+    mi_lista[1][0] = 30
+    mi_lista[1][1] = 40
+
+FUNCTION factorial:
+    t0 = n <= 1
+    if t0 goto L1
+    goto L2
+L1:
+    return 1
+    goto L0
+L2:
+    t1 = n - 1
+    param t1
+    t2 = call factorial, 1
+    t3 = n * t2
+    return t3
+L0:
+END_FUNCTION
+
+
+FUNCTION suma_rango:
+    total = 0
+    i = inicio
+L3:
+    t4 = i <= fin
+    if t4 goto L4
+    goto L5
+L4:
+    t5 = total + i
+    total = t5
+    t6 = i + 1
+    i = t6
+    goto L3
+L5:
+    return total
+END_FUNCTION
+
+
+FUNCTION NAVIDAD:
+    param 5
+    t7 = call factorial, 1
+    f = t7
+    show f
+    param 1
+    param 10
+    t8 = call suma_rango, 2
+    s = t8
+    show s
+    t9 = f + s
+    resultado_global = t9
+    show resultado_global
+    t10 = mi_lista[1][0]
+    x = t10
+    show x
+END_FUNCTION
+
+
+    ========== FIN CÓDIGO INTERMEDIO ==========

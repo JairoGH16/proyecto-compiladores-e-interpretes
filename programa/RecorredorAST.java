@@ -31,10 +31,10 @@ public class RecorredorAST {
         
         construirTabla(raiz, true);
         
-        System.out.println("========== ANÁLISIS SEMÁNTICO ==========\n");
+        System.out.println("========== ANALISIS SEMANTICO ==========\n");
         
         if (!erroresSemanticos.isEmpty()) {
-            System.out.println("❌ ERRORES SEMÁNTICOS:");
+            System.out.println("ERRORES SEMANTICOS:");
             for (String error : erroresSemanticos) {
                 System.err.println("  - " + error);
             }
@@ -1026,10 +1026,6 @@ public class RecorredorAST {
     public ArrayList<String> getErrores() { return new ArrayList<>(); }
     public ArrayList<String> getErroresSemanticos() { return erroresSemanticos; }
     public boolean tieneErrores() { return !erroresSemanticos.isEmpty(); }
-
-    // ==================== AGREGAR ESTOS MÉTODOS AL FINAL DE RecorredorAST.java ====================
-// (Antes de la última llave "}")
-
     // ==================== GENERACIÓN DE CÓDIGO INTERMEDIO ====================
     
     /**
@@ -1098,7 +1094,9 @@ public class RecorredorAST {
             case "sentencia":
                 generarCodigoSentencia(nodo, gen);
                 break;
-                
+            case "sentenciaIO":
+                generarCodigoIO(nodo, gen);
+                break;    
             case "decideOf":
                 generarCodigoDecide(nodo, gen);
                 break;
@@ -1170,8 +1168,6 @@ public class RecorredorAST {
     
         // --- 3. CONDICIÓN (Forzamos búsqueda si 'condicion' es null) ---
         if (condicion == null) {
-            // En tu gramática FOR ¿ init ; EXPR ; act ? 
-            // La expresión suele ser el hijo número 5 del nodo forLoop
             if (nodo.getNumHijos() >= 6) condicion = nodo.getHijo(5);
         }
     
@@ -1189,10 +1185,7 @@ public class RecorredorAST {
         if (sentencias != null) {
             generarCodigoParaNodo(sentencias, gen);
         }
-    
-        // --- 5. GENERAR ACTUALIZACIÓN (EL CAMBIO AQUÍ) ---
         if (actualizacion != null) {
-            // Buscamos si hay un ID y un signo '=' dentro de la actualización
             boolean esAsignacionDirecta = false;
             Nodo nodoID = null;
             Nodo nodoExpr = null;
@@ -1204,7 +1197,6 @@ public class RecorredorAST {
                 if (h.getTipo() != null && h.getTipo().equals("ASSIGN")) {
                     esAsignacionDirecta = true;
                 }
-                // En tu gramática, la expresión suele ser el último hijo o una etiqueta 'expresion'
                 if (h.getEtiqueta().equals("expresion") || h.getEtiqueta().equals("aditiva")) {
                     nodoExpr = h;
                 }
@@ -1214,7 +1206,6 @@ public class RecorredorAST {
                 String val = generarCodigoExpresion(nodoExpr, gen);
                 gen.generarAsignacion(nodoID.getLexema(), val);
             } else {
-                // Si no es directa, intentamos el recorrido normal por si es un incremento unario (i++)
                 for (Nodo h : actualizacion.getHijos()) {
                     generarCodigoParaNodo(h, gen);
                 }
@@ -1230,8 +1221,52 @@ public class RecorredorAST {
         if (hijos.size() < 2) return;
         
         String nombreVar = hijos.get(1).getLexema();
+        Nodo tercerHijo = hijos.get(2);
         
-        // Buscar si tiene asignación
+        // ========== ARRAYS GLOBALES ==========
+        if (tercerHijo.getEtiqueta().equals("array")) {
+            String dims = extraerDimensionesArray(tercerHijo);
+            String tipo = extraerTipoArray(tercerHijo);
+            gen.generarDeclaracionArray(nombreVar, tipo, dims);
+            
+            // Buscar inicialización
+            boolean tieneInicializacion = false;
+            
+            for (int i = 0; i < hijos.size(); i++) {
+                Nodo hijo = hijos.get(i);
+                if (hijo.getTipo() != null && hijo.getTipo().equals("ASSIGN")) {
+                    tieneInicializacion = true;
+                    break;
+                }
+            }
+            
+            if (tieneInicializacion) {
+                // Recolectar nodos de inicialización
+                ArrayList<Nodo> nodosInicializacion = new ArrayList<>();
+                boolean recolectando = false;
+                
+                for (Nodo hijo : hijos) {
+                    if (hijo.getTipo() != null && hijo.getTipo().equals("ASSIGN")) {
+                        recolectando = true;
+                        continue;
+                    }
+                    if (hijo.getTipo() != null && hijo.getTipo().equals("ENDL")) {
+                        break;
+                    }
+                    if (recolectando) {
+                        nodosInicializacion.add(hijo);
+                    }
+                }
+                
+                if (!nodosInicializacion.isEmpty()) {
+                    generarInicializacionArrayConNodos(nombreVar, nodosInicializacion, dims, gen);
+                }
+            }
+            
+            return;
+        }
+        
+        // ========== VARIABLES GLOBALES SIMPLES ==========
         boolean tieneAsignacion = false;
         Nodo nodoExpresion = null;
         
@@ -1260,13 +1295,77 @@ public class RecorredorAST {
         if (hijos.size() < 3) return;
         
         String nombreVar = hijos.get(1).getLexema();
-        Nodo tercerHijo = hijos.get(2); // Aquí está el tipo o el array
+        Nodo tercerHijo = hijos.get(2);
+        
+        // ========== DEBUG TEMPORAL ==========
+        System.err.println("DEBUG: generarCodigoDeclaracionLocal");
+        System.err.println("  nombreVar = " + nombreVar);
+        System.err.println("  tercerHijo.getEtiqueta() = " + tercerHijo.getEtiqueta());
+        System.err.println("  tercerHijo.getTipo() = " + tercerHijo.getTipo());
+        System.err.println("  numHijos = " + tercerHijo.getNumHijos());
+        // ====================================
         
         if (tercerHijo.getEtiqueta().equals("array")) {
-            // Extraer dimensiones: int[2, 2]
+            System.err.println("DEBUG: ¡Es un array!");
+            
             String dims = extraerDimensionesArray(tercerHijo);
             String tipo = extraerTipoArray(tercerHijo);
             gen.generarDeclaracionArray(nombreVar, tipo, dims);
+            
+            // ========== BUSCAR INICIALIZACIÓN ==========
+            boolean tieneInicializacion = false;
+            Nodo nodoInicializacion = null;
+            
+            for (int i = 0; i < hijos.size(); i++) {
+                Nodo hijo = hijos.get(i);
+                System.err.println("DEBUG: Revisando hijo[" + i + "]: etiqueta=" + hijo.getEtiqueta() + ", tipo=" + hijo.getTipo());
+                
+                if (hijo.getTipo() != null && hijo.getTipo().equals("ASSIGN")) {
+                    tieneInicializacion = true;
+                    System.err.println("DEBUG: ¡Encontré ASSIGN en posición " + i + "!");
+                    
+                    if (i + 1 < hijos.size()) {
+                        nodoInicializacion = hijos.get(i + 1);
+                        System.err.println("DEBUG: nodoInicializacion: etiqueta=" + nodoInicializacion.getEtiqueta() + ", tipo=" + nodoInicializacion.getTipo());
+                    }
+                    break;
+                }
+            }
+            
+            System.err.println("DEBUG: tieneInicializacion=" + tieneInicializacion);
+            
+            if (tieneInicializacion) {
+                // Recolectar TODOS los nodos entre ASSIGN y ENDL
+                ArrayList<Nodo> nodosInicializacion = new ArrayList<>();
+                boolean recolectando = false;
+                
+                for (Nodo hijo : hijos) {
+                    if (hijo.getTipo() != null && hijo.getTipo().equals("ASSIGN")) {
+                        recolectando = true;
+                        continue;
+                    }
+                    if (hijo.getTipo() != null && hijo.getTipo().equals("ENDL")) {
+                        break;
+                    }
+                    if (recolectando) {
+                        nodosInicializacion.add(hijo);
+                    }
+                }
+                
+                System.err.println("DEBUG: Nodos de inicialización recolectados: " + nodosInicializacion.size());
+                for (int k = 0; k < nodosInicializacion.size(); k++) {
+                    Nodo n = nodosInicializacion.get(k);
+                    System.err.println("  [" + k + "]: etiqueta=" + n.getEtiqueta() + ", tipo=" + n.getTipo() + ", numHijos=" + n.getNumHijos());
+                }
+                
+                if (!nodosInicializacion.isEmpty()) {
+                    System.err.println("DEBUG: ¡Llamando a generarInicializacionArray!");
+                    generarInicializacionArrayConNodos(nombreVar, nodosInicializacion, dims, gen);
+                }
+            } else {
+                System.err.println("DEBUG: NO se llamó a generarInicializacionArray");
+            }
+            // ========================================================
             
         } else {
             // Declaración normal de variables
@@ -1287,6 +1386,159 @@ public class RecorredorAST {
             }
         }
     }
+
+    private void generarInicializacionArrayConNodos(String nombreArray, 
+        ArrayList<Nodo> nodosInit,
+        String dims, 
+        GeneradorCodigoIntermedio gen) {
+        System.err.println("DEBUG generarInicializacionArrayConNodos");
+
+        String[] dimensiones = dims.split("x");
+        int filas = Integer.parseInt(dimensiones[0]);
+        int cols = Integer.parseInt(dimensiones[1]);
+
+        ArrayList<ArrayList<String>> valores = new ArrayList<>();
+        ArrayList<String> filaActual = new ArrayList<>();
+        boolean dentroFila = false;
+
+        for (Nodo nodo : nodosInit) {
+        String tipo = nodo.getTipo();
+        String etiqueta = nodo.getEtiqueta();
+
+        System.err.println("DEBUG: Procesando nodo: tipo=" + tipo + ", etiqueta=" + etiqueta + ", numHijos=" + nodo.getNumHijos());
+
+        // Si es OPEN_BLOCK externo, ignorar (es el primero)
+        if (tipo != null && tipo.equals("OPEN_BLOCK") && !dentroFila) {
+        continue;
+        }
+
+        // Si es CLOSE_BLOCK externo, ignorar (es el último)
+        if (tipo != null && tipo.equals("CLOSE_BLOCK") && !dentroFila) {
+        continue;
+        }
+
+        // Si es el nodo intermedio (inicializacionArray), procesar sus hijos
+        if (etiqueta != null && etiqueta.equals("inicializacionArray")) {
+        System.err.println("DEBUG: Encontré inicializacionArray, procesando sus " + nodo.getNumHijos() + " hijos");
+        procesarInicializacionArray(nodo, valores);
+        }
+        }
+
+        System.err.println("DEBUG: Total filas extraídas: " + valores.size());
+        for (int i = 0; i < valores.size(); i++) {
+        System.err.println("  Fila " + i + ": " + valores.get(i));
+        }
+
+        // Generar asignaciones
+        for (int i = 0; i < valores.size() && i < filas; i++) {
+        ArrayList<String> fila = valores.get(i);
+        for (int j = 0; j < fila.size() && j < cols; j++) {
+        String valor = fila.get(j);
+        System.err.println("DEBUG: Generando " + nombreArray + "[" + i + "][" + j + "] = " + valor);
+        gen.generarAsignacionArray2D(nombreArray, String.valueOf(i), String.valueOf(j), valor);
+        }
+        }
+        }
+
+        // NUEVO MÉTODO
+        private void procesarInicializacionArray(Nodo nodoInicial, ArrayList<ArrayList<String>> valores) {
+            for (Nodo hijo : nodoInicial.getHijos()) {
+                String tipo = hijo.getTipo();
+                String etiqueta = hijo.getEtiqueta();
+                
+                System.err.println("  DEBUG hijo: tipo=" + tipo + ", etiqueta=" + etiqueta + ", numHijos=" + hijo.getNumHijos());
+                
+                // Saltar comas
+                if (tipo != null && tipo.equals("COMMA")) {
+                    continue;
+                }
+                
+                // Procesar cada filaArray
+                if (etiqueta != null && etiqueta.equals("filaArray")) {
+                    System.err.println("  DEBUG: Procesando filaArray con " + hijo.getNumHijos() + " hijos");
+                    ArrayList<String> fila = procesarFilaArray(hijo);
+                    if (!fila.isEmpty()) {
+                        valores.add(fila);
+                        System.err.println("  DEBUG: Fila guardada: " + fila);
+                    }
+                }
+            }
+        }
+        
+        // NUEVO MÉTODO
+        private ArrayList<String> procesarFilaArray(Nodo nodoFila) {
+            ArrayList<String> fila = new ArrayList<>();
+            
+            for (Nodo hijo : nodoFila.getHijos()) {
+                String tipo = hijo.getTipo();
+                String etiqueta = hijo.getEtiqueta();
+                
+                System.err.println("    DEBUG filaArray hijo: tipo=" + tipo + ", etiqueta=" + etiqueta);
+                
+                // Saltar OPEN_BLOCK, CLOSE_BLOCK y COMMA
+                if (tipo != null && (tipo.equals("OPEN_BLOCK") || tipo.equals("CLOSE_BLOCK") || tipo.equals("COMMA"))) {
+                    continue;
+                }
+                
+                // Procesar literal
+                if (etiqueta != null && etiqueta.equals("literal")) {
+                    String valor = extraerValorLiteral(hijo);
+                    if (valor != null) {
+                        fila.add(valor);
+                        System.err.println("    DEBUG: Valor extraído: " + valor);
+                    }
+                }
+                // Procesar listaExpresiones si existe
+                else if (etiqueta != null && etiqueta.equals("listaExpresiones")) {
+                    System.err.println("    DEBUG: Procesando listaExpresiones");
+                    procesarListaExpresionesParaFila(hijo, fila);
+                }
+                // Recursión en otros hijos
+                else if (hijo.getNumHijos() > 0) {
+                    procesarNodosParaValores(hijo, fila);
+                }
+            }
+            
+            return fila;
+        }
+        
+        // NUEVO MÉTODO
+        private void procesarListaExpresionesParaFila(Nodo nodoLista, ArrayList<String> fila) {
+            for (Nodo hijo : nodoLista.getHijos()) {
+                String tipo = hijo.getTipo();
+                String etiqueta = hijo.getEtiqueta();
+                
+                // Saltar comas
+                if (tipo != null && tipo.equals("COMMA")) {
+                    continue;
+                }
+                
+                // Procesar literal
+                if (etiqueta != null && etiqueta.equals("literal")) {
+                    String valor = extraerValorLiteral(hijo);
+                    if (valor != null) {
+                        fila.add(valor);
+                    }
+                }
+                // Recursión
+                else if (hijo.getNumHijos() > 0) {
+                    procesarNodosParaValores(hijo, fila);
+                }
+            }
+        }
+
+        private void procesarNodosParaValores(Nodo nodo, ArrayList<String> valores) {
+            for (Nodo hijo : nodo.getHijos()) {
+                if (hijo.getEtiqueta() != null && hijo.getEtiqueta().equals("literal")) {
+                    String valor = extraerValorLiteral(hijo);
+                    if (valor != null) {
+                        valores.add(valor);
+                    }
+                } else if (hijo.getNumHijos() > 0) {
+                    procesarNodosParaValores(hijo, valores);
+                }
+            }
+        }
     
     private void generarCodigoFuncion(Nodo nodo, GeneradorCodigoIntermedio gen) {
         ArrayList<Nodo> hijos = nodo.getHijos();
@@ -1470,7 +1722,6 @@ public class RecorredorAST {
         if (nodo == null) return "0";
     
         String etiqueta = nodo.getEtiqueta();
-        System.err.println("DEBUG generarCodigoExpresion: etiqueta = " + etiqueta);
         
         // Literales
         if (etiqueta.equals("literal")) {
@@ -1664,4 +1915,146 @@ public class RecorredorAST {
             default: return "";
         }
     }
+
+    private void generarCodigoIO(Nodo nodo, GeneradorCodigoIntermedio gen) {
+        ArrayList<Nodo> hijos = nodo.getHijos();
+        if (hijos.isEmpty()) return;
+    
+        Nodo primerHijo = hijos.get(0);
+        String operacion = primerHijo.getLexema(); // "show" o "get"
+    
+        if (operacion != null && operacion.equals("show")) {
+            // En tu gramática: SHOW OPEN_PAREN expresion CLOSE_PAREN ENDL
+            // La expresión suele ser el hijo número 2
+            if (hijos.size() >= 3) {
+                Nodo expresion = hijos.get(2);
+                String valor = generarCodigoExpresion(expresion, gen);
+                gen.agregarInstruccion("show " + valor);
+            }
+        } else if (operacion != null && operacion.equals("get")) {
+            // Para el get (lectura)
+            if (hijos.size() >= 3) {
+                String variable = hijos.get(2).getLexema();
+                gen.agregarInstruccion("get " + variable);
+            }
+        }
+    }
+
+    /**
+     * Genera código para inicializar un array con valores literales
+     * Ejemplo: local matriz int[2, 2] = ¡ ¡10, 20!, ¡30, 40! !
+     */
+    private void generarInicializacionArray(String nombreArray, Nodo nodoInit, 
+        String dims, GeneradorCodigoIntermedio gen) {
+        System.err.println("DEBUG generarInicializacionArray: nombreArray=" + nombreArray + ", dims=" + dims);
+        System.err.println("DEBUG nodoInit: etiqueta=" + nodoInit.getEtiqueta() + ", tipo=" + nodoInit.getTipo());
+
+        String[] dimensiones = dims.split("x");
+        int filas = Integer.parseInt(dimensiones[0]);
+        int cols = Integer.parseInt(dimensiones[1]);
+
+        System.err.println("DEBUG filas=" + filas + ", cols=" + cols);
+
+        ArrayList<ArrayList<String>> valores = extraerValoresArray(nodoInit);
+
+        System.err.println("DEBUG valores extraídos: " + valores.size() + " filas");
+        for (int i = 0; i < valores.size(); i++) {
+        System.err.println("  Fila " + i + ": " + valores.get(i));
+        }
+
+        // Generar asignaciones
+        for (int i = 0; i < valores.size() && i < filas; i++) {
+        ArrayList<String> fila = valores.get(i);
+        for (int j = 0; j < fila.size() && j < cols; j++) {
+        String valor = fila.get(j);
+        System.err.println("DEBUG: Generando mi_lista[" + i + "][" + j + "] = " + valor);
+        gen.generarAsignacionArray2D(nombreArray, String.valueOf(i), String.valueOf(j), valor);
+        }
+        }
+
+        System.err.println("DEBUG: Fin generarInicializacionArray");
+        }
+
+    /**
+    * Extrae los valores de un nodo de inicialización de array
+    * Formato esperado: ¡ ¡10, 20!, ¡30, 40! !
+    */
+    private ArrayList<ArrayList<String>> extraerValoresArray(Nodo nodo) {
+        System.err.println("DEBUG extraerValoresArray: inicio");
+        ArrayList<ArrayList<String>> resultado = new ArrayList<>();
+        
+        if (nodo == null) {
+            System.err.println("DEBUG: nodo es NULL");
+            return resultado;
+        }
+        
+        System.err.println("DEBUG: nodo.etiqueta=" + nodo.getEtiqueta() + ", numHijos=" + nodo.getHijos().size());
+        
+        ArrayList<Nodo> hijos = nodo.getHijos();
+        ArrayList<String> filaActual = new ArrayList<>();
+        boolean dentroFila = false;
+        
+        for (int i = 0; i < hijos.size(); i++) {
+            Nodo hijo = hijos.get(i);
+            String etiqueta = hijo.getEtiqueta();
+            String tipo = hijo.getTipo();
+            
+            System.err.println("DEBUG hijo[" + i + "]: etiqueta=" + etiqueta + ", tipo=" + tipo);
+            
+            // ... resto del código sin cambios
+
+    // Inicio de fila: otro OPEN_BLOCK
+    if (tipo != null && tipo.equals("OPEN_BLOCK")) {
+    dentroFila = true;
+    filaActual = new ArrayList<>();
+    }
+    // Fin de fila: CLOSE_BLOCK
+    else if (tipo != null && tipo.equals("CLOSE_BLOCK")) {
+    if (dentroFila && !filaActual.isEmpty()) {
+    resultado.add(new ArrayList<>(filaActual));
+    filaActual.clear();
+    }
+    dentroFila = false;
+    }
+    // Literal dentro de una fila
+    else if (dentroFila && etiqueta != null && etiqueta.equals("literal")) {
+    String valor = extraerValorLiteral(hijo);
+    if (valor != null) {
+    filaActual.add(valor);
+    }
+    }
+    // Recursión en hijos
+    else if (dentroFila && hijo.getNumHijos() > 0) {
+    procesarHijosParaValores(hijo, filaActual);
+    }
+    }
+
+    return resultado;
+    }
+
+    /**
+    * Procesa hijos de un nodo para extraer valores literales
+    */
+    private void procesarHijosParaValores(Nodo nodo, ArrayList<String> valores) {
+    for (Nodo hijo : nodo.getHijos()) {
+    if (hijo.getEtiqueta() != null && hijo.getEtiqueta().equals("literal")) {
+    String valor = extraerValorLiteral(hijo);
+    if (valor != null) {
+    valores.add(valor);
+    }
+    } else if (hijo.getNumHijos() > 0) {
+    procesarHijosParaValores(hijo, valores);
+    }
+    }
+    }
+
+    /**
+    * Extrae el valor de un nodo literal
+    */
+    private String extraerValorLiteral(Nodo nodoLiteral) {
+    if (nodoLiteral == null || nodoLiteral.getHijos().isEmpty()) return null;
+    Nodo hijo = nodoLiteral.getHijos().get(0);
+    return hijo.getLexema();
+    }
+
 }
