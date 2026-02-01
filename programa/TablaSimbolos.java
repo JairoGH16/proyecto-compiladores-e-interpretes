@@ -159,6 +159,16 @@ public class TablaSimbolos {
                 }
             }
         }
+
+        for (int i = pilaAlcances.size() - 1; i >= 0; i--) {
+            String alcance = pilaAlcances.get(i);
+            ArrayList<Simbolo> simbolos = tablas.get(alcance);
+            if (simbolos != null) {
+                for (Simbolo s : simbolos) {
+                    if (s.getNombre().equals(nombre)) return s;
+                }
+            }
+        }
         
         return null; // No encontrado
     }

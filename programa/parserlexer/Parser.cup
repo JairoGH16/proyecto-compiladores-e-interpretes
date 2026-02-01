@@ -232,6 +232,17 @@ declaracionGlobal ::= WORLD ID:id tipo:t ENDL
         result.addHijo(new Nodo("endl", "ENDL"));
         RESULT = (Nodo)result;
     :}
+    | LOCAL ID:id array:a ENDL
+    {:
+        Nodo result = new Nodo("declaracionLocal");
+        result.addHijo(new Nodo("local", "LOCAL"));
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        result.addHijo((Nodo)a);
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
     | WORLD error ENDL
     {:
         parser.report_error("Error en declaración global", null);
@@ -563,6 +574,17 @@ declaracionLocal ::= LOCAL ID:id tipo:t ENDL
         result.addHijo(new Nodo("¡", "OPEN_BLOCK"));
         result.addHijo((Nodo)ia);
         result.addHijo(new Nodo("!", "CLOSE_BLOCK"));
+        result.addHijo(new Nodo("endl", "ENDL"));
+        RESULT = (Nodo)result;
+    :}
+    | LOCAL ID:id array:a ENDL
+    {:
+        Nodo result = new Nodo("declaracionLocal");
+        result.addHijo(new Nodo("local", "LOCAL"));
+        Nodo nodoID = new Nodo(id, "ID");
+        nodoID.setLinea(idleft);
+        result.addHijo(nodoID);
+        result.addHijo((Nodo)a);
         result.addHijo(new Nodo("endl", "ENDL"));
         RESULT = (Nodo)result;
     :}

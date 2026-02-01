@@ -1,0 +1,159 @@
+========== CÓDIGO INTERMEDIO (THREE-ADDRESS CODE) ==========
+
+    ========== INICIO CÓDIGO INTERMEDIO ==========
+
+    t = 10
+
+FUNCTION factorial:
+    t0 = n <= 1
+    if t0 goto L1
+    goto L2
+L1:
+    return 1
+    goto L0
+L2:
+    t1 = n - 1
+    param t1
+    t2 = call factorial, 1
+    t3 = n * t2
+    return t3
+L0:
+END_FUNCTION
+
+
+FUNCTION pruebaFinal:
+    DECLARE tabla : int[5x5]
+    i = 0
+L3:
+    t4 = i < 5
+    if t4 goto L4
+    goto L5
+L4:
+    param i
+    t5 = call factorial, 1
+    tabla[i][0] = t5
+    t6 = i + 1
+    i = t6
+    goto L3
+L5:
+    t7 = tabla[n][0]
+    return t7
+END_FUNCTION
+
+
+FUNCTION probarArray:
+    DECLARE matriz : int[2x2]
+    suma = 0
+    t8 = matriz[0][0]
+    t9 = matriz[1][1]
+    t10 = t8 + t9
+    suma = t10
+    return suma
+END_FUNCTION
+
+
+FUNCTION probarFor:
+    total = 0
+    i = 1
+L6:
+    t11 = i <= 10
+    if t11 goto L7
+    goto L8
+L7:
+    t12 = total + i
+    total = t12
+    t13 = i + 1
+    i = t13
+    goto L6
+L8:
+    return total
+END_FUNCTION
+
+
+FUNCTION suma:
+    t14 = 10 - 2
+    t = t14
+    t15 = a + b
+    return t15
+END_FUNCTION
+
+
+FUNCTION error1:
+    i = 2
+L9:
+    t16 = i > 3
+    if t16 goto L10
+    t17 = suma + i
+    suma = t17
+    t18 = i + 1
+    i = t18
+    goto L9
+L10:
+    return "texto"
+END_FUNCTION
+
+
+FUNCTION condicionInvalida:
+    t19 = 5 > 3
+    if t19 goto L12
+    goto L13
+L12:
+    return 1
+    goto L11
+L13:
+    t20 = 5 < 3
+    if t20 goto L14
+    goto L15
+L14:
+    return 2
+    goto L11
+L15:
+L11:
+    return 0
+END_FUNCTION
+
+
+FUNCTION NAVIDAD:
+    t21 = 4 == 42
+    b3 = t21
+    param 5
+    param 3
+    t22 = call suma, 2
+    x = t22
+    param 5
+    param 2
+    t23 = call suma, 2
+    y = t23
+    t = 11
+    a = 15
+    b = 7
+    t24 = b * 2
+    t25 = a + t24
+    t26 = a / b
+    t27 = t25 - t26
+    c = t27
+    t28 = c > 20
+    t29 = c < 30
+    t30 = t28 && t29
+    if t30 goto L17
+    goto L18
+L17:
+    t31 = c * 2
+    c = t31
+    goto L16
+L18:
+    t32 = c == 20
+    if t32 goto L20
+    goto L21
+L20:
+    c = 100
+    goto L19
+L21:
+    c = 0
+L19:
+L16:
+END_FUNCTION
+
+
+    ========== FIN CÓDIGO INTERMEDIO ==========
+

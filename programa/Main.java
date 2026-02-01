@@ -1,7 +1,8 @@
 import java.io.*;
 import java.util.*;
 import java_cup.runtime.Symbol;
-import parserlexer.Nodo;
+import parserlexer.*;
+import java.util.Scanner;
 
 /**
  * Clase Principal (Main)
@@ -34,6 +35,7 @@ public class Main {
             System.out.println("3. Realizar Análisis Sintáctico");
             System.out.println("4. Realizar Análisis Semántico");
             System.out.println("5. Realizar Análisis Total (Léxico+Sintáctico+Semántico)");
+            System.out.println("6. Generar código intermedio"); 
             System.out.println("0. Salir");
             
             String opcion = sc.nextLine();
@@ -54,14 +56,17 @@ public class Main {
                 case "5":
                     menuAnalisisCompleto();
                     break;
+                case "6":
+                    opcionCodigoIntermedio(sc);
+                    break;
                 case "0":
-                    System.out.println("Saliendo...");
+                    System.out.println("\n¡Hasta luego!");
                     return;
                 default:
                     System.out.println("Opción no válida.");
+                }
             }
         }
-    }
 
     private static void menuAnalisisSintactico() {
         File folder = new File(RUTA_PRUEBAS);
@@ -607,5 +612,113 @@ public class Main {
             }
         } catch (Exception e) { }
         return "UNKNOWN";
+    }
+
+    private static void opcionCodigoIntermedio(Scanner scanner) {
+        System.out.println("\n========================================");
+        System.out.println("   GENERACIÓN DE CÓDIGO INTERMEDIO");
+        System.out.println("========================================\n");
+        
+        // Obtener archivos disponibles
+        java.io.File carpeta = new java.io.File("programa/archivos_prueba");
+        java.io.File[] archivos = carpeta.listFiles((dir, name) -> name.endsWith(".txt"));
+        
+        if (archivos == null || archivos.length == 0) {
+            System.out.println("No se encontraron archivos .txt en programa/archivos_entrada/");
+            return;
+        }
+        
+        // Mostrar archivos disponibles
+        System.out.println("Archivos disponibles:");
+        for (int i = 0; i < archivos.length; i++) {
+            System.out.println((i + 1) + ". " + archivos[i].getName());
+        }
+        System.out.println((archivos.length + 1) + ". Volver al menú principal");
+        
+        System.out.print("\nSeleccione un archivo (1-" + (archivos.length + 1) + "): ");
+        
+        try {
+            int opcion = Integer.parseInt(scanner.nextLine());
+            
+            if (opcion == archivos.length + 1) {
+                return; // Volver al menú
+            }
+            
+            if (opcion < 1 || opcion > archivos.length) {
+                System.out.println("Opción inválida");
+                return;
+            }
+            
+            java.io.File archivoSeleccionado = archivos[opcion - 1];
+            String rutaArchivo = archivoSeleccionado.getPath();
+            
+            System.out.println("\nAnalizando: " + archivoSeleccionado.getName() + "...");
+            
+            Reader reader = new BufferedReader(
+                new InputStreamReader(
+                    new FileInputStream(rutaArchivo), "UTF-8"));
+            
+            // Cargar las clases dinámicamente
+            Class<?> lexerClass = Class.forName("parserlexer.Lexer");
+            Object scannerObj = lexerClass.getConstructor(Reader.class).newInstance(reader);
+            
+            Class<?> parserClass = Class.forName("parserlexer.Parser");
+            Object parserObj = parserClass.getConstructor(java_cup.runtime.Scanner.class).newInstance(scannerObj);
+            
+            // Limpiar errores previos
+            parserClass.getMethod("limpiarErrores").invoke(null);
+            
+            // Ejecutar el parser
+            Object resultado = parserClass.getMethod("parse").invoke(parserObj);
+            
+            // Obtener el valor del resultado (Symbol.value)
+            Object valorResultado = resultado.getClass().getField("value").get(resultado);
+            
+            
+            if (valorResultado instanceof Nodo) {
+                Nodo raiz = (Nodo) valorResultado;
+                
+                // Construir tabla y analizar
+                RecorredorAST recorredor = new RecorredorAST();
+                recorredor.recorrerYAnalizar(raiz);
+                
+                if (recorredor.tieneErrores()) {
+                    System.out.println("\n⚠️  No se puede generar código intermedio.");
+                    System.out.println("    El programa tiene errores semánticos.");
+                    System.out.println("    Por favor, corrija los errores primero usando la opción 4.");
+                    return;
+                }
+                
+                System.out.println("✓ Sin errores semánticos");
+                
+                // Generar código intermedio
+                System.out.println("\n========== GENERANDO CÓDIGO INTERMEDIO ==========\n");
+                GeneradorCodigoIntermedio generador = recorredor.generarCodigoIntermedio(raiz);
+                
+                // Mostrar código intermedio en consola
+                System.out.println(generador.getCodigoCompleto());
+                
+                // Guardar en archivo
+                String nombreArchivo = archivoSeleccionado.getName().replace(".txt", "");
+                String archivoSalida = "programa/archivos_salida/codigo_intermedio_" + nombreArchivo + ".txt";
+                
+                try (java.io.PrintWriter writer = new java.io.PrintWriter(archivoSalida)) {
+                    writer.println(generador.getCodigoCompleto());
+                    System.out.println("\n✓ Código intermedio guardado en: " + archivoSalida);
+                } catch (java.io.IOException e) {
+                    System.err.println("✗ Error al guardar archivo: " + e.getMessage());
+                }
+                
+            } else {
+                System.err.println("✗ Error: El análisis no produjo un árbol válido");
+            }
+            
+        } catch (NumberFormatException e) {
+            System.out.println("✗ Error: Debe ingresar un número");
+        } catch (Exception e) {
+            System.err.println("\n✗ Error durante el análisis:");
+            System.err.println("   " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

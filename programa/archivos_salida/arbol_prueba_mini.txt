@@ -8,6 +8,81 @@ ANÁLISIS SINTÁCTICO: prueba_mini.txt
 ======================================================================
 └── programa
     ├── declaraciones
+    │   ├── declaracionGlobal
+    │   │   ├── world [WORLD]
+    │   │   ├── t [ID]
+    │   │   ├── tipo
+    │   │   │   └── int [INT]
+    │   │   ├── = [ASSIGN]
+    │   │   ├── literal
+    │   │   │   └── 10 [INT_LITERAL]
+    │   │   └── endl [ENDL]
+    │   ├── declaracionFuncion
+    │   │   ├── gift [GIFT]
+    │   │   ├── probarFor [ID]
+    │   │   ├── ¿ [OPEN_PAREN]
+    │   │   ├── ? [CLOSE_PAREN]
+    │   │   ├── tipo
+    │   │   │   └── int [INT]
+    │   │   ├── ¡ [OPEN_BLOCK]
+    │   │   ├── sentencias
+    │   │   │   ├── declaracionLocal
+    │   │   │   │   ├── local [LOCAL]
+    │   │   │   │   ├── total [ID]
+    │   │   │   │   ├── tipo
+    │   │   │   │   │   └── int [INT]
+    │   │   │   │   ├── = [ASSIGN]
+    │   │   │   │   ├── literal
+    │   │   │   │   │   └── 0 [INT_LITERAL]
+    │   │   │   │   └── endl [ENDL]
+    │   │   │   ├── forLoop
+    │   │   │   │   ├── for [FOR]
+    │   │   │   │   ├── ¿ [OPEN_PAREN]
+    │   │   │   │   ├── inicializacionFor
+    │   │   │   │   │   ├── local [LOCAL]
+    │   │   │   │   │   ├── i [ID]
+    │   │   │   │   │   ├── tipo
+    │   │   │   │   │   │   └── int [INT]
+    │   │   │   │   │   ├── = [ASSIGN]
+    │   │   │   │   │   └── literal
+    │   │   │   │   │       └── 1 [INT_LITERAL]
+    │   │   │   │   ├── ; [SEMICOLON]
+    │   │   │   │   ├── comparacion
+    │   │   │   │   │   ├── primaria
+    │   │   │   │   │   │   └── i [ID]
+    │   │   │   │   │   ├── <= [LTEQ]
+    │   │   │   │   │   └── literal
+    │   │   │   │   │       └── 10 [INT_LITERAL]
+    │   │   │   │   ├── ; [SEMICOLON]
+    │   │   │   │   ├── actualizacionFor
+    │   │   │   │   │   ├── i [ID]
+    │   │   │   │   │   ├── = [ASSIGN]
+    │   │   │   │   │   └── aditiva
+    │   │   │   │   │       ├── primaria
+    │   │   │   │   │       │   └── i [ID]
+    │   │   │   │   │       ├── + [PLUS]
+    │   │   │   │   │       └── literal
+    │   │   │   │   │           └── 1 [INT_LITERAL]
+    │   │   │   │   ├── ? [CLOSE_PAREN]
+    │   │   │   │   ├── ¡ [OPEN_BLOCK]
+    │   │   │   │   ├── sentencias
+    │   │   │   │   │   └── asignacion
+    │   │   │   │   │       ├── total [ID]
+    │   │   │   │   │       ├── = [ASSIGN]
+    │   │   │   │   │       ├── aditiva
+    │   │   │   │   │       │   ├── primaria
+    │   │   │   │   │       │   │   └── total [ID]
+    │   │   │   │   │       │   ├── + [PLUS]
+    │   │   │   │   │       │   └── primaria
+    │   │   │   │   │       │       └── i [ID]
+    │   │   │   │   │       └── endl [ENDL]
+    │   │   │   │   └── ! [CLOSE_BLOCK]
+    │   │   │   └── sentencia
+    │   │   │       ├── return [RETURN]
+    │   │   │       ├── primaria
+    │   │   │       │   └── total [ID]
+    │   │   │       └── endl [ENDL]
+    │   │   └── ! [CLOSE_BLOCK]
     │   ├── declaracionFuncion
     │   │   ├── gift [GIFT]
     │   │   ├── suma [ID]
@@ -27,6 +102,19 @@ ANÁLISIS SINTÁCTICO: prueba_mini.txt
     │   │   │   └── int [INT]
     │   │   ├── ¡ [OPEN_BLOCK]
     │   │   ├── sentencias
+    │   │   │   ├── asignacion
+    │   │   │   │   ├── t [ID]
+    │   │   │   │   ├── = [ASSIGN]
+    │   │   │   │   ├── primaria
+    │   │   │   │   │   ├── ¿ [OPEN_PAREN]
+    │   │   │   │   │   ├── aditiva
+    │   │   │   │   │   │   ├── literal
+    │   │   │   │   │   │   │   └── 10 [INT_LITERAL]
+    │   │   │   │   │   │   ├── - [MINUS]
+    │   │   │   │   │   │   └── literal
+    │   │   │   │   │   │       └── 2 [INT_LITERAL]
+    │   │   │   │   │   └── ? [CLOSE_PAREN]
+    │   │   │   │   └── endl [ENDL]
     │   │   │   └── sentencia
     │   │   │       ├── return [RETURN]
     │   │   │       ├── aditiva
@@ -37,19 +125,120 @@ ANÁLISIS SINTÁCTICO: prueba_mini.txt
     │   │   │       │       └── b [ID]
     │   │   │       └── endl [ENDL]
     │   │   └── ! [CLOSE_BLOCK]
+    │   ├── declaracionFuncion
+    │   │   ├── gift [GIFT]
+    │   │   ├── error1 [ID]
+    │   │   ├── ¿ [OPEN_PAREN]
+    │   │   ├── ? [CLOSE_PAREN]
+    │   │   ├── tipo
+    │   │   │   └── string [STRING]
+    │   │   ├── ¡ [OPEN_BLOCK]
+    │   │   ├── sentencias
+    │   │   │   ├── declaracionLocal
+    │   │   │   │   ├── local [LOCAL]
+    │   │   │   │   ├── i [ID]
+    │   │   │   │   ├── tipo
+    │   │   │   │   │   └── int [INT]
+    │   │   │   │   ├── = [ASSIGN]
+    │   │   │   │   ├── literal
+    │   │   │   │   │   └── 2 [INT_LITERAL]
+    │   │   │   │   └── endl [ENDL]
+    │   │   │   ├── loop
+    │   │   │   │   ├── loop [LOOP]
+    │   │   │   │   ├── exit [EXIT]
+    │   │   │   │   ├── when [WHEN]
+    │   │   │   │   ├── primaria
+    │   │   │   │   │   ├── ¿ [OPEN_PAREN]
+    │   │   │   │   │   ├── comparacion
+    │   │   │   │   │   │   ├── primaria
+    │   │   │   │   │   │   │   └── i [ID]
+    │   │   │   │   │   │   ├── > [GT]
+    │   │   │   │   │   │   └── literal
+    │   │   │   │   │   │       └── 3 [INT_LITERAL]
+    │   │   │   │   │   └── ? [CLOSE_PAREN]
+    │   │   │   │   ├── endl [ENDL]
+    │   │   │   │   ├── sentencias
+    │   │   │   │   │   ├── asignacion
+    │   │   │   │   │   │   ├── suma [ID]
+    │   │   │   │   │   │   ├── = [ASSIGN]
+    │   │   │   │   │   │   ├── aditiva
+    │   │   │   │   │   │   │   ├── primaria
+    │   │   │   │   │   │   │   │   └── suma [ID]
+    │   │   │   │   │   │   │   ├── + [PLUS]
+    │   │   │   │   │   │   │   └── primaria
+    │   │   │   │   │   │   │       └── i [ID]
+    │   │   │   │   │   │   └── endl [ENDL]
+    │   │   │   │   │   └── asignacion
+    │   │   │   │   │       ├── i [ID]
+    │   │   │   │   │       ├── = [ASSIGN]
+    │   │   │   │   │       ├── aditiva
+    │   │   │   │   │       │   ├── primaria
+    │   │   │   │   │       │   │   └── i [ID]
+    │   │   │   │   │       │   ├── + [PLUS]
+    │   │   │   │   │       │   └── literal
+    │   │   │   │   │       │       └── 1 [INT_LITERAL]
+    │   │   │   │   │       └── endl [ENDL]
+    │   │   │   │   ├── end [END]
+    │   │   │   │   ├── loop [LOOP]
+    │   │   │   │   └── endl [ENDL]
+    │   │   │   └── sentencia
+    │   │   │       ├── return [RETURN]
+    │   │   │       ├── literal
+    │   │   │       │   └── "texto" [STRING_LITERAL]
+    │   │   │       └── endl [ENDL]
+    │   │   └── ! [CLOSE_BLOCK]
     │   └── declaracionFuncion
     │       ├── gift [GIFT]
-    │       ├── error1 [ID]
+    │       ├── condicionInvalida [ID]
     │       ├── ¿ [OPEN_PAREN]
     │       ├── ? [CLOSE_PAREN]
     │       ├── tipo
     │       │   └── int [INT]
     │       ├── ¡ [OPEN_BLOCK]
     │       ├── sentencias
+    │       │   ├── decideOf
+    │       │   │   ├── decide [DECIDE]
+    │       │   │   ├── of [OF]
+    │       │   │   ├── casosDecide
+    │       │   │   │   ├── caso
+    │       │   │   │   │   ├── comparacion
+    │       │   │   │   │   │   ├── literal
+    │       │   │   │   │   │   │   └── 5 [INT_LITERAL]
+    │       │   │   │   │   │   ├── > [GT]
+    │       │   │   │   │   │   └── literal
+    │       │   │   │   │   │       └── 3 [INT_LITERAL]
+    │       │   │   │   │   ├── -> [ARROW]
+    │       │   │   │   │   ├── ¡ [OPEN_BLOCK]
+    │       │   │   │   │   ├── sentencias
+    │       │   │   │   │   │   └── sentencia
+    │       │   │   │   │   │       ├── return [RETURN]
+    │       │   │   │   │   │       ├── literal
+    │       │   │   │   │   │       │   └── 1 [INT_LITERAL]
+    │       │   │   │   │   │       └── endl [ENDL]
+    │       │   │   │   │   └── ! [CLOSE_BLOCK]
+    │       │   │   │   └── caso
+    │       │   │   │       ├── comparacion
+    │       │   │   │       │   ├── literal
+    │       │   │   │       │   │   └── 5 [INT_LITERAL]
+    │       │   │   │       │   ├── < [LT]
+    │       │   │   │       │   └── literal
+    │       │   │   │       │       └── 3 [INT_LITERAL]
+    │       │   │   │       ├── -> [ARROW]
+    │       │   │   │       ├── ¡ [OPEN_BLOCK]
+    │       │   │   │       ├── sentencias
+    │       │   │   │       │   └── sentencia
+    │       │   │   │       │       ├── return [RETURN]
+    │       │   │   │       │       ├── literal
+    │       │   │   │       │       │   └── 2 [INT_LITERAL]
+    │       │   │   │       │       └── endl [ENDL]
+    │       │   │   │       └── ! [CLOSE_BLOCK]
+    │       │   │   ├── end [END]
+    │       │   │   ├── decide [DECIDE]
+    │       │   │   └── endl [ENDL]
     │       │   └── sentencia
     │       │       ├── return [RETURN]
     │       │       ├── literal
-    │       │       │   └── "texto" [STRING_LITERAL]
+    │       │       │   └── 0 [INT_LITERAL]
     │       │       └── endl [ENDL]
     │       └── ! [CLOSE_BLOCK]
     └── navidad
@@ -57,6 +246,22 @@ ANÁLISIS SINTÁCTICO: prueba_mini.txt
         ├── coal [COAL]
         ├── ¡ [OPEN_BLOCK]
         ├── sentencias
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── b3 [ID]
+        │   │   ├── tipo
+        │   │   │   └── bool [BOOL]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── primaria
+        │   │   │   ├── ¿ [OPEN_PAREN]
+        │   │   │   ├── comparacion
+        │   │   │   │   ├── literal
+        │   │   │   │   │   └── 4 [INT_LITERAL]
+        │   │   │   │   ├── == [EQEQ]
+        │   │   │   │   └── literal
+        │   │   │   │       └── 42 [INT_LITERAL]
+        │   │   │   └── ? [CLOSE_PAREN]
+        │   │   └── endl [ENDL]
         │   ├── declaracionLocal
         │   │   ├── local [LOCAL]
         │   │   ├── x [ID]
@@ -76,18 +281,6 @@ ANÁLISIS SINTÁCTICO: prueba_mini.txt
         │   │   └── endl [ENDL]
         │   ├── declaracionLocal
         │   │   ├── local [LOCAL]
-        │   │   ├── x [ID]
-        │   │   ├── tipo
-        │   │   │   └── int [INT]
-        │   │   └── endl [ENDL]
-        │   ├── declaracionLocal
-        │   │   ├── local [LOCAL]
-        │   │   ├── y [ID]
-        │   │   ├── tipo
-        │   │   │   └── int [INT]
-        │   │   └── endl [ENDL]
-        │   ├── declaracionLocal
-        │   │   ├── local [LOCAL]
         │   │   ├── y [ID]
         │   │   ├── tipo
         │   │   │   └── int [INT]
@@ -96,31 +289,162 @@ ANÁLISIS SINTÁCTICO: prueba_mini.txt
         │   │   │   ├── suma [ID]
         │   │   │   ├── ¿ [OPEN_PAREN]
         │   │   │   ├── listaExpresiones
+        │   │   │   │   ├── literal
+        │   │   │   │   │   └── 5 [INT_LITERAL]
+        │   │   │   │   ├── , [COMMA]
         │   │   │   │   └── literal
-        │   │   │   │       └── 5 [INT_LITERAL]
+        │   │   │   │       └── 2 [INT_LITERAL]
         │   │   │   └── ? [CLOSE_PAREN]
         │   │   └── endl [ENDL]
-        │   └── declaracionLocal
-        │       ├── local [LOCAL]
-        │       ├── z [ID]
-        │       ├── tipo
-        │       │   └── int [INT]
-        │       ├── = [ASSIGN]
-        │       ├── primaria
-        │       │   ├── noExiste [ID]
-        │       │   ├── ¿ [OPEN_PAREN]
-        │       │   ├── listaExpresiones
-        │       │   │   └── literal
-        │       │   │       └── 5 [INT_LITERAL]
-        │       │   └── ? [CLOSE_PAREN]
+        │   ├── asignacion
+        │   │   ├── t [ID]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── literal
+        │   │   │   └── 11 [INT_LITERAL]
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── a [ID]
+        │   │   ├── tipo
+        │   │   │   └── int [INT]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── literal
+        │   │   │   └── 15 [INT_LITERAL]
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── b [ID]
+        │   │   ├── tipo
+        │   │   │   └── int [INT]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── literal
+        │   │   │   └── 7 [INT_LITERAL]
+        │   │   └── endl [ENDL]
+        │   ├── declaracionLocal
+        │   │   ├── local [LOCAL]
+        │   │   ├── c [ID]
+        │   │   ├── tipo
+        │   │   │   └── int [INT]
+        │   │   ├── = [ASSIGN]
+        │   │   ├── aditiva
+        │   │   │   ├── aditiva
+        │   │   │   │   ├── primaria
+        │   │   │   │   │   └── a [ID]
+        │   │   │   │   ├── + [PLUS]
+        │   │   │   │   └── multiplicativa
+        │   │   │   │       ├── primaria
+        │   │   │   │       │   └── b [ID]
+        │   │   │   │       ├── * [MULT]
+        │   │   │   │       └── literal
+        │   │   │   │           └── 2 [INT_LITERAL]
+        │   │   │   ├── - [MINUS]
+        │   │   │   └── primaria
+        │   │   │       ├── ¿ [OPEN_PAREN]
+        │   │   │       ├── multiplicativa
+        │   │   │       │   ├── primaria
+        │   │   │       │   │   └── a [ID]
+        │   │   │       │   ├── / [DIV]
+        │   │   │       │   └── primaria
+        │   │   │       │       └── b [ID]
+        │   │   │       └── ? [CLOSE_PAREN]
+        │   │   └── endl [ENDL]
+        │   └── decideOf
+        │       ├── decide [DECIDE]
+        │       ├── of [OF]
+        │       ├── casosDecide
+        │       │   └── caso
+        │       │       ├── primaria
+        │       │       │   ├── ¿ [OPEN_PAREN]
+        │       │       │   ├── conjuncion
+        │       │       │   │   ├── primaria
+        │       │       │   │   │   ├── ¿ [OPEN_PAREN]
+        │       │       │   │   │   ├── comparacion
+        │       │       │   │   │   │   ├── primaria
+        │       │       │   │   │   │   │   └── c [ID]
+        │       │       │   │   │   │   ├── > [GT]
+        │       │       │   │   │   │   └── literal
+        │       │       │   │   │   │       └── 20 [INT_LITERAL]
+        │       │       │   │   │   └── ? [CLOSE_PAREN]
+        │       │       │   │   ├── @ [AND]
+        │       │       │   │   └── primaria
+        │       │       │   │       ├── ¿ [OPEN_PAREN]
+        │       │       │   │       ├── comparacion
+        │       │       │   │       │   ├── primaria
+        │       │       │   │       │   │   └── c [ID]
+        │       │       │   │       │   ├── < [LT]
+        │       │       │   │       │   └── literal
+        │       │       │   │       │       └── 30 [INT_LITERAL]
+        │       │       │   │       └── ? [CLOSE_PAREN]
+        │       │       │   └── ? [CLOSE_PAREN]
+        │       │       ├── -> [ARROW]
+        │       │       ├── ¡ [OPEN_BLOCK]
+        │       │       ├── sentencias
+        │       │       │   └── asignacion
+        │       │       │       ├── c [ID]
+        │       │       │       ├── = [ASSIGN]
+        │       │       │       ├── multiplicativa
+        │       │       │       │   ├── primaria
+        │       │       │       │   │   └── c [ID]
+        │       │       │       │   ├── * [MULT]
+        │       │       │       │   └── literal
+        │       │       │       │       └── 2 [INT_LITERAL]
+        │       │       │       └── endl [ENDL]
+        │       │       └── ! [CLOSE_BLOCK]
+        │       ├── casoElseOpt
+        │       │   ├── else [ELSE]
+        │       │   ├── -> [ARROW]
+        │       │   ├── ¡ [OPEN_BLOCK]
+        │       │   ├── sentencias
+        │       │   │   └── decideOf
+        │       │   │       ├── decide [DECIDE]
+        │       │   │       ├── of [OF]
+        │       │   │       ├── casosDecide
+        │       │   │       │   └── caso
+        │       │   │       │       ├── primaria
+        │       │   │       │       │   ├── ¿ [OPEN_PAREN]
+        │       │   │       │       │   ├── comparacion
+        │       │   │       │       │   │   ├── primaria
+        │       │   │       │       │   │   │   └── c [ID]
+        │       │   │       │       │   │   ├── == [EQEQ]
+        │       │   │       │       │   │   └── literal
+        │       │   │       │       │   │       └── 20 [INT_LITERAL]
+        │       │   │       │       │   └── ? [CLOSE_PAREN]
+        │       │   │       │       ├── -> [ARROW]
+        │       │   │       │       ├── ¡ [OPEN_BLOCK]
+        │       │   │       │       ├── sentencias
+        │       │   │       │       │   └── asignacion
+        │       │   │       │       │       ├── c [ID]
+        │       │   │       │       │       ├── = [ASSIGN]
+        │       │   │       │       │       ├── literal
+        │       │   │       │       │       │   └── 100 [INT_LITERAL]
+        │       │   │       │       │       └── endl [ENDL]
+        │       │   │       │       └── ! [CLOSE_BLOCK]
+        │       │   │       ├── casoElseOpt
+        │       │   │       │   ├── else [ELSE]
+        │       │   │       │   ├── -> [ARROW]
+        │       │   │       │   ├── ¡ [OPEN_BLOCK]
+        │       │   │       │   ├── sentencias
+        │       │   │       │   │   └── asignacion
+        │       │   │       │   │       ├── c [ID]
+        │       │   │       │   │       ├── = [ASSIGN]
+        │       │   │       │   │       ├── literal
+        │       │   │       │   │       │   └── 0 [INT_LITERAL]
+        │       │   │       │   │       └── endl [ENDL]
+        │       │   │       │   └── ! [CLOSE_BLOCK]
+        │       │   │       ├── end [END]
+        │       │   │       ├── decide [DECIDE]
+        │       │   │       └── endl [ENDL]
+        │       │   └── ! [CLOSE_BLOCK]
+        │       ├── end [END]
+        │       ├── decide [DECIDE]
         │       └── endl [ENDL]
         └── ! [CLOSE_BLOCK]
 
 ======================================================================
 
 ESTADÍSTICAS:
-- Número total de nodos: 109
-- Altura del árbol: 8
+- Número total de nodos: 433
+- Altura del árbol: 13
 
 
 ======================================================================
@@ -134,8 +458,11 @@ ESTADÍSTICAS:
 ├─────────────────────────────────────────────────────────────────────┤
 │ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
 ├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ suma            │ int             │ 1        │ funcion      │
-│ error1          │ int             │ 5        │ funcion      │
+│ t               │ int             │ 1        │ variable     │
+│ probarFor       │ int             │ 3        │ funcion      │
+│ suma            │ int             │ 11       │ funcion      │
+│ error1          │ string          │ 16       │ funcion      │
+│ condicionInvalida │ int             │ 26       │ funcion      │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -143,9 +470,20 @@ ESTADÍSTICAS:
 ├─────────────────────────────────────────────────────────────────────┤
 │ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
 ├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ x               │ int             │ 10       │ variable     │
-│ y               │ int             │ 12       │ variable     │
-│ z               │ int             │ 14       │ variable     │
+│ b3              │ bool            │ 39       │ variable     │
+│ x               │ int             │ 40       │ variable     │
+│ y               │ int             │ 41       │ variable     │
+│ a               │ int             │ 44       │ variable     │
+│ b               │ int             │ 45       │ variable     │
+│ c               │ int             │ 46       │ variable     │
+└─────────────────┴─────────────────┴──────────┴──────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ ALCANCE: FOR_5                                                      │
+├─────────────────────────────────────────────────────────────────────┤
+│ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
+├─────────────────┼─────────────────┼──────────┼──────────────┤
+│ i               │ int             │ 5        │ variable     │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -153,8 +491,24 @@ ESTADÍSTICAS:
 ├─────────────────────────────────────────────────────────────────────┤
 │ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
 ├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ a               │ int             │ 1        │ parametro    │
-│ b               │ int             │ 1        │ parametro    │
+│ a               │ int             │ 11       │ parametro    │
+│ b               │ int             │ 11       │ parametro    │
+└─────────────────┴─────────────────┴──────────┴──────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ ALCANCE: probarFor                                                  │
+├─────────────────────────────────────────────────────────────────────┤
+│ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
+├─────────────────┼─────────────────┼──────────┼──────────────┤
+│ total           │ int             │ 4        │ variable     │
+└─────────────────┴─────────────────┴──────────┴──────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ ALCANCE: error1                                                     │
+├─────────────────────────────────────────────────────────────────────┤
+│ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
+├─────────────────┼─────────────────┼──────────┼──────────────┤
+│ i               │ int             │ 17       │ variable     │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 

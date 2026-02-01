@@ -1,13 +1,89 @@
+world t int = 10 endl
+
+gift factorial ¿ n int ? int ¡
+    decide of
+        n <= 1 -> ¡ return 1 endl !
+        else -> ¡ return n * factorial¿n - 1? endl !
+    end decide endl
+!
+
+gift pruebaFinal ¿ n int ? int ¡
+    local tabla int[5, 5] endl
+    local i int = 0 endl
+    
+    for ¿i = 0 ; i < 5 ; i = i + 1? ¡
+        tabla[i, 0] = factorial¿i? endl
+    !
+    return tabla[n, 0] endl
+!
+
+gift probarArray ¿ ? int ¡
+    local matriz int[2, 2] = ¡ ¡1, 2!, ¡3, 4! ! endl
+    local suma int = 0 endl
+    
+    suma = matriz[0, 0] + matriz[1, 1] endl
+    return suma endl
+!
+
+gift probarFor ¿ ? int ¡
+    local total int = 0 endl
+    for ¿local i int = 1 ; i <= 10 ; i = i + 1? ¡
+        total = total + i endl
+    !
+    return total endl
+!
+
 gift suma ¿ a int , b int ? int ¡
+    t = ¿10 - 2? endl
     return a + b endl
 !
 
 gift error1 ¿ ? string ¡
+    local i int = 2 endl 
+    loop 
+        exit when ¿i > 3? endl
+        suma = suma + i endl
+        i = i + 1 endl
+    end loop endl
     return "texto" endl
+!
+
+gift condicionInvalida ¿ ? int ¡
+    decide of
+        5 > 3 -> ¡
+            return 1 endl
+        !
+        5 < 3 -> ¡
+            return 2 endl
+        !
+    end decide endl
+    return 0 endl
 !
 
 navidad coal ¡
     local b3 bool = ¿4 == 42? endl
     local x int = suma¿5, 3? endl
     local y int = suma¿5, 2? endl
+    t = 11 endl
+
+    local a int = 15 endl
+    local b int = 7 endl
+    local c int = a + b * 2 - ¿a / b? endl
+    
+    decide of
+        ¿¿c > 20? @ ¿c < 30?? -> ¡
+            c = c * 2 endl
+        !
+        else -> ¡
+            decide of
+                ¿c == 20? -> ¡
+                    c = 100 endl
+                !
+                else -> ¡
+                    c = 0 endl
+                !
+            end decide endl
+        !
+    end decide endl
+
 !

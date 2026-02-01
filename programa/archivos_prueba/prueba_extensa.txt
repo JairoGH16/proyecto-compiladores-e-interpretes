@@ -1,359 +1,121 @@
-| ========================================
-| ARCHIVO DE PRUEBA COMPLETO
-| Prueba TODAS las características del lenguaje
-| ========================================
-
-є Comentario
-   multilínea
-   de prueba э
-
-| ========================================
-| 1. VARIABLES GLOBALES
-| ========================================
-
-| Variables globales sin inicializar
-world x int endl
-world temperatura float endl
-world activo bool endl
-world inicial char endl
-world mensaje string endl
-
-| Variables globales con inicialización
 world contador int = 0 endl
-world pi float = 3.14 endl
-world estaEncendido bool = true endl
-world letra char = 'A' endl
-world saludo string = "Hola Mundo" endl
+world limite int = 10 endl
+world resultado float = 0.0 endl
 
-| Arreglos globales bidimensionales
-world matrizEnteros int[3, 3] = ¡¡1, 2, 3!, ¡4, 5, 6!, ¡7, 8, 9!! endl
-world tablaBool char[2, 2] = ¡¡'a', 'b'!, ¡'c', 'd'!! endl
-
-| ========================================
-| 2. PROGRAMA PRINCIPAL (navidad)
-| ========================================
-
-navidad coal ¡
-    | Variables locales
-    local y int endl
-    local suma int = 10 + 5 endl
-    local resultado float = 2.5 * 4.0 endl
-    
-    | Arreglo local
-    local grid int[2, 2] = ¡¡10, 20!, ¡30, 40!! endl
-    
-    | ========================================
-    | 3. OPERACIONES ARITMÉTICAS
-    | ========================================
-    
-    | Suma y resta
-    suma = 5 + 3 - 2 endl
-    
-    | Multiplicación y división
-    resultado = 10 * 2 / 4 endl
-    
-    | División entera
-    y = 17 // 5 endl
-    
-    | Módulo
-    y = 17 % 5 endl
-    
-    | Potencia
-    y = 2 ^ 3 endl
-    
-    | Expresión compleja
-    y = ¿5 + 3? * 2 ^ 2 endl
-    
-    | Operadores unarios
-    y = -10 endl
-    ++contador endl
-    --contador endl
-    
-    | ========================================
-    | 4. OPERACIONES RELACIONALES
-    | ========================================
-    
-    | Menor que
-    activo = 5 < 10 endl
-    
-    | Menor o igual
-    activo = 5 <= 10 endl
-    
-    | Mayor que
-    activo = 10 > 5 endl
-    
-    | Mayor o igual
-    activo = 10 >= 5 endl
-    
-    | Igual
-    activo = 5 == 5 endl
-    
-    | Diferente (Σ=)
-    activo = 5 Σ= 3 endl
-    
-    | ========================================
-    | 5. OPERACIONES LÓGICAS
-    | ========================================
-    
-    | AND (@)
-    activo = true @ false endl
-    
-    | OR (~)
-    activo = true ~ false endl
-    
-    | NOT (Σ)
-    activo = Σ false endl
-    
-    | Expresión lógica compleja
-    activo = ¿5 > 3? @ ¿10 < 20? ~ Σ false endl
-    
-    | ========================================
-    | 6. ACCESO Y MODIFICACIÓN DE ARREGLOS
-    | ========================================
-    
-    | Acceso a arreglo
-    y = matrizEnteros[0, 0] endl
-    
-    | Modificación de arreglo
-    matrizEnteros[1, 1] = 100 endl
-    grid[0, 1] = matrizEnteros[2, 2] + 5 endl
-    
-    | ========================================
-    | 7. ENTRADA Y SALIDA
-    | ========================================
-    
-    | Mostrar literales
-    show ¿"Prueba de impresión"? endl
-    show ¿42? endl
-    show ¿3.14? endl
-    show ¿true? endl
-    show ¿'X'? endl
-    
-    | Mostrar variables
-    show ¿contador? endl
-    show ¿pi? endl
-    
-    | Mostrar expresiones
-    show ¿5 + 3? endl
-    show ¿matrizEnteros[0, 0]? endl
-    
-    | Leer valores
-    get ¿x? endl
-    get ¿temperatura? endl
-    
-    | ========================================
-    | 8. ESTRUCTURA DECIDE OF
-    | ========================================
-    
+gift factorial ¿ n int ? int ¡
     decide of
-        x > 10 -> ¡
-            show ¿"X es mayor a 10"? endl
-        !
-        x < 10 -> ¡
-            show ¿"X es menor a 10"? endl
-        !
-        else -> ¡
-            show ¿"X es igual a 10"? endl
-        !
-    end decide endl
-    
-    | Decide of sin else
-    decide of
-        activo == true -> ¡
-            show ¿"Está activo"? endl
-        !
-    end decide endl
-    
-    | ========================================
-    | 9. ESTRUCTURA LOOP
-    | ========================================
-    
-    | Loop con código antes y después de exit when
-    y = 0 endl
-    loop
-        show ¿y? endl
-        y = y + 1 endl
-        exit when y > 5 endl
-        show ¿"Iteración"? endl
-    end loop endl
-    
-    | ========================================
-    | 10. ESTRUCTURA FOR
-    | ========================================
-    
-    | For completo
-    for ¿y = 0; y < 10; ++y? ¡
-        show ¿y? endl
-    !
-    
-    | For con decremento
-    for ¿y = 10; y > 0; --y? ¡
-        show ¿y? endl
-    !
-    
-    | For sin inicialización
-    y = 0 endl
-    for ¿; y < 5; ++y? ¡
-        show ¿y? endl
-    !
-    
-    | For sin actualización
-    y = 0 endl
-    for ¿; y < 5; ? ¡
-        show ¿y? endl
-        y = y + 1 endl
-    !
-    
-    | ========================================
-    | 11. BREAK Y RETURN
-    | ========================================
-    
-    loop
-        y = y + 1 endl
-        exit when y > 3 endl
-        decide of
-            y == 2 -> ¡
-                break endl
-            !
-        end decide endl
-    end loop endl
-    
-    | ========================================
-    | 12. LLAMADAS A FUNCIONES
-    | ========================================
-    
-    | Llamada sin argumentos
-    imprimirMensaje¿? endl
-    
-    | Llamada con argumentos
-    y = sumar¿5, 3? endl
-    resultado = multiplicar¿2.5, 4.0? endl
-    
-    | Llamada con expresiones como argumentos
-    y = sumar¿x + 1, contador * 2? endl
-    
-    | Llamada anidada
-    y = sumar¿sumar¿1, 2?, 3? endl
-    
-    | Expresión compleja con llamadas
-    y = sumar¿5, 3? * 2 + restar¿10, 5? endl
-!
-
-| ========================================
-| 13. FUNCIONES
-| ========================================
-
-| Función sin parámetros que retorna string
-gift imprimirMensaje ¿? string ¡
-    show ¿"Mensaje desde función"? endl
-    return "OK" endl
-!
-
-| Función con parámetros que retorna int
-gift sumar ¿a int, b int? int ¡
-    local resultado int = a + b endl
-    return resultado endl
-!
-
-| Función con parámetros float
-gift multiplicar ¿x float, y float? float ¡
-    return x * y endl
-!
-
-| Función que retorna bool
-gift esMayor ¿a int, b int? bool ¡
-    return a > b endl
-!
-
-| Función con char
-gift obtenerLetra ¿? char ¡
-    return 'Z' endl
-!
-
-| Función que usa estructuras de control
-gift restar ¿a int, b int? int ¡
-    local resultado int endl
-    
-    decide of
-        a > b -> ¡
-            resultado = a - b endl
-        !
-        else -> ¡
-            resultado = b - a endl
-        !
-    end decide endl
-    
-    return resultado endl
-!
-
-| Función que usa loops
-gift factorial ¿n int? int ¡
-    local resultado int = 1 endl
-    local i int = 1 endl
-    
-    loop
-        resultado = resultado * i endl
-        i = i + 1 endl
-        exit when i > n endl
-    end loop endl
-    
-    return resultado endl
-!
-
-| Función que usa for
-gift sumarHasta ¿limite int? int ¡
-    local suma int = 0 endl
-    
-    for ¿local i int = 1; i <= limite; ++i? ¡
-        suma = suma + i endl
-    !
-    
-    return suma endl
-!
-
-| Función que usa arreglos
-gift sumarMatriz ¿matriz int[3, 3]? int ¡
-    local suma int = 0 endl
-    local i int endl
-    local j int endl
-    
-    for ¿i = 0; i < 3; ++i? ¡
-        for ¿j = 0; j < 3; ++j? ¡
-            suma = suma + matriz[i, j] endl
-        !
-    !
-    
-    return suma endl
-!
-
-| Función recursiva
-gift potenciaRecursiva ¿base int, exponente int? int ¡
-    decide of
-        exponente == 0 -> ¡
+        ¿n == 0? -> ¡
             return 1 endl
         !
         else -> ¡
-            return base * potenciaRecursiva¿base, exponente - 1? endl
+            local temp int = n - 1 endl
+            local fact int = factorial¿temp? endl
+            return n * fact endl
         !
-    end decide endl
-    
-    return 0 endl
+    end
 !
 
-| Función con múltiples returns
-gift valorAbsoluto ¿n int? int ¡
+gift potencia ¿ base int , exponente int ? int ¡
     decide of
-        n < 0 -> ¡
-            return -n endl
+        ¿exponente == 0? -> ¡
+            return 1 endl
         !
         else -> ¡
-            return n endl
+            local temp int = exponente - 1 endl
+            local pot int = potencia¿base, temp? endl
+            return base * pot endl
         !
-    end decide endl
-    
-    return 0 endl
+    end
 !
 
-| ========================================
-| FIN DEL ARCHIVO DE PRUEBA
-| ========================================
+gift esPar ¿ numero int ? bool ¡
+    local residuo int = numero % 2 endl
+    decide of
+        ¿residuo == 0? -> ¡
+            return true endl
+        !
+        else -> ¡
+            return false endl
+        !
+    end
+!
+
+gift maximo ¿ a int , b int ? int ¡
+    decide of
+        ¿a > b? -> ¡
+            return a endl
+        !
+        else -> ¡
+            return b endl
+        !
+    end
+!
+
+gift sumaRango ¿ inicio int , fin int ? int ¡
+    local suma int = 0 endl
+    local i int = inicio endl
+    
+    loop ¡
+        exit when ¿i > fin? endl
+        suma = suma + i endl
+        i = i + 1 endl
+    !
+    
+    return suma endl
+!
+
+navidad coal ¡
+    local x int = 5 endl
+    local y int = 3 endl
+    
+    local fact5 int = factorial¿x? endl
+    local pot2_3 int = potencia¿2, y? endl
+    
+    local max int = maximo¿fact5, pot2_3? endl
+    
+    local par bool = esPar¿max? endl
+    
+    decide of
+        ¿par @ ¿max > 100?? -> ¡
+            resultado = 100.5 endl
+        !
+        else -> ¡
+            resultado = 50.25 endl
+        !
+    end
+    
+    local suma10 int = sumaRango¿1, 10? endl
+    
+    contador = 0 endl
+    loop ¡
+        exit when ¿contador >= limite? endl
+        
+        decide of
+            ¿esPar¿contador?? -> ¡
+                resultado = resultado + contador endl
+            !
+        end
+        
+        contador = contador + 1 endl
+    !
+    
+    local a int = 15 endl
+    local b int = 7 endl
+    local c int = a + b * 2 - ¿a / b? endl
+    
+    decide of
+        ¿¿c > 20? @ ¿c < 30?? -> ¡
+            c = c * 2 endl
+        !
+        else -> ¡
+            decide of
+                ¿c == 20? -> ¡
+                    c = 100 endl
+                !
+                else -> ¡
+                    c = 0 endl
+                !
+            end
+        !
+    end
+!

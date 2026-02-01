@@ -1,6 +1,6 @@
 ========== REPORTE DE ANÁLISIS SEMÁNTICO ==========
 Archivo: prueba_errores.txt
-Fecha: Sat Jan 31 17:04:48 CST 2026
+Fecha: Sat Jan 31 18:09:00 CST 2026
 
 ERRORES SEMÁNTICOS:
   - Línea 2: Variable global duplicada 'x'

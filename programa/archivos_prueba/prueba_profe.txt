@@ -3,19 +3,12 @@
  world ss string  endl 
  world ff float  endl 
  world ii int  endl 
+ world _var_2 int end
+ world _var2_ int endl
 	
-|comentario 2
-	arr = 10 - arr[67+i, 23] * func1  ¿ hola, true, "hola mundo", 4.5, 'a' ?  endl  |sintactico arreglo
-	fl1 = 4.5%miChar^-0.005 endl  
-	miFunc ¿ miFunc ¿  ? ,'a' ?  endl  
-	local bl0 bool  = 6.7 Σ= 8.9 endl  |ok
-	bl0 = true Σ= false endl  |ok
-	local bl1 bool  = in1 >= fl1 ~ false @ Σ ¿ func2 ¿ 3,in1 ?  > 56 ?  endl  
-	
-	return 1+_f_ ¿  ?  endl 
- ! 
 
- gift _func2_    ¿ _b1_ bool , _i1_ int  ? bool  ¡ 
+
+ gift _func2_    ¿ _b1_ bool , _i1_ int  ? int  ¡ 
 
  є !@# endl  endl %^& multilinea
   э
@@ -27,7 +20,7 @@
 
 
 gift  _mi_  ¿ _dif_ int , _otra_ char ?   float ¡  |sintactico  ? 
-	local _otra_ int  endl 
+	local _otra21_ int  endl 
 	local _str_ string ="Hola  endl ~&|! endl & ?  mundo" endl 
 	for ¿ _i_=20  ;  i>=10  ;  --i ?  | puede dar sintactico
 	 ¡ 
@@ -86,3 +79,13 @@ gift  _mi_  ¿ _dif_ int , _otra_ char ?   float ¡  |sintactico  ?
 	local fl1 float =56.6 endl  
 	local in1 int =--fl1- -14% ++in1 + 7 / 15 endl  |sintactico
 	local fl2 float =3.7 ^ fl1+ ¿ 45.6 % 76 ?  endl  
+	|comentario 2
+	arr = 10 - arr[67+i, 23] * func1  ¿ hola, true, "hola mundo", 4.5, 'a' ?  endl  |sintactico arreglo
+	fl1 = 4.5%miChar^-0.005 endl  
+	miFunc ¿ miFunc ¿  ? ,'a' ?  endl  
+	local bl0 bool  = 6.7 Σ= 8.9 endl  |ok
+	bl0 = true Σ= false endl  |ok
+	local bl1 bool  = in1 >= fl1 ~ false @ Σ ¿ func2 ¿ 3,in1 ?  > 56 ?  endl  
+	
+	return 1+_f_ ¿  ?  endl 
+ ! 
