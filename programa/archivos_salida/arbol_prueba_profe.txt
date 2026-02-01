@@ -1,7 +1,12 @@
 ANÁLISIS SINTÁCTICO: prueba_profe.txt
 ======================================================================
 
-✓ ARCHIVO SINTÁCTICAMENTE CORRECTO
+✗ SE ENCONTRARON 2 ERROR(ES) SINTÁCTICO(S)
+
+ERRORES SINTÁCTICOS:
+  - Error sintáctico en línea 6, columna 19: Syntax error
+  - Error sintáctico: Error en declaración global
+
 
 ======================================================================
 ÁRBOL SINTÁCTICO:
@@ -32,6 +37,7 @@ ANÁLISIS SINTÁCTICO: prueba_profe.txt
     │   │   ├── tipo
     │   │   │   └── int [INT]
     │   │   └── endl [ENDL]
+    │   ├── error_declaracionGlobal
     │   ├── declaracionFuncion
     │   │   ├── gift [GIFT]
     │   │   ├── _func2_ [ID]
@@ -48,7 +54,7 @@ ANÁLISIS SINTÁCTICO: prueba_profe.txt
     │   │   │           └── int [INT]
     │   │   ├── ? [CLOSE_PAREN]
     │   │   ├── tipo
-    │   │   │   └── bool [BOOL]
+    │   │   │   └── int [INT]
     │   │   ├── ¡ [OPEN_BLOCK]
     │   │   ├── sentencias
     │   │   │   ├── declaracionLocal
@@ -87,7 +93,7 @@ ANÁLISIS SINTÁCTICO: prueba_profe.txt
     │   │   ├── sentencias
     │   │   │   ├── declaracionLocal
     │   │   │   │   ├── local [LOCAL]
-    │   │   │   │   ├── _otra_ [ID]
+    │   │   │   │   ├── _otra21_ [ID]
     │   │   │   │   ├── tipo
     │   │   │   │   │   └── int [INT]
     │   │   │   │   └── endl [ENDL]
@@ -685,7 +691,7 @@ ANÁLISIS SINTÁCTICO: prueba_profe.txt
 ======================================================================
 
 ESTADÍSTICAS:
-- Número total de nodos: 675
+- Número total de nodos: 676
 - Altura del árbol: 17
 
 
@@ -704,9 +710,9 @@ ESTADÍSTICAS:
 │ ss              │ string          │ 3        │ variable     │
 │ ff              │ float           │ 4        │ variable     │
 │ ii              │ int             │ 5        │ variable     │
-│ _func2_         │ bool            │ 9        │ funcion      │
-│ _mi_            │ float           │ 20       │ funcion      │
-│ _miOtraFun_     │ bool            │ 60       │ funcion      │
+│ _func2_         │ int             │ 11       │ funcion      │
+│ _mi_            │ float           │ 22       │ funcion      │
+│ _miOtraFun_     │ bool            │ 62       │ funcion      │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -714,17 +720,17 @@ ESTADÍSTICAS:
 ├─────────────────────────────────────────────────────────────────────┤
 │ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
 ├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ i               │ float           │ 65       │ variable     │
-│ _miChar_        │ char            │ 66       │ variable     │
-│ _miChar2_       │ char            │ 67       │ variable     │
-│ _arr_           │ char[3x3]       │ 68       │ variable     │
-│ _b1_            │ bool            │ 70       │ variable     │
-│ _s1_            │ string          │ 71       │ variable     │
-│ fl1             │ float           │ 77       │ variable     │
-│ in1             │ int             │ 78       │ variable     │
-│ fl2             │ float           │ 79       │ variable     │
-│ bl0             │ bool            │ 84       │ variable     │
-│ bl1             │ bool            │ 86       │ variable     │
+│ i               │ float           │ 67       │ variable     │
+│ _miChar_        │ char            │ 68       │ variable     │
+│ _miChar2_       │ char            │ 69       │ variable     │
+│ _arr_           │ char[3x3]       │ 70       │ variable     │
+│ _b1_            │ bool            │ 72       │ variable     │
+│ _s1_            │ string          │ 73       │ variable     │
+│ fl1             │ float           │ 79       │ variable     │
+│ in1             │ int             │ 80       │ variable     │
+│ fl2             │ float           │ 81       │ variable     │
+│ bl0             │ bool            │ 86       │ variable     │
+│ bl1             │ bool            │ 88       │ variable     │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -732,9 +738,9 @@ ESTADÍSTICAS:
 ├─────────────────────────────────────────────────────────────────────┤
 │ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
 ├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ _b1_            │ bool            │ 9        │ parametro    │
-│ _i1_            │ int             │ 9        │ parametro    │
-│ i               │ int             │ 14       │ variable     │
+│ _b1_            │ bool            │ 11       │ parametro    │
+│ _i1_            │ int             │ 11       │ parametro    │
+│ i               │ int             │ 16       │ variable     │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -742,10 +748,18 @@ ESTADÍSTICAS:
 ├─────────────────────────────────────────────────────────────────────┤
 │ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
 ├─────────────────┼─────────────────┼──────────┼──────────────┤
-│ _dif_           │ int             │ 20       │ parametro    │
-│ _otra_          │ char            │ 20       │ parametro    │
-│ _str_           │ string          │ 22       │ variable     │
-│ _otrax_         │ int             │ 48       │ variable     │
+│ _dif_           │ int             │ 22       │ parametro    │
+│ _otra_          │ char            │ 22       │ parametro    │
+│ _otra21_        │ int             │ 23       │ variable     │
+│ _str_           │ string          │ 24       │ variable     │
+└─────────────────┴─────────────────┴──────────┴──────────────┘
+
+┌─────────────────────────────────────────────────────────────────────┐
+│ ALCANCE: FOR_25                                                     │
+├─────────────────────────────────────────────────────────────────────┤
+│ NOMBRE          │ TIPO            │ LÍNEA    │ CATEGORÍA    │
+├─────────────────┼─────────────────┼──────────┼──────────────┤
+│ _otrax_         │ int             │ 50       │ variable     │
 └─────────────────┴─────────────────┴──────────┴──────────────┘
 
 

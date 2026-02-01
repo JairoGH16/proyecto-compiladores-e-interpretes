@@ -219,7 +219,7 @@ public class Main {
             
             // Si hay errores sintácticos, no continuar
             if (!erroresSintacticos.isEmpty()) {
-                System.err.println("Errores sintácticos encontrados. No se puede continuar.\n");
+                System.err.println("Errores sintacticos encontrados. No se puede continuar.\n");
                 for (String error : erroresSintacticos) {
                     System.err.println("  - " + error);
                 }
@@ -231,17 +231,22 @@ public class Main {
             Object arbol = campoArbol.get(null);
             
             if (arbol == null) {
-                System.err.println("Error: No se pudo construir el árbol sintáctico");
+                System.err.println("Error: No se pudo construir el árbol sintactico");
                 return;
             }
             
             // ANÁLISIS SEMÁNTICO
             RecorredorAST recorredor = new RecorredorAST();
             recorredor.recorrerYAnalizar((Nodo) arbol);
+
+            if (recorredor.tieneErrores()) {
+                System.err.println("\n[!] GENERACION ABORTADA: El codigo viola las reglas de tipado fuerte.");
+                return; // <--- NO llamar al generador de código intermedio
+            }
             
             // Guardar reporte
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(rutaReporte), "UTF-8"));
-            writer.println("========== REPORTE DE ANÁLISIS SEMÁNTICO ==========");
+            writer.println("========== REPORTE DE ANALISIS SEMANTICO ==========");
             writer.println("Archivo: " + archivoFuente.getName());
             writer.println("Fecha: " + new java.util.Date());
             writer.println();

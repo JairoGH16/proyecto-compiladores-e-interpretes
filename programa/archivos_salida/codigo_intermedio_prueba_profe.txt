@@ -1,0 +1,125 @@
+========== CÓDIGO INTERMEDIO (THREE-ADDRESS CODE) ==========
+
+    ========== INICIO CÓDIGO INTERMEDIO ==========
+
+
+FUNCTION _func2_:
+    i = 0
+    return 1
+END_FUNCTION
+
+
+FUNCTION _mi_:
+    _otra21_ = 0
+    _str_ = "Hola  endl ~&|! endl & ?  mundo"
+L0:
+    t0 = i >= 10
+    if t0 goto L1
+    goto L2
+L1:
+L3:
+    t1 = _var_2 // 1
+    _var_2 = t1
+    t2 = _var_ - 1
+    _var_ = t2
+    t3 = _var2_ != 12
+    t4 = 34 * 35
+    t5 = 12 == t4
+    t6 = ! t5
+    t7 = t3 && t6
+    if t7 goto L4
+    goto L3
+L4:
+    var = 0
+    t8 = 24 >= var
+    if t8 goto L6
+    goto L7
+L6:
+    goto L5
+L7:
+L5:
+    if 1 goto L9
+    goto L10
+L9:
+    goto L8
+L10:
+    t9 = _otra_ == 1.1
+    if t9 goto L12
+    goto L13
+L12:
+    goto L11
+L13:
+    t10 = _otrax_ == 2
+    if t10 goto L14
+    goto L15
+L14:
+    _otrax_ = 10
+    goto L11
+L15:
+    t11 = -10.5 * -1.9
+    _otra_ = t11
+L11:
+L8:
+    goto L0
+L2:
+    return 1.1
+END_FUNCTION
+
+
+FUNCTION _miOtraFun_:
+    return -5.6
+END_FUNCTION
+
+
+FUNCTION NAVIDAD:
+    i = -0.01
+    _miChar_ = ''!''
+    _miChar2_ = ''!''
+    DECLARE _arr_ : int[3x3]
+    t12 = _i_ + 1
+    _i_ = t12
+    t13 = 67 + _i_
+    _arr_[t13][23] = -0.01
+    _b1_ = 0
+    _s1_ = 0
+    fl1 = 56
+    t14 = fl1 - 1
+    fl1 = t14
+    t15 = in1 + 1
+    in1 = t15
+    t16 = -14 % in1
+    t17 = fl1 - t16
+    t18 = 7 / 15
+    t19 = t17 + t18
+    in1 = t19
+    t20 = 45.6 % 76.3
+    t21 = 3.7 + t20
+    fl2 = t21
+    t22 = _arr_[67][23]
+    t23 = 10 - t22
+    _arr_[2][2] = t23
+    t24 = 4 % 4
+    fl1 = t24
+    t25 = 6.7 != 8.9
+    bl0 = t25
+    t26 = 1 != 0
+    bl0 = t26
+    t27 = in1 >= fl1
+    param 1
+    param in1
+    t28 = call _func2_, 2
+    t29 = t28 > 56
+    t30 = ! t29
+    t31 = 0 && t30
+    t32 = t27 || t31
+    bl1 = t32
+    param 1
+    param in1
+    t33 = call _func2_, 2
+    t34 = 1 + t33
+    return t34
+END_FUNCTION
+
+
+    ========== FIN CÓDIGO INTERMEDIO ==========
+

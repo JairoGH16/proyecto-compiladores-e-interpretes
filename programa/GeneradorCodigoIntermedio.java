@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import parserlexer.Nodo;
 
 /**
  * Generador de Código Intermedio (Three-Address Code)

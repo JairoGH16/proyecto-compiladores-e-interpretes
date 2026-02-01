@@ -3,7 +3,7 @@
  world ss string  endl 
  world ff float  endl 
  world ii int  endl 
- world _var_2 int end
+ world _var_2 int endl
  world _var2_ int endl
 	
 
@@ -19,19 +19,21 @@
 
 
 
-gift  _mi_  ¿ _dif_ int , _otra_ char ?   float ¡  |sintactico  ? 
+gift  _mi_  ¿ _dif_ int , _otra_ float ?   float ¡  |sintactico  ? 
 	local _otra21_ int  endl 
 	local _str_ string ="Hola  endl ~&|! endl & ?  mundo" endl 
 	for ¿ _i_=20  ;  i>=10  ;  --i ?  | puede dar sintactico
 	 ¡ 
 		loop
 		  	_var_2 = _var_2 // 1 endl  
-			_var_ = _var_ - 1 endl  
-		exit when ¿ _var2_Σ=12.2 @ Σ ¿12 == ¿ 34*35 ??  ?  endl  
+			local _var_ int = _var_ - 1 endl  
+		exit when ¿ _var2_Σ=12 @ Σ ¿12 == ¿ 34*35 ??  ?  endl  
 		end loop endl 
 
+		local var int endl
+
 		decide   of
-		 x24>=var   -> | sintactico
+		 24>=var   -> | sintactico
 		 ¡ 
 			show ¿ "entra al if" ?  endl 
 		 !
@@ -44,7 +46,7 @@ gift  _mi_  ¿ _dif_ int , _otra_ char ?   float ¡  |sintactico  ?
 		else ->
 		 ¡ 
 			decide   of  
-				_otra_ == 1 -> ¡ 
+				_otra_ == 1.1 -> ¡ 
 					show ¿ "!|" ?  endl  !
 				_otrax_ == 2 -> ¡
 					local _otrax_ int = 10 endl 
@@ -56,10 +58,10 @@ gift  _mi_  ¿ _dif_ int , _otra_ char ?   float ¡  |sintactico  ?
 		 !
 		 end  decide   endl 
 	 ! 
-	return 1 endl 
+	return 1.1 endl 
   ! 
 
- gift  _miOtraFun_  ¿  ?  bool ¡ 
+ gift  _miOtraFun_  ¿  ?  float ¡ 
 	return -5.6 endl  
   ! 
 
@@ -67,7 +69,7 @@ gift  _mi_  ¿ _dif_ int , _otra_ char ?   float ¡  |sintactico  ?
 	local  i float=-0.01 endl  |error sintactico
 	local _miChar_ char ='!' endl  |error sintactico
 	local _miChar2_ char ='!' endl  |sintactico-semantico
-	local _arr_ char[3,3] = ¡¡1,5,10!,¡2,4,5!,¡20,40,50!! endl 
+	local _arr_ int[3,3] = ¡¡1,5,10!,¡2,4,5!,¡20,40,50!! endl 
 	_arr_[67+ ++_i_, 23] = -0.01 endl |sintactico
 	local _b1_ bool  endl  
 	local _s1_ string  endl  
@@ -76,16 +78,15 @@ gift  _mi_  ¿ _dif_ int , _otra_ char ?   float ¡  |sintactico  ?
 	show ¿ true ?  endl  
 	show ¿ -6.7 ?  endl 
 
-	local fl1 float =56.6 endl  
+	local fl1 int =56 endl  
 	local in1 int =--fl1- -14% ++in1 + 7 / 15 endl  |sintactico
-	local fl2 float =3.7 ^ fl1+ ¿ 45.6 % 76 ?  endl  
+	local fl2 float =3.7 ^ fl1+ ¿ 45.6 % 76.3 ?  endl  
 	|comentario 2
-	arr = 10 - arr[67+i, 23] * func1  ¿ hola, true, "hola mundo", 4.5, 'a' ?  endl  |sintactico arreglo
-	fl1 = 4.5%miChar^-0.005 endl  
-	miFunc ¿ miFunc ¿  ? ,'a' ?  endl  
+	_arr_[2,2] = 10 - _arr_[67, 23] endl  |sintactico arreglo
+	fl1 = 4%4^-5 endl  
 	local bl0 bool  = 6.7 Σ= 8.9 endl  |ok
 	bl0 = true Σ= false endl  |ok
-	local bl1 bool  = in1 >= fl1 ~ false @ Σ ¿ func2 ¿ 3,in1 ?  > 56 ?  endl  
+	local bl1 bool  = in1 >= fl1 ~ false @ Σ ¿ _func2_ ¿ true,in1 ?  > 56 ?  endl  
 	
-	return 1+_f_ ¿  ?  endl 
+	return 1+_func2_ ¿true, in1  ?  endl 
  ! 

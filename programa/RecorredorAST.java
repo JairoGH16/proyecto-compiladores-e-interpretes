@@ -158,6 +158,41 @@ public class RecorredorAST {
                     verificarLlamadaFuncion(nodo);
                 }
                 break;
+            case "unaria":
+                if (nodo.getNumHijos() >= 2) {
+                    Nodo operador = nodo.getHijo(0);
+                    Nodo operando = nodo.getHijo(1);
+                    String tipoOperando = inferirTipo(operando);
+                    String lexemaOp = operador.getLexema();
+
+                    // 1. Validar Incremento/Decremento: SOLO para 'int'
+                    if (lexemaOp.equals("++") || lexemaOp.equals("--")) {
+                        if (!tipoOperando.equals("int") && !tipoOperando.equals("error")) {
+                            int linea = obtenerLinea(nodo);
+                            String claveError = "unaria_strong_" + linea + "_" + tipoOperando;
+                            if (!erroresReportados.contains(claveError)) {
+                                erroresReportados.add(claveError);
+                                erroresSemanticos.add("Línea " + linea + 
+                                    ": Error de tipado fuerte - El operador '" + lexemaOp + 
+                                    "' solo aplica a 'int', pero se recibió '" + tipoOperando + "'");
+                            }
+                        }
+                    }
+                    // 2. Validar Menos Unario: Permite 'int' o 'float'
+                    else if (lexemaOp.equals("-")) {
+                        if (!tipoOperando.equals("int") && !tipoOperando.equals("float") && !tipoOperando.equals("error")) {
+                            int linea = obtenerLinea(nodo);
+                            String claveError = "unaria_neg_" + linea + "_" + tipoOperando;
+                            if (!erroresReportados.contains(claveError)) {
+                                erroresReportados.add(claveError);
+                                erroresSemanticos.add("Línea " + linea + 
+                                    ": Error de tipado fuerte - El operador '-' unario solo aplica a tipos numéricos, pero se recibió '" + 
+                                    tipoOperando + "'");
+                            }
+                        }
+                    }
+                }
+                break;
             }
         
         for (Nodo hijo : nodo.getHijos()) {
@@ -193,16 +228,32 @@ public class RecorredorAST {
             String claveError = "var_notfound_" + nombreVar + "_" + linea;
             if (!erroresReportados.contains(claveError)) {
                 erroresReportados.add(claveError);
-                erroresSemanticos.add("Línea " + linea + 
-                    ": variable no declarada '" + nombreVar + "'");
+                erroresSemanticos.add("Línea " + linea + ": variable no declarada '" + nombreVar + "'");
             }
             return;
         }
         
+        // --- REGLA DE TIPADO FUERTE PARA ARREGLOS ---
+        // Si la variable en la tabla tiene dimensiones, es un arreglo.
+        // No se le puede asignar un valor simple (escalar).
+        if (simbolo.getDimensiones() != null && !simbolo.getDimensiones().isEmpty()) {
+            String claveError = "asign_array_illegal_" + nombreVar + "_" + linea;
+            if (!erroresReportados.contains(claveError)) {
+                erroresReportados.add(claveError);
+                erroresSemanticos.add("Línea " + linea + 
+                    ": Error de tipo - No se puede asignar un valor escalar a la matriz '" + nombreVar + 
+                    "'. Debe acceder a una posición específica [f, c].");
+            }
+            return; // Bloqueamos el análisis de tipos porque la estructura ya es inválida
+        }
+        // --------------------------------------------
+    
         String tipoVar = simbolo.getTipo();
         String tipoExpr = inferirTipo(nodoExpresion);
         
         if (!tipoVar.equals(tipoExpr) && !tipoExpr.equals("error")) {
+            // Permitir promoción de int a float si tu lenguaje lo permite, 
+            // de lo contrario, esto lo bloquea por ser tipado fuerte.
             String claveError = "asign_simple_" + nombreVar + "_" + linea;
             if (!erroresReportados.contains(claveError)) {
                 erroresReportados.add(claveError);
@@ -374,26 +425,26 @@ public class RecorredorAST {
     
     if (nodoID == null || nodoTipo == null || nodoExpresion == null) return;
     
-    int lineaOriginal = lineaActual;
-    lineaActual = obtenerLinea(nodo);
-    
-    String tipoDeclarado = extraerTipo(nodoTipo);
-    String tipoExpresion = inferirTipo(nodoExpresion);
-    
-    lineaActual = lineaOriginal;
-    
-    if (!tipoDeclarado.equals(tipoExpresion) && 
-        !tipoExpresion.equals("error")) {
-        int linea = obtenerLinea(nodo);
-        String claveError = "asign_decl_" + nodoID.getLexema() + "_" + linea;
-        if (!erroresReportados.contains(claveError)) {
-            erroresReportados.add(claveError);
-            erroresSemanticos.add("Línea " + linea + 
-                ": variable '" + nodoID.getLexema() + "' tipo '" + 
-                tipoDeclarado + "' pero asignado '" + tipoExpresion + "'");
+        int lineaOriginal = lineaActual;
+        lineaActual = obtenerLinea(nodo);
+        
+        String tipoDeclarado = extraerTipo(nodoTipo);
+        String tipoExpresion = inferirTipo(nodoExpresion);
+        
+        lineaActual = lineaOriginal;
+        
+        if (!tipoDeclarado.equals(tipoExpresion) && 
+            !tipoExpresion.equals("error")) {
+            int linea = obtenerLinea(nodo);
+            String claveError = "asign_decl_" + nodoID.getLexema() + "_" + linea;
+            if (!erroresReportados.contains(claveError)) {
+                erroresReportados.add(claveError);
+                erroresSemanticos.add("Línea " + linea + 
+                    ": variable '" + nodoID.getLexema() + "' tipo '" + 
+                    tipoDeclarado + "' pero asignado '" + tipoExpresion + "'");
+            }
         }
     }
-}
     
     private void verificarLlamadaFuncion(Nodo nodo) {
         ArrayList<Nodo> hijos = nodo.getHijos();
@@ -410,7 +461,7 @@ public class RecorredorAST {
             if (!erroresReportados.contains(claveError)) {
                 erroresReportados.add(claveError);
                 erroresSemanticos.add("Línea " + linea + 
-                    ": función '" + nombreFunc + "' no declarada");
+                    ": Error de análisis - función '" + nombreFunc + "' no declarada.");
             }
             return;
         }
@@ -418,6 +469,7 @@ public class RecorredorAST {
         ArrayList<String> tiposEsperados = funcion.getTiposParametros();
         ArrayList<String> tiposReales = new ArrayList<>();
         
+        // Recolectar tipos de los argumentos enviados
         for (Nodo hijo : hijos) {
             if (hijo.getEtiqueta().equals("listaExpresiones")) {
                 for (Nodo expr : hijo.getHijos()) {
@@ -433,29 +485,31 @@ public class RecorredorAST {
             }
         }
         
+        // 1. Validar cantidad de argumentos
         if (tiposEsperados.size() != tiposReales.size()) {
             String claveError = "args_count_" + nombreFunc + "_" + linea;
             if (!erroresReportados.contains(claveError)) {
                 erroresReportados.add(claveError);
                 erroresSemanticos.add("Línea " + linea + 
-                    ": función '" + nombreFunc + "' esperaba " + 
-                    tiposEsperados.size() + " argumentos pero recibió " + 
-                    tiposReales.size());
+                    ": Error de parámetros - la función '" + nombreFunc + "' esperaba " + 
+                    tiposEsperados.size() + " argumentos pero recibió " + tiposReales.size() + ".");
             }
             return;
         }
         
+        // 2. Validar tipos de argumentos (REGLA DE TIPADO FUERTE)
         for (int i = 0; i < tiposEsperados.size(); i++) {
-            if (!tiposEsperados.get(i).equals(tiposReales.get(i)) && 
-                !tiposReales.get(i).equals("error")) {
-                String claveError = "args_type_" + nombreFunc + "_" + 
-                                   i + "_" + linea;
+            String esperado = tiposEsperados.get(i);
+            String recibido = tiposReales.get(i);
+            
+            if (!esperado.equals(recibido) && !recibido.equals("error")) {
+                String claveError = "args_type_strong_" + nombreFunc + "_" + i + "_" + linea;
                 if (!erroresReportados.contains(claveError)) {
                     erroresReportados.add(claveError);
                     erroresSemanticos.add("Línea " + linea + 
-                        ": argumento " + (i+1) + " de '" + nombreFunc + 
-                        "' esperaba '" + tiposEsperados.get(i) + 
-                        "' pero recibió '" + tiposReales.get(i) + "'");
+                        ": Error de tipado fuerte - El argumento " + (i + 1) + " de la función '" + 
+                        nombreFunc + "' debe ser de tipo '" + esperado + "' pero se recibió '" + 
+                        recibido + "'. No se permiten conversiones implícitas.");
                 }
             }
         }
@@ -467,8 +521,7 @@ public class RecorredorAST {
             String claveError = "return_nofunction_" + linea;
             if (!erroresReportados.contains(claveError)) {
                 erroresReportados.add(claveError);
-                erroresSemanticos.add("Línea " + linea + 
-                    ": return fuera de función");
+                erroresSemanticos.add("Línea " + linea + ": Error de tipado fuerte - return fuera de función.");
             }
             return;
         }
@@ -478,22 +531,28 @@ public class RecorredorAST {
         
         String tipoEsperado = funcion.getTipo();
         
+        // Si la función es 'coal' (void), no debería retornar valores
+        if (tipoEsperado.equals("coal") || tipoEsperado.equals("void")) {
+            // Podrías validar aquí que el return no lleve expresiones si quisieras ser más estricto
+        }
+    
         for (Nodo hijo : nodo.getHijos()) {
             if (hijo.getTipo() == null || 
-                (!hijo.getTipo().equals("RETURN") && 
-                 !hijo.getTipo().equals("ENDL"))) {
+                (!hijo.getTipo().equals("RETURN") && !hijo.getTipo().equals("ENDL"))) {
+                
                 String tipoReal = inferirTipo(hijo);
                 
-                if (!tipoEsperado.equals(tipoReal) && 
-                    !tipoReal.equals("error")) {
+                // REGLA DE TIPADO FUERTE: Solo permitimos el retorno si el tipo es EXACTAMENTE igual
+                if (!tipoEsperado.equals(tipoReal) && !tipoReal.equals("error")) {
                     int linea = obtenerLinea(nodo);
-                    String claveError = "return_type_" + funcionActual + 
-                                       "_" + linea;
+                    String claveError = "return_type_strong_" + funcionActual + "_" + linea;
+                    
                     if (!erroresReportados.contains(claveError)) {
                         erroresReportados.add(claveError);
                         erroresSemanticos.add("Línea " + linea + 
-                            ": return tipo '" + tipoReal + "' pero función '" + 
-                            funcionActual + "' retorna '" + tipoEsperado + "'");
+                            ": Error de tipado fuerte - La función '" + funcionActual + 
+                            "' declara un retorno '" + tipoEsperado + 
+                            "' pero intentó devolver '" + tipoReal + "'. No se permite conversión implícita.");
                     }
                 }
                 break;
@@ -535,28 +594,21 @@ public class RecorredorAST {
                 String tipo1 = inferirTipo(nodo.getHijos().get(0));
                 String tipo2 = inferirTipo(nodo.getHijos().get(2));
                 
-                if (tipo1.equals("int") && tipo2.equals("int")) {
-                    nodo.setTipoSemantico("int");
-                    return "int";
-                }
-                if (tipo1.equals("float") && tipo2.equals("float")) {
-                    nodo.setTipoSemantico("float");
-                    return "float";
-                }
-                if ((tipo1.equals("int") || tipo1.equals("float")) &&
-                    (tipo2.equals("int") || tipo2.equals("float"))) {
-                    nodo.setTipoSemantico("float");
-                    return "float";
+                // REGLA: Los tipos deben ser idénticos
+                if (tipo1.equals(tipo2) && !tipo1.equals("error")) {
+                    nodo.setTipoSemantico(tipo1);
+                    return tipo1;
                 }
                 
+                // Error de tipado fuerte si son diferentes (ej: int + float)
                 if (!tipo1.equals("error") && !tipo2.equals("error")) {
                     int linea = obtenerLinea(nodo);
-                    String claveError = "arit_" + linea + "_" + tipo1 + "_" + tipo2;
+                    String claveError = "arit_strong_" + linea + "_" + tipo1 + "_" + tipo2;
                     if (!erroresReportados.contains(claveError)) {
                         erroresReportados.add(claveError);
                         erroresSemanticos.add("Línea " + linea + 
-                            ": operación aritmética inválida entre '" + tipo1 + 
-                            "' y '" + tipo2 + "'");
+                            ": Error de tipado fuerte - Operación inválida entre '" + 
+                            tipo1 + "' y '" + tipo2 + "'. Debes convertir uno de los valores.");
                     }
                 }
                 return "error";
@@ -572,25 +624,21 @@ public class RecorredorAST {
                 String tipo1 = inferirTipo(nodo.getHijos().get(0));
                 String tipo2 = inferirTipo(nodo.getHijos().get(2));
                 
-                if ((tipo1.equals("int") || tipo1.equals("float")) &&
-                    (tipo2.equals("int") || tipo2.equals("float"))) {
-                    nodo.setTipoSemantico("bool");
-                    return "bool";
-                }
-                
                 if (tipo1.equals(tipo2) && !tipo1.equals("error")) {
                     nodo.setTipoSemantico("bool");
                     return "bool";
                 }
                 
+                // Si llegamos aquí, los tipos son diferentes (ej: int vs float)
+                // En tipado fuerte, esto es un error inmediato.
                 if (!tipo1.equals("error") && !tipo2.equals("error")) {
                     int linea = obtenerLinea(nodo);
                     String claveError = "comp_" + linea + "_" + tipo1 + "_" + tipo2;
                     if (!erroresReportados.contains(claveError)) {
                         erroresReportados.add(claveError);
                         erroresSemanticos.add("Línea " + linea + 
-                            ": comparación entre tipos incompatibles: '" + 
-                            tipo1 + "' y '" + tipo2 + "'");
+                            ": Error de tipado fuerte - No se puede comparar '" + 
+                            tipo1 + "' con '" + tipo2 + "'. Los tipos deben ser idénticos.");
                     }
                 }
             }
@@ -775,6 +823,8 @@ public class RecorredorAST {
     
     private void construirNavidad(Nodo nodo, boolean analizarSemantica) {
         tablaSimbolos.entrarAlcance("NAVIDAD");
+        String funcionAnterior = funcionActual;
+        funcionActual = "NAVIDAD";
         for (Nodo hijo : nodo.getHijos()) {
             if (hijo.getEtiqueta().equals("sentencias")) {
                 construirTabla(hijo, analizarSemantica);
@@ -783,6 +833,7 @@ public class RecorredorAST {
                 }
             }
         }
+        funcionActual = funcionAnterior; 
         tablaSimbolos.salirAlcance();
     }
     
@@ -1479,6 +1530,32 @@ public class RecorredorAST {
                     String op2 = generarCodigoExpresion(hijos.get(2), gen);
                     return gen.generarOperacionBinaria(op1, operador, op2);
                 }
+            }
+        }
+
+        if (etiqueta.equals("unaria")) {
+            ArrayList<Nodo> hijos = nodo.getHijos();
+            Nodo op = hijos.get(0);
+            Nodo operando = hijos.get(1);
+        
+            // CASO A: Incremento o Decremento (++i, --i)
+            if (op.getLexema().equals("++") || op.getLexema().equals("--")) {
+                String nombreVar = operando.getLexema();
+                if (nombreVar == null) nombreVar = "var_error"; // Seguridad
+                
+                String operador = op.getLexema().equals("++") ? "+" : "-";
+                String temp = gen.generarOperacionBinaria(nombreVar, operador, "1");
+                gen.generarAsignacion(nombreVar, temp);
+                return nombreVar;
+            } 
+            
+            // CASO B: Signo Menos (-5, -x)
+            if (op.getLexema().equals("-")) {
+                String val = generarCodigoExpresion(operando, gen);
+                // Si es un literal (-5), podemos retornar "-5" directamente
+                // Si es una variable (-x), generamos 0 - x
+                if (operando.getEtiqueta().equals("literal")) return "-" + val;
+                return gen.generarOperacionBinaria("0", "-", val);
             }
         }
         
