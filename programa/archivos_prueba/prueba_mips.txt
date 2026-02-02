@@ -1,25 +1,28 @@
-| ============================================================
-| ARCHIVO DE PRUEBA INTEGRAL - PROYECTO COMPILADORES
-| Este archivo prueba todas las producciones de la gramática.
-| ============================================================
-
-є 
-   Comentario multilínea
-   Probando los caracteres especiales
+є
+    Archivo FINAL de prueba del lenguaje
+    Demuestra todas las funcionalidades de la gramática
 э
 
-| 1. Declaraciones Globales (world)
-world variableGlobal int = 100 endl
-world pi float = 3.14159 endl
-world estadoGlobal bool = true endl
-world letraGlobal char = 'G' endl
-world saludoGlobal string = "Hola Mundo Global" endl
+| =================================================
+| SECCION 1: DECLARACIONES GLOBALES
+| =================================================
+world entero int = 42 endl
+world decimal float = 3.14159 endl
+world estado bool = true endl
+world letra char = 'A' endl
+world texto string = "Lenguaje funcionando" endl
+world matrizGlobal int[2, 2] = ¡ ¡1, 2!, ¡3, 4! ! endl
 
-| Arreglo global (char y entero permitidos)
-world matrizGlobal int[2, 2] = ¡ ¡1, 0!, ¡0, 1! ! endl
+| =================================================
+| SECCION 2: FUNCIONES
+| =================================================
 
-| 2. Definición de Funciones (gift)
-| Prueba de parámetros, tipos de retorno y recursividad
+| --- Funcion simple ---
+gift sumar ¿ a int, b int ? int ¡
+    return a + b endl
+!
+
+| --- Funcion recursiva ---
 gift factorial ¿ n int ? int ¡
     decide of
         ¿n <= 1? -> ¡
@@ -31,91 +34,151 @@ gift factorial ¿ n int ? int ¡
     end decide endl
 !
 
-gift operacionesMatematicas ¿ a float, b float ? float ¡
-    local resultado float endl
-    | Prueba de precedencia y operadores: +, -, *, /, //, %, ^, ¿?
-    resultado = ¿a + b? * ¿a - b? / ¿a ^ 2.0? endl
-    resultado = a // b + ¿a % b? endl
-    return resultado endl
+| --- Funcion con operadores ---
+gift calculos ¿ x int, y int ? int ¡
+    local temp int endl
+    temp = x + y endl
+    temp = x - y endl
+    temp = x * y endl
+    temp = x / y endl
+    temp = x // y endl
+    temp = x % y endl
+    temp = x ^ 2 endl
+    return temp endl
 !
 
-| 3. Función Principal (navidad de tipo coal)
+| =================================================
+| SECCION 3: PROGRAMA PRINCIPAL
+| =================================================
 navidad coal ¡
-    | 3.1 Declaraciones Locales
-    local contador int = 0 endl
-    local limite float = 50.5 endl
-    local mensaje string = "Ejecutando bucles" endl
-    local flag bool = false endl
-    
-    | Arreglo local con asignación
-    local notas int[3, 3] = ¡ 
-        ¡10, 20, 30!, 
-        ¡40, 50, 60!, 
-        ¡70, 80, 90! 
-    ! endl
 
-    | 3.2 Entrada y Salida (get y show)
-    show ¿"Ingrese un valor para el contador:"? endl
-    get ¿contador? endl
-    show ¿contador? endl
-    show ¿variableGlobal? endl
+    show ¿"========================================\n"? endl
+    show ¿"      DEMOSTRACION DEL LENGUAJE\n"? endl
+    show ¿"========================================\n\n"? endl
 
-    | 3.3 Estructura de Control: decide of (if-else)
+    | -------------------------------------------------
+    | 1. FLOATS
+    | -------------------------------------------------
+    show ¿"1) PRUEBA DE FLOATS\n"? endl
+    show ¿"   Valor de pi: "? endl
+    show ¿decimal? endl
+    show ¿"\n\n"? endl
+
+    | -------------------------------------------------
+    | 2. OPERADORES UNARIOS
+    | -------------------------------------------------
+    show ¿"2) OPERADORES UNARIOS (++ y --)\n"? endl
+    local num int = 10 endl
+
+    show ¿"   Valor inicial: "? endl
+    show ¿num? endl
+    show ¿"\n"? endl
+
+    ++num endl
+    show ¿"   Despues de ++: "? endl
+    show ¿num? endl
+    show ¿"\n"? endl
+
+    | -------------------------------------------------
+    | 3. DECIDE OF COMPARACION
+    | -------------------------------------------------
+    show ¿"3) CONDICIONALES (DECIDE OF)\n"? endl
+    local A int = 50 endl
+    local B int = 100 endl
+
+    show ¿"   A = "? endl
+    show ¿A? endl
+    show ¿"   B = "? endl
+    show ¿B? endl
+    show ¿"\n"? endl
+
     decide of
-        ¿contador > 10 @ contador < 100? -> ¡
-            show ¿"Contador en rango medio"? endl
+        ¿A > B? -> ¡
+            show ¿"   -> A es MAYOR que B\n"? endl
         !
-        ¿contador >= 100 ~ flag == true? -> ¡
-            show ¿"Contador alto o flag activo"? endl
+        ¿A == B? -> ¡
+            show ¿"   -> A es IGUAL a B\n"? endl
         !
         else -> ¡
-            show ¿"Contador bajo"? endl
+            show ¿"   -> A es MENOR que B\n"? endl
         !
     end decide endl
+    show ¿"\n"? endl
 
-    | 3.4 Operadores Unarios y Asignaciones
-    ++contador endl
-    --contador endl
-    local negativo int = -5 endl
-    local preIncremento int = ++contador endl
+    | -------------------------------------------------
+    | 4. BUCLE FOR
+    | -------------------------------------------------
+    show ¿"4) BUCLE FOR\n"? endl
+    show ¿"   Conteo: "? endl
 
-    | 3.5 Bucle: loop (tipo Ada)
-    loop
-        show ¿"Iteracion loop:"? endl
-        show ¿contador? endl
-        contador = contador + 5 endl
-        exit when ¿contador > 20? endl
-    end loop endl
-
-    | 3.6 Bucle: for (tipo C/Java)
-    for ¿local i int = 0 ; i < 3 ; ++i? ¡
-        for ¿local j int = 0 ; j < 3 ; ++j? ¡
-            | Modificar y obtener elementos de arreglos
-            notas[i, j] = notas[i, j] + contador endl
-            show ¿notas[i, j]? endl
-        !
+    for ¿local i int = 0; i <= 5; ++i? ¡
+        show ¿i? endl
+        show ¿" "? endl
     !
+    show ¿"\n\n"? endl
 
-    | 3.7 Expresiones Lógicas Complejas
-    | Uso de negación (Σ), conjunción (@) y disyunción (~)
-    local validacion bool = Σ¿contador == 0? @ ¿letraGlobal Σ= 'X'? endl
-    
+    | -------------------------------------------------
+    | 5. MATRICES Y FOR ANIDADO
+    | -------------------------------------------------
+    show ¿"5) MATRIZ GLOBAL (2x2)\n"? endl
+
+    for ¿local f int = 0; f < 2; ++f? ¡
+        show ¿"   Fila "? endl
+        show ¿f? endl
+        show ¿": "? endl
+
+        for ¿local c int = 0; c < 2; ++c? ¡
+            show ¿"["? endl
+            show ¿matrizGlobal[f, c]? endl
+            show ¿"] "? endl
+        !
+        show ¿"\n"? endl
+    !
+    show ¿"\n"? endl
+
+    | -------------------------------------------------
+    | 6. ENTRADA, FUNCIONES Y RECURSION
+    | -------------------------------------------------
+    show ¿"6) FACTORIAL CON ENTRADA\n"? endl
+    show ¿"   Ingrese un numero: "? endl
+
+    local numUsuario int endl
+    get ¿numUsuario? endl
+
+    local resultadoFact int = factorial¿numUsuario? endl
+
+    show ¿"   factorial("? endl
+    show ¿numUsuario? endl
+    show ¿") = "? endl
+    show ¿resultadoFact? endl
+    show ¿"\n\n"? endl
+
+    | -------------------------------------------------
+    | 7. DECIDE OF
+    | -------------------------------------------------
+    show ¿"7) ANALISIS DEL FACTORIAL\n"? endl
+
     decide of
-        validacion -> ¡
-            show ¿mensaje? endl
-            break endl | Prueba de break dentro de bloque
+        ¿resultadoFact < 10? -> ¡
+            show ¿"   -> Muy pequeño\n"? endl
+        !
+        ¿resultadoFact >= 10 @ resultadoFact < 100? -> ¡
+            show ¿"   -> Tamaño pequeño\n"? endl
+        !
+        ¿resultadoFact >= 100 @ resultadoFact < 1000? -> ¡
+            show ¿"   -> Tamaño mediano\n"? endl
+        !
+        ¿resultadoFact >= 1000 @ resultadoFact < 10000? -> ¡
+            show ¿"   -> Tamaño grande\n"? endl
+        !
+        else -> ¡
+            show ¿"   -> EXTREMADAMENTE GRANDE\n"? endl
         !
     end decide endl
 
-    | 3.8 Llamada a funciones y expresiones aritméticas
-    local rFact int = factorial¿5? endl
-    local rMat float = operacionesMatematicas¿10.5, 2.0? endl
-    
-    show ¿"Factorial de 5 es:"? endl
-    show ¿rFact? endl
-    show ¿"Resultado math:"? endl
-    show ¿rMat? endl
+    show ¿"\n========================================\n"? endl
+    show ¿"           FIN DEL PROGRAMA\n"? endl
+    show ¿"========================================\n"? endl
 
-    | El procedimiento navidad es coal (void), no requiere return pero puede tener uno vacío
     return 0 endl
 !

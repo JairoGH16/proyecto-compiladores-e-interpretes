@@ -1,13 +1,31 @@
 import java.util.ArrayList;
 import parserlexer.Nodo;
 
+/**
+ * Clase RecorredorAST
+ * Objetivo: Recorrer el Árbol Sintáctico Abstracto (AST) para construir la tabla de símbolos,
+ * realizar análisis semántico y generar código intermedio. Es el componente central que conecta
+ * el análisis sintáctico con la generación de código.
+ * Restricciones: Requiere un AST válido generado por el parser. El AST debe tener la estructura
+ * correcta con nodos etiquetados apropiadamente.
+ */
 public class RecorredorAST {
     private TablaSimbolos tablaSimbolos;
+    // Lista de errores semánticos encontrados durante el análisis
     private ArrayList<String> erroresSemanticos;
+    // Set para evitar reportar el mismo error múltiples veces
     private java.util.HashSet<String> erroresReportados;
+    // Nombre de la función que se está analizando actualmente
     private String funcionActual;
+    // Línea actual del código fuente que se está procesando
     private int lineaActual = -1;
     
+    /**
+     * Constructor de RecorredorAST
+     * Objetivo: Inicializar las estructuras necesarias para el recorrido del AST.
+     * Entrada: Ninguna.
+     * Salida: Instancia del recorredor lista para procesar el AST.
+     */
     public RecorredorAST() {
         this.tablaSimbolos = new TablaSimbolos();
         this.erroresSemanticos = new ArrayList<>();
@@ -1115,7 +1133,20 @@ public class RecorredorAST {
                 break;
             case "forLoop": // NUEVO
                 generarCodigoFor(nodo, gen);
-                break;    
+                break;
+            
+            // CORRECCIÓN: Procesar expresiones standalone (como ++num, --num, etc.)
+            case "expresion":
+            case "aditiva":
+            case "multiplicativa":
+            case "relacional":
+            case "logica":
+            case "unaria":
+            case "primaria":
+                // Generar código para la expresión (esto genera las instrucciones de ++ y --)
+                generarCodigoExpresion(nodo, gen);
+                break;
+                
             default:
                 // Para otros nodos, procesar hijos recursivamente
                 for (Nodo hijo : nodo.getHijos()) {
@@ -1185,37 +1216,97 @@ public class RecorredorAST {
         if (sentencias != null) {
             generarCodigoParaNodo(sentencias, gen);
         }
+        
+        // --- 5. ACTUALIZACIÓN (CRÍTICO: ANTES DEL GOTO) ---
         if (actualizacion != null) {
-            boolean esAsignacionDirecta = false;
-            Nodo nodoID = null;
-            Nodo nodoExpr = null;
-    
-            for (Nodo h : actualizacion.getHijos()) {
-                if (h.getTipo() != null && h.getTipo().equals("ID")) {
-                    nodoID = h;
-                }
-                if (h.getTipo() != null && h.getTipo().equals("ASSIGN")) {
-                    esAsignacionDirecta = true;
-                }
-                if (h.getEtiqueta().equals("expresion") || h.getEtiqueta().equals("aditiva")) {
-                    nodoExpr = h;
-                }
-            }
-    
-            if (esAsignacionDirecta && nodoID != null && nodoExpr != null) {
-                String val = generarCodigoExpresion(nodoExpr, gen);
-                gen.generarAsignacion(nodoID.getLexema(), val);
-            } else {
-                for (Nodo h : actualizacion.getHijos()) {
-                    generarCodigoParaNodo(h, gen);
-                }
-            }
+            procesarActualizacionFor(actualizacion, gen);
         }
     
         gen.generarGoto(etiqInicio);
         gen.agregarEtiqueta(etiqSalida);
     }
 
+    /**
+     * Procesar actualización del FOR (++i, --i, i = i + 1, etc.)
+     * ESTE MÉTODO ES CRÍTICO PARA EVITAR BUCLES INFINITOS
+     */
+    private void procesarActualizacionFor(Nodo actualizacion, GeneradorCodigoIntermedio gen) {
+        ArrayList<Nodo> hijos = actualizacion.getHijos();
+        
+        // Caso 1: Operador unario al inicio (++i, --i)
+        boolean tieneOperadorUnario = false;
+        String operadorUnario = null;
+        String variableUnaria = null;
+        
+        for (int i = 0; i < hijos.size(); i++) {
+            Nodo h = hijos.get(i);
+            // Verificar si es un nodo de operador unario
+            if (h.getEtiqueta().equals("opUnario")) {
+                // El operador está en el hijo del nodo opUnario
+                if (h.getNumHijos() > 0) {
+                    operadorUnario = h.getHijo(0).getLexema();
+                    // La variable está en el siguiente nodo
+                    if (i + 1 < hijos.size()) {
+                        variableUnaria = hijos.get(i + 1).getLexema();
+                    }
+                    tieneOperadorUnario = true;
+                    break;
+                }
+            }
+            // O puede ser que el operador sea directamente un hijo
+            else if (h.getLexema() != null && (h.getLexema().equals("++") || h.getLexema().equals("--"))) {
+                operadorUnario = h.getLexema();
+                // La variable está en el siguiente nodo
+                if (i + 1 < hijos.size()) {
+                    variableUnaria = hijos.get(i + 1).getLexema();
+                }
+                tieneOperadorUnario = true;
+                break;
+            }
+        }
+        
+        if (tieneOperadorUnario && operadorUnario != null && variableUnaria != null) {
+            // Generar código para ++i o --i
+            if (operadorUnario.equals("++")) {
+                String temp = gen.generarOperacionBinaria(variableUnaria, "+", "1");
+                gen.generarAsignacion(variableUnaria, temp);
+            } else if (operadorUnario.equals("--")) {
+                String temp = gen.generarOperacionBinaria(variableUnaria, "-", "1");
+                gen.generarAsignacion(variableUnaria, temp);
+            }
+            return;
+        }
+        
+        // Caso 2: Asignación (i = i + 1)
+        boolean esAsignacion = false;
+        String variable = null;
+        Nodo expresion = null;
+        
+        for (int i = 0; i < hijos.size(); i++) {
+            Nodo h = hijos.get(i);
+            if (h.getTipo() != null && h.getTipo().equals("ID")) {
+                variable = h.getLexema();
+            }
+            if (h.getLexema() != null && h.getLexema().equals("=")) {
+                esAsignacion = true;
+            }
+            if (h.getEtiqueta().equals("expresion") || h.getEtiqueta().equals("aditiva") ||
+                h.getEtiqueta().equals("multiplicativa") || h.getEtiqueta().equals("primaria")) {
+                expresion = h;
+            }
+        }
+        
+        if (esAsignacion && variable != null && expresion != null) {
+            String val = generarCodigoExpresion(expresion, gen);
+            gen.generarAsignacion(variable, val);
+            return;
+        }
+        
+        // Caso 3: Si ninguno de los anteriores funcionó, procesar hijos
+        for (Nodo h : hijos) {
+            generarCodigoParaNodo(h, gen);
+        }
+    }
     private void generarCodigoDeclaracionGlobal(Nodo nodo, GeneradorCodigoIntermedio gen) {
         ArrayList<Nodo> hijos = nodo.getHijos();
         if (hijos.size() < 2) return;
@@ -1369,6 +1460,9 @@ public class RecorredorAST {
             
         } else {
             // Declaración normal de variables
+            String tipo = tercerHijo.getLexema(); // El tipo está en tercerHijo
+            gen.generarDeclaracion(nombreVar, tipo); // ✅ GENERAR DECLARACIÓN
+            
             boolean tieneAsignacion = false;
             Nodo nodoExpresion = null;
             for (int i = 0; i < hijos.size(); i++) {
@@ -1784,28 +1878,40 @@ public class RecorredorAST {
             }
         }
 
+        // === CORRECCIÓN CRÍTICA PARA ++ Y -- ===
         if (etiqueta.equals("unaria")) {
             ArrayList<Nodo> hijos = nodo.getHijos();
+            if (hijos.size() < 2) return "0";
+            
             Nodo op = hijos.get(0);
             Nodo operando = hijos.get(1);
-        
-            // CASO A: Incremento o Decremento (++i, --i)
-            if (op.getLexema().equals("++") || op.getLexema().equals("--")) {
-                String nombreVar = operando.getLexema();
-                if (nombreVar == null) nombreVar = "var_error"; // Seguridad
+
+            // CASO: Incremento o Decremento (++i, --i)
+            if (op.getLexema() != null && (op.getLexema().equals("++") || op.getLexema().equals("--"))) {
+                // Obtener el nombre de la variable del operando (puede estar en diferentes niveles)
+                String nombreVar = obtenerNombreVariable(operando);
                 
-                String operador = op.getLexema().equals("++") ? "+" : "-";
-                String temp = gen.generarOperacionBinaria(nombreVar, operador, "1");
+                if (nombreVar == null || nombreVar.isEmpty()) {
+                    // Si no se puede obtener el nombre, intentar generar como expresión
+                    return generarCodigoExpresion(operando, gen);
+                }
+                
+                String operadorBinario = op.getLexema().equals("++") ? "+" : "-";
+
+                // t_n = var +/- 1
+                String temp = gen.generarOperacionBinaria(nombreVar, operadorBinario, "1");
+                // var = t_n (Esto fuerza la escritura en memoria en MIPS)
                 gen.generarAsignacion(nombreVar, temp);
+
                 return nombreVar;
-            } 
-            
-            // CASO B: Signo Menos (-5, -x)
-            if (op.getLexema().equals("-")) {
+            }
+
+            // CASO: Signo Menos (-x)
+            if (op.getLexema() != null && op.getLexema().equals("-")) {
                 String val = generarCodigoExpresion(operando, gen);
-                // Si es un literal (-5), podemos retornar "-5" directamente
-                // Si es una variable (-x), generamos 0 - x
+                // Si es un literal, podemos retornar "-valor" directamente
                 if (operando.getEtiqueta().equals("literal")) return "-" + val;
+                // Si es variable, generamos 0 - valor
                 return gen.generarOperacionBinaria("0", "-", val);
             }
         }
@@ -1816,7 +1922,6 @@ public class RecorredorAST {
             if (!hijos.isEmpty()) {
                 // Si el primer hijo es OPEN_PAREN, la expresión real está en el hijo[1]
                 if (hijos.size() >= 3 && hijos.get(0).getEtiqueta().equals("¿")) {
-                    // Caso: ¿expresion?
                     return generarCodigoExpresion(hijos.get(1), gen);
                 }
                 
@@ -1837,15 +1942,11 @@ public class RecorredorAST {
             }
         }
 
-        // Dentro de generarCodigoExpresion en RecorredorAST.java
         if (etiqueta.equals("accesoArray")) {
             ArrayList<Nodo> hijos = nodo.getHijos();
             String nombreArray = hijos.get(0).getLexema();
-            
-            // Suponiendo que los índices están en las posiciones 2 y 4: matriz[idx1, idx2]
             String idx1 = generarCodigoExpresion(hijos.get(2), gen);
             String idx2 = generarCodigoExpresion(hijos.get(4), gen);
-            
             return gen.generarAccesoArray2D(nombreArray, idx1, idx2);
         }
         
@@ -1885,6 +1986,36 @@ public class RecorredorAST {
         }
         
         return gen.generarLlamadaFuncion(nombreFunc, numParams);
+    }
+    
+    /**
+     * Obtiene el nombre de una variable de un nodo, navegando recursivamente si es necesario
+     */
+    private String obtenerNombreVariable(Nodo nodo) {
+        if (nodo == null) return null;
+        
+        // Si el nodo tiene lexema directamente, retornarlo
+        String lexema = nodo.getLexema();
+        if (lexema != null && !lexema.isEmpty()) {
+            // Asegurarse de que no sea un símbolo o palabra clave
+            if (!lexema.equals("¿") && !lexema.equals("?") && !lexema.equals("!") && 
+                !lexema.equals("[") && !lexema.equals("]") && !lexema.equals("(") && 
+                !lexema.equals(")") && !lexema.equals(",") && !lexema.equals(";")) {
+                return lexema;
+            }
+        }
+        
+        // Si es un nodo contenedor (primaria, expresion, etc.), buscar en sus hijos
+        if (nodo.getNumHijos() > 0) {
+            for (Nodo hijo : nodo.getHijos()) {
+                String resultado = obtenerNombreVariable(hijo);
+                if (resultado != null && !resultado.isEmpty()) {
+                    return resultado;
+                }
+            }
+        }
+        
+        return null;
     }
     
     private String obtenerSimbolo(Nodo nodo) {

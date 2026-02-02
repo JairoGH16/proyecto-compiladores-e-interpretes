@@ -1,148 +1,249 @@
-========== CÓDIGO INTERMEDIO (THREE-ADDRESS CODE) ==========
 
     ========== INICIO CÓDIGO INTERMEDIO ==========
 
-    variableGlobal = 100
-    pi = 3.14159
-    estadoGlobal = 1
-    letraGlobal = ''G''
-    saludoGlobal = "Hola Mundo Global"
+    ========== INICIO CÓDIGO INTERMEDIO ==========
+
+    entero = 42
+    decimal = 3.14159
+    estado = 1
+    letra = ''A''
+    texto = "Lenguaje funcionando"
     DECLARE matrizGlobal : int[2x2]
     matrizGlobal[0][0] = 1
-    matrizGlobal[0][1] = 0
-    matrizGlobal[1][0] = 0
-    matrizGlobal[1][1] = 1
+    matrizGlobal[0][1] = 2
+    matrizGlobal[1][0] = 3
+    matrizGlobal[1][1] = 4
+
+FUNCTION sumar:
+    t0 = a + b
+    return t0
+END_FUNCTION
+
 
 FUNCTION factorial:
-    t0 = n <= 1
-    if t0 goto L1
+    t1 = n <= 1
+    if t1 goto L1
     goto L2
 L1:
     return 1
     goto L0
 L2:
-    t1 = n - 1
-    param t1
-    t2 = call factorial, 1
-    t3 = n * t2
-    return t3
+    t2 = n - 1
+    param t2
+    t3 = call factorial, 1
+    t4 = n * t3
+    return t4
 L0:
 END_FUNCTION
 
 
-FUNCTION operacionesMatematicas:
-    resultado = 0
-    t4 = a + b
-    t5 = a - b
-    t6 = t4 * t5
-    t7 = t6 / a
-    resultado = t7
-    t8 = a // b
-    t9 = a % b
-    t10 = t8 + t9
-    resultado = t10
-    return resultado
+FUNCTION calculos:
+    DECLARE temp : null
+    temp = 0
+    t5 = x + y
+    temp = t5
+    t6 = x - y
+    temp = t6
+    t7 = x * y
+    temp = t7
+    t8 = x DIV_DECIMAL y
+    temp = t8
+    t9 = x DIV_ENTERA y
+    temp = t9
+    t10 = x % y
+    temp = t10
+    temp = x
+    return temp
 END_FUNCTION
 
 
 FUNCTION NAVIDAD:
-    contador = 0
-    limite = 50.5
-    mensaje = "Ejecutando bucles"
-    flag = 0
-    DECLARE notas : int[3x3]
-    notas[0][0] = 10
-    notas[0][1] = 20
-    notas[0][2] = 30
-    notas[1][0] = 40
-    notas[1][1] = 50
-    notas[1][2] = 60
-    notas[2][0] = 70
-    notas[2][1] = 80
-    notas[2][2] = 90
-    show "Ingrese un valor para el contador:"
-    get contador
-    show contador
-    show variableGlobal
-    t11 = contador > 10
-    t12 = contador < 100
-    t13 = t11 && t12
-    if t13 goto L4
+    show "========================================
+"
+    show "      DEMOSTRACION DEL LENGUAJE
+"
+    show "========================================
+
+"
+    show "1) PRUEBA DE FLOATS
+"
+    show "   Valor de pi: "
+    show decimal
+    show "
+
+"
+    show "2) OPERADORES UNARIOS (++ y --)
+"
+    DECLARE num : null
+    num = 10
+    show "   Valor inicial: "
+    show num
+    show "
+"
+    show "   Despues de ++: "
+    show num
+    show "
+"
+    show "   Despues de --: "
+    show num
+    show "
+
+"
+    show "3) CONDICIONALES (DECIDE OF)
+"
+    DECLARE A : null
+    A = 50
+    DECLARE B : null
+    B = 100
+    show "   A = "
+    show A
+    show "   B = "
+    show B
+    show "
+"
+    t11 = A > B
+    if t11 goto L4
     goto L5
 L4:
-    show "Contador en rango medio"
+    show "   -> A es MAYOR que B
+"
     goto L3
 L5:
-    t14 = contador >= 100
-    t15 = flag == 1
-    t16 = t14 || t15
-    if t16 goto L6
+    t12 = A == B
+    if t12 goto L6
     goto L7
 L6:
-    show "Contador alto o flag activo"
+    show "   -> A es IGUAL a B
+"
     goto L3
 L7:
-    show "Contador bajo"
+    show "   -> A es MENOR que B
+"
 L3:
-    negativo = -5
-    t17 = contador + 1
-    contador = t17
-    preIncremento = contador
-L8:
-    show "Iteracion loop:"
-    show contador
-    t18 = contador + 5
-    contador = t18
-    t19 = contador > 20
-    if t19 goto L9
-    goto L8
-L9:
+    show "
+"
+    show "4) BUCLE FOR
+"
+    show "   Conteo: "
     i = 0
-L10:
-    t20 = i < 3
-    if t20 goto L11
-    goto L12
-L11:
-    j = 0
-L13:
-    t21 = j < 3
-    if t21 goto L14
-    goto L15
-L14:
-    t22 = notas[i][j]
-    t23 = t22 + contador
-    notas[i][j] = t23
-    t24 = notas[i][j]
-    show t24
-    goto L13
-L15:
+L8:
+    t13 = i <= 5
+    if t13 goto L9
     goto L10
+L9:
+    show i
+    show " "
+    t14 = i + 1
+    i = t14
+    goto L8
+L10:
+    show "
+
+"
+    show "5) MATRIZ GLOBAL (2x2)
+"
+    f = 0
+L11:
+    t15 = f < 2
+    if t15 goto L12
+    goto L13
 L12:
-    t25 = contador == 0
-    t26 = ! t25
-    t27 = letraGlobal != ''X''
-    t28 = t26 && t27
-    validacion = t28
-    if validacion goto L17
-    goto L18
-L17:
-    show mensaje
+    show "   Fila "
+    show f
+    show ": "
+    c = 0
+L14:
+    t16 = c < 2
+    if t16 goto L15
     goto L16
-L18:
+L15:
+    show "["
+    t17 = matrizGlobal[f][c]
+    show t17
+    show "] "
+    t18 = c + 1
+    c = t18
+    goto L14
 L16:
-    param 5
-    t29 = call factorial, 1
-    rFact = t29
-    param 10.5
-    param 2.0
-    t30 = call operacionesMatematicas, 2
-    rMat = t30
-    show "Factorial de 5 es:"
-    show rFact
-    show "Resultado math:"
-    show rMat
+    show "
+"
+    t19 = f + 1
+    f = t19
+    goto L11
+L13:
+    show "
+"
+    show "6) FACTORIAL CON ENTRADA
+"
+    show "   Ingrese un numero: "
+    DECLARE numUsuario : null
+    numUsuario = 0
+    get numUsuario
+    DECLARE resultadoFact : null
+    param numUsuario
+    t20 = call factorial, 1
+    resultadoFact = t20
+    show "   factorial("
+    show numUsuario
+    show ") = "
+    show resultadoFact
+    show "
+
+"
+    show "7) ANALISIS DEL FACTORIAL
+"
+    t21 = resultadoFact < 10
+    if t21 goto L18
+    goto L19
+L18:
+    show "   -> Muy pequeño
+"
+    goto L17
+L19:
+    t22 = resultadoFact >= 10
+    t23 = resultadoFact < 100
+    t24 = t22 && t23
+    if t24 goto L20
+    goto L21
+L20:
+    show "   -> Tamaño pequeño
+"
+    goto L17
+L21:
+    t25 = resultadoFact >= 100
+    t26 = resultadoFact < 1000
+    t27 = t25 && t26
+    if t27 goto L22
+    goto L23
+L22:
+    show "   -> Tamaño mediano
+"
+    goto L17
+L23:
+    t28 = resultadoFact >= 1000
+    t29 = resultadoFact < 10000
+    t30 = t28 && t29
+    if t30 goto L24
+    goto L25
+L24:
+    show "   -> Tamaño grande
+"
+    goto L17
+L25:
+    show "   -> EXTREMADAMENTE GRANDE
+"
+L17:
+    show "
+========================================
+"
+    show "           FIN DEL PROGRAMA
+"
+    show "========================================
+"
     return 0
 END_FUNCTION
 
+
+    ========== FIN CÓDIGO INTERMEDIO ==========
 
     ========== FIN CÓDIGO INTERMEDIO ==========
