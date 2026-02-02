@@ -29,6 +29,11 @@ navidad coal ¡
     resultado_global = f + s endl
     show ¿resultado_global? endl
 
+    local f1 float = 10.5 endl
+    local f2 float = 2.3 endl
+    local f3 float = f1 + f2 endl
+    
+
 
     local x int = mi_lista[1, 0] endl
     show ¿x? endl  | Debería mostrar 30

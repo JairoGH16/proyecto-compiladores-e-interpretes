@@ -56,8 +56,12 @@ FUNCTION NAVIDAD:
     t9 = f + s
     resultado_global = t9
     show resultado_global
-    t10 = mi_lista[1][0]
-    x = t10
+    f1 = 10.5
+    f2 = 2.3
+    t10 = f1 + f2
+    f3 = t10
+    t11 = mi_lista[1][0]
+    x = t11
     show x
 END_FUNCTION
 

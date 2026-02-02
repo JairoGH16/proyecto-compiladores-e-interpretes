@@ -164,6 +164,16 @@ NAVIDAD:
     la $a0, newline    # Imprimir salto de línea
     li $v0, 4          # Syscall print_string
     syscall
+    li $t0, 10.5
+    sw $t0, 20($sp)
+    li $t0, 2.3
+    sw $t0, 24($sp)
+    lw $t0, 20($sp)
+    lw $t1, 24($sp)
+    add $t2, $t0, $t1    # f1 + f2
+    sw $t2, 28($sp)
+    lw $t0, 28($sp)
+    sw $t0, 32($sp)
     li $t0, 1
     li $t1, 0
     # Acceso a array global mi_lista[1][0]
@@ -174,10 +184,10 @@ NAVIDAD:
     la $t4, mi_lista    # Dirección base del array
     add $t4, $t4, $t3       # Dirección del elemento
     lw $t5, 0($t4)          # Cargar elemento
-    sw $t5, 20($sp)
-    lw $t0, 20($sp)
-    sw $t0, 24($sp)
-    lw $a0, 24($sp)
+    sw $t5, 36($sp)
+    lw $t0, 36($sp)
+    sw $t0, 40($sp)
+    lw $a0, 40($sp)
     li $v0, 1          # Syscall print_int
     syscall
     la $a0, newline    # Imprimir salto de línea
