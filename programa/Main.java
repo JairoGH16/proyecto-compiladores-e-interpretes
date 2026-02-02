@@ -1,47 +1,69 @@
 import java.io.*;
 import java.util.*;
 import java_cup.runtime.Symbol;
-import parserlexer.*;
+import parserlexer.Nodo;
 
 /**
  * Clase Principal (Main)
- * Objetivo: Controlar todo el flujo del compilador: generación, análisis léxico, 
- * sintáctico, semántico, código intermedio y ensamblador MIPS.
+ * Objetivo: Controlar todo el flujo del programa, desde la generación de los archivos del compilador
+ * hasta la ejecución del análisis léxico, sintáctico, semántico, generación de código intermedio y MIPS.
+ * Restricciones: Requiere que las carpetas lib/, parserlexer/ y archivos_prueba/ existan y tengan los permisos adecuados.
  */
 public class Main {
+    // Escáner para leer lo que se ocupa por consola
     private static final Scanner sc = new Scanner(System.in);
     
+    // Rutas de carpetas para que el programa sepa donde buscar
     private static final String RUTA_PROGRAMA = "programa/";
     private static final String RUTA_LIB = RUTA_PROGRAMA + "lib/";
     private static final String RUTA_PARSERLEXER = RUTA_PROGRAMA + "parserlexer/";
     private static final String RUTA_PRUEBAS = RUTA_PROGRAMA + "archivos_prueba/";
     private static final String RUTA_SALIDA = RUTA_PROGRAMA + "archivos_salida/";
 
+    /**
+     * Método main
+     * Objetivo: Mostrar el menú interactivo y dirigir al usuario a la opción que quiera ejecutar.
+     * Entrada: Argumentos de consola (no se usan en este caso).
+     * Salida: Interacción por consola.
+     */
     public static void main(String[] args) {
         while (true) {
-            System.out.println("\n----- Menu de compilación -----");
+            System.out.println("\n----- Menu de análisis -----");
             System.out.println("1. Generar Lexer.java, Parser.java y sym.java");
             System.out.println("2. Realizar Análisis Léxico");
             System.out.println("3. Realizar Análisis Sintáctico");
             System.out.println("4. Realizar Análisis Semántico");
             System.out.println("5. Realizar Análisis Total (Léxico+Sintáctico+Semántico)");
-            System.out.println("6. Generar Código Intermedio (TAC)"); 
-            System.out.println("7. Generar Código Ensamblador MIPS (.s)");
+            System.out.println("6. Generar Código Intermedio (TAC)");
+            System.out.println("7. Generar Código Ensamblador MIPS (.asm)");
             System.out.println("0. Salir");
             
-            System.out.print("Seleccione una opción: ");
             String opcion = sc.nextLine();
 
             switch (opcion) {
-                case "1": generarArchivos(); break;
-                case "2": menuArchivos("LEXICO"); break;
-                case "3": menuArchivos("SINTACTICO"); break;
-                case "4": menuArchivos("SEMANTICO"); break;
-                case "5": menuArchivos("TOTAL"); break;
-                case "6": menuArchivos("INTERMEDIO"); break;
-                case "7": menuArchivos("MIPS"); break;
+                case "1":
+                    generarArchivos();
+                    break;
+                case "2":
+                    menuAnalisisLexico();
+                    break;
+                case "3":
+                    menuAnalisisSintactico();
+                    break;
+                case "4":
+                    menuAnalisisSemantico();
+                    break;
+                case "5":
+                    menuAnalisisCompleto();
+                    break;
+                case "6":
+                    menuGeneracionCodigo("TAC");
+                    break;
+                case "7":
+                    menuGeneracionCodigo("MIPS");
+                    break;
                 case "0":
-                    System.out.println("\n¡Hasta luego!");
+                    System.out.println("Saliendo...");
                     return;
                 default:
                     System.out.println("Opción no válida.");
@@ -50,9 +72,13 @@ public class Main {
     }
 
     /**
-     * Menú genérico para selección de archivos para evitar código duplicado.
+     * Método menuAnalisisSintactico
+     * Objetivo: Menú para seleccionar archivos y ejecutar análisis sintáctico.
+     * Entrada: Selección del usuario por consola.
+     * Salida: Llamada al método ejecutarParser con el archivo seleccionado.
+     * Restricciones: Debe haber archivos .txt en la carpeta archivos_prueba/.
      */
-    private static void menuArchivos(String tipoAnalisis) {
+    private static void menuAnalisisSintactico() {
         File folder = new File(RUTA_PRUEBAS);
         File[] listaArchivos = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
         
@@ -61,19 +87,103 @@ public class Main {
             return;
         }
         
-        System.out.println("\n--- Lista de archivos para " + tipoAnalisis + " ---");
+        System.out.println("\n--- Lista de archivos disponibles ---");
         System.out.println("0. ANALIZAR TODOS");
         for (int i = 0; i < listaArchivos.length; i++) {
             System.out.println((i + 1) + ". " + listaArchivos[i].getName());
         }
         
         System.out.print("Escoja una opción: ");
+        int eleccion;
         try {
-            int eleccion = Integer.parseInt(sc.nextLine());
-            if (eleccion == 0) {
-                for (File f : listaArchivos) ejecutarFlujo(f, tipoAnalisis);
-            } else if (eleccion > 0 && eleccion <= listaArchivos.length) {
-                ejecutarFlujo(listaArchivos[eleccion - 1], tipoAnalisis);
+            eleccion = Integer.parseInt(sc.nextLine());
+        } catch (Exception e) {
+            System.out.println("Entrada inválida");
+            return;
+        }
+    
+        if (eleccion == 0) {
+            for (File f : listaArchivos) {
+                ejecutarParser(f);
+            }
+        } else if (eleccion > 0 && eleccion <= listaArchivos.length) {
+            ejecutarParser(listaArchivos[eleccion - 1]);
+        } else {
+            System.out.println("Opción fuera de rango");
+        }
+    }
+
+    /**
+     * Método menuAnalisisSemantico
+     * Objetivo: Menú para seleccionar archivos y ejecutar análisis semántico completo.
+     * Entrada: Selección del usuario por consola.
+     * Salida: Llamada al método ejecutarAnalisisSemantico con el archivo seleccionado.
+     * Restricciones: Debe haber archivos .txt en la carpeta archivos_prueba/.
+     */
+    private static void menuAnalisisSemantico() {
+        File folder = new File(RUTA_PRUEBAS);
+        File[] listaArchivos = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
+        
+        if (listaArchivos == null || listaArchivos.length == 0) {
+            System.err.println("Error: No hay archivos .txt en " + RUTA_PRUEBAS);
+            return;
+        }
+        
+        System.out.println("\n--- Lista de archivos disponibles ---");
+        System.out.println("0. ANALIZAR TODOS");
+        for (int i = 0; i < listaArchivos.length; i++) {
+            System.out.println((i + 1) + ". " + listaArchivos[i].getName());
+        }
+        
+        System.out.print("Escoja una opción: ");
+        int eleccion;
+        try {
+            eleccion = Integer.parseInt(sc.nextLine());
+        } catch (Exception e) {
+            System.out.println("Entrada inválida");
+            return;
+        }
+    
+        if (eleccion == 0) {
+            for (File f : listaArchivos) {
+                ejecutarAnalisisSemantico(f);
+            }
+        } else if (eleccion > 0 && eleccion <= listaArchivos.length) {
+            ejecutarAnalisisSemantico(listaArchivos[eleccion - 1]);
+        } else {
+            System.out.println("Opción fuera de rango");
+        }
+    }
+
+    /**
+     * Método menuAnalisisCompleto
+     * Objetivo: Menú para seleccionar archivos y verificar si son 100% válidos (Léxico, Sintáctico y Semántico).
+     * Entrada: Selección del usuario por consola.
+     * Salida: Resultado de validación por consola.
+     * Restricciones: Requiere que los archivos de configuración estén generados.
+     */
+    private static void menuAnalisisCompleto() {
+        File folder = new File(RUTA_PRUEBAS);
+        File[] listaArchivos = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
+        if (listaArchivos == null || listaArchivos.length == 0) {
+            System.err.println("Error: No hay archivos .txt en " + RUTA_PRUEBAS);
+            return;
+        }
+        System.out.println("\n--- Lista de archivos para validación total ---");
+        for (int i = 0; i < listaArchivos.length; i++) {
+            System.out.println((i + 1) + ". " + listaArchivos[i].getName());
+        }
+        System.out.print("Escoja un archivo para validar: ");
+        int eleccion;
+        try {
+            eleccion = Integer.parseInt(sc.nextLine());
+            if (eleccion > 0 && eleccion <= listaArchivos.length) {
+                boolean esValido = validarCodigoCompleto(listaArchivos[eleccion - 1]);
+                if (esValido) {
+                    System.out.println("\nEL ARCHIVO ES VÁLIDO Y PUEDE GENERARSE.");
+                } else {
+                    System.out.println("\nEL ARCHIVO CONTIENE ERRORES Y NO PUEDE GENERARSE.");
+                }
             } else {
                 System.out.println("Opción fuera de rango");
             }
@@ -83,38 +193,92 @@ public class Main {
     }
 
     /**
-     * Centraliza la ejecución de los análisis según la opción seleccionada.
+     * Método menuGeneracionCodigo
+     * Objetivo: Menú para seleccionar archivos y generar código intermedio (TAC) o ensamblador (MIPS).
+     * Entrada: String indicando el tipo ("TAC" o "MIPS") y selección del usuario por consola.
+     * Salida: Archivo generado con el código correspondiente.
+     * Restricciones: El código fuente debe ser válido (sin errores léxicos, sintácticos ni semánticos).
      */
-    private static void ejecutarFlujo(File archivo, String tipo) {
-        switch (tipo) {
-            case "LEXICO": ejecutarLexer(archivo); break;
-            case "SINTACTICO": ejecutarParser(archivo); break;
-            case "SEMANTICO": ejecutarAnalisisSemantico(archivo, false); break;
-            case "TOTAL": {
-                boolean ok = validarCodigoCompleto(archivo);
-                System.out.println(ok ? "ARCHIVO VALIDO" : "CONTIENE ERRORES");
-                break;
+    private static void menuGeneracionCodigo(String tipo) {
+        File folder = new File(RUTA_PRUEBAS);
+        File[] listaArchivos = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
+        
+        if (listaArchivos == null || listaArchivos.length == 0) {
+            System.err.println("Error: No hay archivos .txt en " + RUTA_PRUEBAS);
+            return;
+        }
+        
+        System.out.println("\n--- Lista de archivos para generación de " + tipo + " ---");
+        System.out.println("0. GENERAR TODOS");
+        for (int i = 0; i < listaArchivos.length; i++) {
+            System.out.println((i + 1) + ". " + listaArchivos[i].getName());
+        }
+        
+        System.out.print("Escoja una opción: ");
+        int eleccion;
+        try {
+            eleccion = Integer.parseInt(sc.nextLine());
+        } catch (Exception e) {
+            System.out.println("Entrada inválida");
+            return;
+        }
+    
+        if (eleccion == 0) {
+            for (File f : listaArchivos) {
+                ejecutarGeneracionCodigo(f, tipo);
             }
-            case "INTERMEDIO": ejecutarGeneracion(archivo, "TAC"); break;
-            case "MIPS": ejecutarGeneracion(archivo, "MIPS"); break;
+        } else if (eleccion > 0 && eleccion <= listaArchivos.length) {
+            ejecutarGeneracionCodigo(listaArchivos[eleccion - 1], tipo);
+        } else {
+            System.out.println("Opción fuera de rango");
         }
     }
 
-    private static void ejecutarGeneracion(File archivoFuente, String modo) {
+    /**
+     * Método ejecutarGeneracionCodigo
+     * Objetivo: Generar código intermedio (TAC) o ensamblador MIPS a partir de un archivo válido.
+     * Entrada: Objeto File del archivo fuente y String indicando el modo ("TAC" o "MIPS").
+     * Salida: Archivo .txt con TAC o .asm con MIPS en la carpeta archivos_salida/.
+     * Restricciones: El código debe pasar todos los análisis previos sin errores.
+     */
+    private static void ejecutarGeneracionCodigo(File archivoFuente, String modo) {
         try {
             System.out.println("\nAnalizando para generación: " + archivoFuente.getName());
+            
+            // Leer el archivo con UTF-8
             Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(archivoFuente), "UTF-8"));
             
-            Lexer lexer = new Lexer(reader);
-            Parser parser = new Parser(lexer);
-            parser.parse();
+            // Cargar las clases dinámicamente
+            Class<?> lexerClass = Class.forName("parserlexer.Lexer");
+            Object scanner = lexerClass.getConstructor(Reader.class).newInstance(reader);
             
-            if (!Parser.getErrores().isEmpty()) {
-                System.err.println("Errores sintácticos detectados. Abortando.");
+            Class<?> parserClass = Class.forName("parserlexer.Parser");
+            Object parser = parserClass.getConstructor(java_cup.runtime.Scanner.class).newInstance(scanner);
+            
+            // Ejecutar parser
+            parserClass.getMethod("limpiarErrores").invoke(null);
+            parserClass.getMethod("parse").invoke(parser);
+            
+            // Verificar errores sintácticos
+            @SuppressWarnings("unchecked")
+            ArrayList<String> erroresSintacticos = 
+                (ArrayList<String>) parserClass.getMethod("getErrores").invoke(null);
+            
+            if (!erroresSintacticos.isEmpty()) {
+                System.err.println("Errores sintácticos detectados. Abortando generación.");
                 return;
             }
 
-            Nodo raiz = (Nodo) Parser.arbolSintactico;
+            // Obtener árbol sintáctico
+            java.lang.reflect.Field campoArbol = parserClass.getField("arbolSintactico");
+            Nodo raiz = (Nodo) campoArbol.get(null);
+            
+            if (raiz == null) {
+                System.err.println("Error: No se pudo construir el árbol sintáctico");
+                return;
+            }
+
+            // Análisis semántico
             RecorredorAST recorredor = new RecorredorAST();
             recorredor.recorrerYAnalizar(raiz);
 
@@ -123,180 +287,477 @@ public class Main {
                 return;
             }
 
+            // Generar código intermedio
             GeneradorCodigoIntermedio tacGen = recorredor.generarCodigoIntermedio(raiz);
             String nombreBase = archivoFuente.getName().replace(".txt", "");
 
             if (modo.equals("TAC")) {
+                // Generar y guardar código intermedio TAC
                 String salida = tacGen.getCodigoCompleto();
+                String rutaSalida = RUTA_SALIDA + "tac_" + nombreBase + ".txt";
+                
+                PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(rutaSalida), "UTF-8"));
+                writer.print(salida);
+                writer.close();
+                
+                System.out.println("\n--- CÓDIGO INTERMEDIO (TAC) GENERADO ---");
                 System.out.println(salida);
-                guardarArchivo(RUTA_SALIDA + "tac_" + nombreBase + ".txt", salida);
-            } else {
+                System.out.println("✓ Guardado en: " + rutaSalida);
+                
+            } else if (modo.equals("MIPS")) {
+                // Generar y guardar código ensamblador MIPS
                 GeneradorMIPS mipsGen = new GeneradorMIPS(tacGen.getCodigo(), recorredor.getTablaSimbolos());
                 String assembly = mipsGen.generar();
-                System.out.println("\n--- CÓDIGO MIPS GENERADO ---\n" + assembly);
-                guardarArchivo(RUTA_SALIDA + "mips_" + nombreBase + ".s", assembly);
+                String rutaSalida = RUTA_SALIDA + "mips_" + nombreBase + ".asm";
+                
+                PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(rutaSalida), "UTF-8"));
+                writer.print(assembly);
+                writer.close();
+                
+                System.out.println("\n--- CÓDIGO ENSAMBLADOR MIPS GENERADO ---");
+                System.out.println(assembly);
+                System.out.println("✓ Guardado en: " + rutaSalida);
             }
-        } catch (Exception e) {
-            System.err.println("Error en generación: " + e.getMessage());
-        }
-    }
-
-    private static void guardarArchivo(String ruta, String contenido) throws IOException {
-        try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(ruta), "UTF-8"))) {
-            writer.print(contenido);
-            System.out.println("✓ Guardado en: " + ruta);
-        }
-    }
-
-    // --- MÉTODOS DE SOPORTE EXISTENTES (LIMPIADOS) ---
-
-    private static void ejecutarLexer(File archivoFuente) {
-        String rutaReporte = RUTA_SALIDA + "lexer_" + archivoFuente.getName();
-        try {
-            Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(archivoFuente), "UTF-8"));
-            Lexer lexer = new Lexer(reader);
-            PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(rutaReporte), "UTF-8"));
             
-            writer.println("REPORTE LEXICO: " + archivoFuente.getName() + "\n");
-            while (true) {
-                Symbol s = lexer.next_token();
-                if (s.sym == sym.EOF) break;
-                writer.printf("Token: %-15s | Lexema: %-15s | Linea: %d%n", obtenerNombreToken(s.sym), s.value, s.left);
-            }
-            writer.close();
-            System.out.println("✓ Reporte léxico generado: " + rutaReporte);
-        } catch (Exception e) { System.err.println("Error: " + e.getMessage()); }
+        } catch (Exception e) {
+            System.err.println("Error en generación de código: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * Método ejecutarAnalisisSemantico
+     * Objetivo: Realizar análisis sintáctico y semántico completo, reportando solo errores semánticos.
+     * Entrada: Objeto File que representa el archivo fuente a analizar.
+     * Salida: Archivo de texto en archivos_salida/ con errores semánticos encontrados.
+     * Restricciones: El archivo Parser.java debe haber sido generado previamente (opción 1).
+     */
+    private static void ejecutarAnalisisSemantico(File archivoFuente) {
+        String nombreSinExt = archivoFuente.getName().replace(".txt", "");
+        String rutaReporte = RUTA_SALIDA + "semantico_" + nombreSinExt + ".txt";
+        
+        try {
+            System.out.println("Analizando: " + archivoFuente.getName() + "...\n");
+            
+            // Leer el archivo con UTF-8
+            Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(archivoFuente), "UTF-8"));
+            
+            // Cargar las clases dinámicamente
+            Class<?> lexerClass = Class.forName("parserlexer.Lexer");
+            Object scanner = lexerClass.getConstructor(Reader.class).newInstance(reader);
+            
+            Class<?> parserClass = Class.forName("parserlexer.Parser");
+            Object parser = parserClass.getConstructor(java_cup.runtime.Scanner.class).newInstance(scanner);
+            
+            // Limpiar errores previos y ejecutar parser
+            parserClass.getMethod("limpiarErrores").invoke(null);
+            parserClass.getMethod("parse").invoke(parser);
+            
+            // Obtener errores sintácticos
+            @SuppressWarnings("unchecked")
+            java.util.ArrayList<String> erroresSintacticos = 
+                (java.util.ArrayList<String>) parserClass.getMethod("getErrores").invoke(null);
+            
+            // Si hay errores sintácticos, no continuar
+            if (!erroresSintacticos.isEmpty()) {
+                System.err.println("Errores sintácticos encontrados. No se puede continuar.\n");
+                for (String error : erroresSintacticos) {
+                    System.err.println("  - " + error);
+                }
+                return;
+            }
+            
+            // Obtener el árbol sintáctico
+            java.lang.reflect.Field campoArbol = parserClass.getField("arbolSintactico");
+            Object arbol = campoArbol.get(null);
+            
+            if (arbol == null) {
+                System.err.println("Error: No se pudo construir el árbol sintáctico");
+                return;
+            }
+            
+            // ANÁLISIS SEMÁNTICO
+            RecorredorAST recorredor = new RecorredorAST();
+            recorredor.recorrerYAnalizar((Nodo) arbol);
+            
+            // Guardar reporte
+            PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(rutaReporte), "UTF-8"));
+            writer.println("========== REPORTE DE ANÁLISIS SEMÁNTICO ==========");
+            writer.println("Archivo: " + archivoFuente.getName());
+            writer.println("Fecha: " + new java.util.Date());
+            writer.println();
+            
+            // Unificar todos los errores semánticos
+            ArrayList<String> todosLosErrores = new ArrayList<>();
+            todosLosErrores.addAll(recorredor.getErrores());
+            todosLosErrores.addAll(recorredor.getErroresSemanticos());
+            
+            if (!todosLosErrores.isEmpty()) {
+                writer.println("ERRORES SEMÁNTICOS:");
+                for (String error : todosLosErrores) {
+                    writer.println("  - " + error);
+                }
+                writer.println("\nTotal: " + todosLosErrores.size() + " errores encontrados");
+            } else {
+                writer.println("✓ Análisis completado exitosamente - Código válido");
+            }
+            
+            writer.close();
+            
+            if (todosLosErrores.isEmpty()) {
+                System.out.println("✅ CÓDIGO VÁLIDO - Sin errores semánticos");
+            }
+            
+            System.out.println("Reporte generado: " + rutaReporte);
+            
+        } catch (Exception e) {
+            System.err.println("Error en análisis semántico: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Método validarCodigoCompleto
+     * Objetivo: Ejecutar los tres niveles de análisis en cadena para determinar validez total.
+     * Entrada: Objeto File del archivo a validar.
+     * Salida: true si el archivo no tiene errores léxicos, sintácticos ni semánticos, false en caso contrario.
+     * Restricciones: Depende de las clases Lexer, Parser y RecorredorAST.
+     */
+    private static boolean validarCodigoCompleto(File archivoFuente) {
+        try {
+            System.out.println("\nIniciando validación integral de: " + archivoFuente.getName());
+            Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(archivoFuente), "UTF-8"));
+            
+            // 1 y 2. Análisis Léxico y Sintáctico (El parser consume al lexer)
+            Class<?> lexerClass = Class.forName("parserlexer.Lexer");
+            Object scanner = lexerClass.getConstructor(Reader.class).newInstance(reader);
+            Class<?> parserClass = Class.forName("parserlexer.Parser");
+            Object parser = parserClass.getConstructor(java_cup.runtime.Scanner.class).newInstance(scanner);
+            parserClass.getMethod("limpiarErrores").invoke(null);
+            parserClass.getMethod("parse").invoke(parser);
+            
+            @SuppressWarnings("unchecked")
+            java.util.ArrayList<String> errSintacticos = 
+                (java.util.ArrayList<String>) parserClass.getMethod("getErrores").invoke(null);
+            if (!errSintacticos.isEmpty()) {
+                System.err.println("-> Falló análisis sintáctico/léxico.");
+                return false;
+            }
+            
+            // 3. Análisis Semántico
+            java.lang.reflect.Field campoArbol = parserClass.getField("arbolSintactico");
+            Object arbol = campoArbol.get(null);
+            if (arbol == null) return false;
+            
+            RecorredorAST recorredor = new RecorredorAST();
+            recorredor.recorrerYAnalizar((Nodo) arbol);
+            
+            if (recorredor.tieneErrores()) {
+                System.err.println("-> Falló análisis semántico.");
+                return false;
+            }
+            
+            return true; // si no hubo ningun error
+        } catch (Exception e) {
+            System.err.println("Error en validación: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Método generarArchivos
+     * Objetivo: Limpiar los archivos viejos y regenerar el lexer y el parser usando los .jar de JFlex y CUP.
+     * Entrada: Archivos Lexer.jflex y Parser.cup existentes en la carpeta parserlexer.
+     * Salida: Archivos generados Lexer.java, Parser.java y sym.java.
+     * Restricciones: Los .jar deben estar en la ruta correcta y se debe tener java instalado en el path.
+     */
+    private static void generarArchivos() {
+        System.out.println("Borrando archivos antiguos...");
+        String[] archivosABorrar = {"Lexer.java", "Parser.java", "sym.java"};
+        for (String s : archivosABorrar) {
+            File f = new File(RUTA_PARSERLEXER + s);
+            if (f.exists()) f.delete();
+        }
+        try {
+            // Sacar el sym y el parser con CUP
+            System.out.println("Generando sym y Parser con CUP...");
+            ProcessBuilder pb1 = new ProcessBuilder(
+            "java", "-jar",
+            RUTA_LIB + "java-cup-11b.jar",
+            "-destdir", RUTA_PARSERLEXER,
+            "-parser", "Parser",
+            RUTA_PARSERLEXER + "Parser.cup"
+            );
+            pb1.redirectErrorStream(true);
+            pb1.inheritIO();
+            Process p1 = pb1.start();
+            p1.waitFor();
+
+            
+            // Generar el lexer.java forzando UTF-8 para evitar problemas con simbolos raros
+            System.out.println("Generando Lexer con JFlex...");
+            ProcessBuilder pb2 = new ProcessBuilder(
+                "java",
+                "-Dfile.encoding=UTF-8",
+                "-jar",
+                RUTA_LIB + "jflex-full-1.9.1.jar",
+                "--encoding", "UTF-8",
+                RUTA_PARSERLEXER + "Lexer.jflex"
+            );
+            pb2.redirectErrorStream(true);
+            pb2.inheritIO();
+            Process p2 = pb2.start();
+            p2.waitFor();
+
+            
+            System.out.println("Archivos generados");
+        } catch (Exception e) {
+            System.err.println("Error ejecutando JFlex/CUP: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Método menuAnalisisLexico
+     * Objetivo: Buscar los txt disponibles y dejar escoger al usuario cuál analizar.
+     * Entrada: Selección del usuario por consola.
+     * Salida: Llamada al método ejecutarLexer con el archivo seleccionado.
+     * Restricciones: Debe haber archivos .txt en la carpeta archivos_prueba/.
+     */
+    private static void menuAnalisisLexico() {
+        File folder = new File(RUTA_PRUEBAS);
+        File[] listaArchivos = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt"));
+        
+        // Si no hay archivos en la carpeta tirar error y regresar
+        if (listaArchivos == null || listaArchivos.length == 0) {
+            System.err.println("Error: No hay archivos .txt en " + RUTA_PRUEBAS);
+            return;
+        }
+        
+        System.out.println("\n--- Lista de archivos disponibles ---");
+        System.out.println("0. ANALIZAR TODOS");
+        for (int i = 0; i < listaArchivos.length; i++) {
+            System.out.println((i + 1) + ". " + listaArchivos[i].getName());
+        }
+        
+        System.out.print("Escoja una opción: ");
+        int eleccion;
+        try {
+            eleccion = Integer.parseInt(sc.nextLine());
+        } catch (Exception e) {
+            System.out.println("Entrada inválida");
+            return;
+        }
+
+        if (eleccion == 0) {
+            for (File f : listaArchivos) {
+                ejecutarLexer(f);
+            }
+        } else if (eleccion > 0 && eleccion <= listaArchivos.length) {
+            ejecutarLexer(listaArchivos[eleccion - 1]);
+        } else {
+            System.out.println("Opción fuera de rango");
+        }
+    }
+
+    /**
+     * Método ejecutarLexer
+     * Objetivo: Analizar el archivo txt token por token usando reflexión y crear el reporte final.
+     * Entrada: Objeto File que representa el archivo fuente a analizar.
+     * Salida: Archivo de texto en archivos_salida/ con la tabla de tokens y lista de errores.
+     * Restricciones: El archivo Lexer.java debe haber sido generado previamente (opción 1).
+     */
+    private static void ejecutarLexer(File archivoFuente) {
+        String nombreSinExt = archivoFuente.getName().replace(".txt", "");
+        String rutaReporte = RUTA_SALIDA + "reporte_" + nombreSinExt + ".txt";
+        
+        // Lista para ir guardando los errores para ponerlos al final del txt
+        List<String> listaErrores = new ArrayList<>();
+
+        try {
+            System.out.println("Analizando: " + archivoFuente.getName() + "...");
+            
+            // Leer el archivo con UTF-8 para que no se caiga con simbolos raros
+            Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(archivoFuente), "UTF-8"));
+            
+            // Cargar las clases dinamicamente para que el programa compile bien aunque no exista Lexer.java aun
+            Class<?> lexerClass = Class.forName("parserlexer.Lexer");
+            Object scanner = lexerClass.getConstructor(Reader.class).newInstance(reader);
+            
+            PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(rutaReporte), "UTF-8"));
+
+            writer.println("REPORTE DE TOKENS: " + archivoFuente.getName());
+            writer.println("======================================================================");
+            writer.printf("%-25s | %-25s | %-10s | %-10s%n", "IDENTIFICADOR (TIPO)", "LEXEMA", "LINEA", "COLUMNA");
+            writer.println("----------------------------------------------------------------------");
+
+            // Sacar valores de sym.java por reflexion
+            Class<?> symClass = Class.forName("parserlexer.sym");
+            int EOF_VAL = symClass.getField("EOF").getInt(null);
+            int ERROR_VAL = symClass.getField("ERROR").getInt(null);
+
+            // Sacar tokens uno por uno hasta llegar al final del archivo
+            while (true) {
+                Symbol s = (Symbol) lexerClass.getMethod("next_token").invoke(scanner);
+                
+                if (s.sym == EOF_VAL) break;
+
+                // Sacar el lexema del scanner o del symbol directamente
+                String lexema = (s.value != null) ? s.value.toString() : (String) lexerClass.getMethod("yytext").invoke(scanner);
+                String nombreToken = obtenerNombreToken(s.sym);
+                String idConTipo = s.sym + " (" + nombreToken + ")";
+
+                // Si es un error lo mete a la lista para el final
+                if (s.sym == ERROR_VAL) {
+                    listaErrores.add("Caracter ilegal <" + lexema + "> en línea " + s.left);
+                }
+
+                // Escribir la linea en el reporte
+                writer.printf("%-25s | %-25s | %-10d | %-10d%n", 
+                               idConTipo, lexema, s.left, s.right);
+            }
+
+            // Escribe el resumen de errores antes de cerrar
+            writer.println("----------------------------------------------------------------------");
+            if (!listaErrores.isEmpty()) {
+                writer.println("ERRORES ENCONTRADOS:");
+                for (String err : listaErrores) {
+                    writer.println("- " + err);
+                }
+            } else {
+                writer.println("No se encontraron errores léxicos.");
+            }
+            
+            writer.println("----------------------------------------------------------------------");
+            writer.println("FIN DEL ANALISIS");
+            writer.close();
+            System.out.println("Reporte generado: " + rutaReporte);
+
+        } catch (ClassNotFoundException e) {
+            System.err.println("Error: No están los archivos del Lexer. Use la opcion 1 primero.");
+        } catch (Exception e) {
+            System.err.println("Error analizando " + archivoFuente.getName() + ": " + e.getMessage());
+        }
+    }
+
+    /**
+     * Método ejecutarParser
+     * Objetivo: Realizar análisis sintáctico completo y generar el árbol sintáctico y tabla de símbolos.
+     * Entrada: Objeto File que representa el archivo fuente a analizar.
+     * Salida: Archivo de texto con árbol sintáctico y tabla de símbolos en archivos_salida/.
+     * Restricciones: El archivo Parser.java debe haber sido generado previamente (opción 1).
+     */
     private static void ejecutarParser(File archivoFuente) {
         String nombreSinExt = archivoFuente.getName().replace(".txt", "");
-        String rutaReporteArbol = RUTA_SALIDA + "arbol_tabla_" + nombreSinExt + ".txt";
+        String rutaReporteArbol = RUTA_SALIDA + "arbol_" + nombreSinExt + ".txt";
         
         try {
             System.out.println("\n========== ANÁLISIS SINTÁCTICO ==========");
             System.out.println("Analizando: " + archivoFuente.getName() + "...");
             
+            // Leer el archivo con UTF-8
             Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(archivoFuente), "UTF-8"));
             
-            // USAR DefaultSymbolFactory para evitar el ClassCastException
-            java_cup.runtime.SymbolFactory sf = new java_cup.runtime.DefaultSymbolFactory();
-            Lexer lexer = new Lexer(reader);
-            Parser parser = new Parser(lexer, sf); // Constructor NO DEPRECATED
+            // Cargar las clases dinámicamente
+            Class<?> lexerClass = Class.forName("parserlexer.Lexer");
+            Object scanner = lexerClass.getConstructor(Reader.class).newInstance(reader);
             
-            Parser.limpiarErrores();
-            parser.parse();
+            Class<?> parserClass = Class.forName("parserlexer.Parser");
+            Object parser = parserClass.getConstructor(java_cup.runtime.Scanner.class).newInstance(scanner);
             
-            ArrayList<String> erroresSintacticos = Parser.getErrores();
-            Nodo arbol = (Nodo) Parser.arbolSintactico;
+            // Limpiar errores previos
+            parserClass.getMethod("limpiarErrores").invoke(null);
             
-            // ... resto del código (impresión de árbol y tabla) ...
+            // Ejecutar el parser
+            parserClass.getMethod("parse").invoke(parser);
+            
+            // Obtener errores sintácticos
+            @SuppressWarnings("unchecked")
+            java.util.ArrayList<String> erroresSintacticos = 
+                (java.util.ArrayList<String>) parserClass.getMethod("getErrores").invoke(null);
+            
+            // Obtener el árbol sintáctico
+            java.lang.reflect.Field campoArbol = parserClass.getField("arbolSintactico");
+            Object arbol = campoArbol.get(null);
+            
+            // Guardar en archivo
+            PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(rutaReporteArbol), "UTF-8"));
+            writer.println("ANÁLISIS SINTÁCTICO: " + archivoFuente.getName());
+            writer.println("======================================================================");
+            
+            // Reportar estado sintáctico
             if (erroresSintacticos.isEmpty()) {
-                System.out.println("✓ Archivo sintácticamente correcto.");
-                if (arbol != null) arbol.arbol(); 
+                System.out.println("\n✓ Archivo sintácticamente correcto");
+                writer.println("\n✓ ARCHIVO SINTÁCTICAMENTE CORRECTO");
             } else {
-                System.err.println("✗ Se encontraron " + erroresSintacticos.size() + " error(es) sintáctico(s):");
-                erroresSintacticos.forEach(System.err::println);
-            }
-
-            if (arbol != null) {
-                RecorredorAST recorredor = new RecorredorAST();
-                recorredor.recorrer(arbol); 
-                TablaSimbolos tabla = recorredor.getTablaSimbolos();
-                System.out.println(tabla.generarReporte());
-                
-                // Generación de archivo (try-with-resources)
-                try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(rutaReporteArbol), "UTF-8"))) {
-                    writer.println("REPORTE SINTÁCTICO Y TABLA DE SÍMBOLOS: " + archivoFuente.getName());
-                    writer.println("======================================================================");
-                    writer.println("ÁRBOL SINTÁCTICO:");
-                    writer.println(arbol.toString());
-                    writer.println("\n======================================================================");
-                    writer.println(tabla.generarReporte());
-                    writer.println("======================================================================");
+                System.out.println("\n✗ Se encontraron " + erroresSintacticos.size() + " error(es) sintáctico(s)");
+                writer.println("\n✗ SE ENCONTRARON " + erroresSintacticos.size() + " ERROR(ES) SINTÁCTICO(S)");
+                writer.println("\nERRORES SINTÁCTICOS:");
+                for (String error : erroresSintacticos) {
+                    writer.println("  - " + error);
                 }
-                System.out.println("✓ Reporte completo generado en: " + rutaReporteArbol);
+                writer.println();
+            }
+            
+            if (arbol != null) {
+                System.out.println("\n========== ÁRBOL SINTÁCTICO ==========");
+                
+                // Imprimir en consola
+                arbol.getClass().getMethod("arbol").invoke(arbol);
+                
+                writer.println("\n======================================================================");
+                writer.println("ÁRBOL SINTÁCTICO:");
+                writer.println("======================================================================");
+                writer.println(arbol.toString());
+                writer.println("======================================================================");
+                
+                // Estadísticas del árbol
+                int numNodos = (int) arbol.getClass().getMethod("contarNodos").invoke(arbol);
+                int altura = (int) arbol.getClass().getMethod("getAltura").invoke(arbol);
+                
+                writer.println("\nESTADÍSTICAS:");
+                writer.println("- Número total de nodos: " + numNodos);
+                writer.println("- Altura del árbol: " + altura);
+                
+                // ========== CONSTRUIR TABLA DE SÍMBOLOS ==========
+                RecorredorAST recorredor = new RecorredorAST();
+                recorredor.recorrer((Nodo) arbol);
+                
+                TablaSimbolos tablaSimbolos = recorredor.getTablaSimbolos();
+                
+                // Imprimir tabla de símbolos en consola
+                System.out.println(tablaSimbolos.generarReporte());
+                
+                // Guardar tabla de símbolos en el archivo
+                writer.println("\n");
+                writer.println("======================================================================");
+                writer.println(tablaSimbolos.generarReporte());
+                
+                writer.close();
+                
+                System.out.println("\n✓ Reporte generado: " + rutaReporteArbol);
+            } else {
+                writer.println("\n✗ No se pudo construir el árbol sintáctico");
+                writer.close();
+                System.err.println("✗ No se pudo construir el árbol sintáctico");
             }
             
         } catch (Exception e) {
             System.err.println("Error en análisis sintáctico: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    private static void ejecutarAnalisisSemantico(File archivoFuente, boolean silencioso) {
-        try {
-            Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(archivoFuente), "UTF-8"));
-            Lexer lexer = new Lexer(reader);
-            Parser parser = new Parser(lexer);
-            Parser.limpiarErrores();
-            parser.parse();
-            
-            if (!Parser.getErrores().isEmpty()) return;
-
-            RecorredorAST recorredor = new RecorredorAST();
-            recorredor.recorrerYAnalizar((Nodo)Parser.arbolSintactico);
-            
-            if (!recorredor.tieneErrores() && !silencioso) {
-                System.out.println("Analisis semántico exitoso.");
-            }
-        } catch (Exception e) { System.err.println("Error: " + e.getMessage()); }
-    }
-
-    private static boolean validarCodigoCompleto(File archivoFuente) {
-        try {
-            Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(archivoFuente), "UTF-8"));
-            Lexer lexer = new Lexer(reader);
-            Parser parser = new Parser(lexer);
-            Parser.limpiarErrores();
-            parser.parse();
-            if (!Parser.getErrores().isEmpty()) return false;
-
-            RecorredorAST recorredor = new RecorredorAST();
-            recorredor.recorrerYAnalizar((Nodo)Parser.arbolSintactico);
-            return !recorredor.tieneErrores();
-        } catch (Exception e) { return false; }
-    }
-
-    private static void generarArchivos() {
-        try {
-            System.out.println("Borrando archivos antiguos...");
-            String[] archivos = {"Lexer.java", "Parser.java", "sym.java", "Lexer.java~"};
-            for (String nombre : archivos) {
-                File f = new File(RUTA_PARSERLEXER + nombre);
-                if (f.exists()) {
-                    if (f.delete()) {
-                        System.out.println("  - Eliminado: " + nombre);
-                    }
-                }
-            }
-
-            System.out.println("Generando archivos con CUP...");
-            Process p1 = new ProcessBuilder(
-                "java", "-jar", RUTA_LIB + "java-cup-11b.jar", 
-                "-destdir", RUTA_PARSERLEXER, 
-                "-parser", "Parser", 
-                RUTA_PARSERLEXER + "Parser.cup"
-            ).inheritIO().start();
-            p1.waitFor();
-
-            System.out.println("Generando archivos con JFlex...");
-            Process p2 = new ProcessBuilder(
-                "java", "-jar", RUTA_LIB + "jflex-full-1.9.1.jar", 
-                "--encoding", "UTF-8",
-                "--nobak", // <--- ESTO ELIMINA EL ARCHIVO CON ~
-                "-d", RUTA_PARSERLEXER,
-                RUTA_PARSERLEXER + "Lexer.jflex"
-            ).inheritIO().start();
-            p2.waitFor();
-            
-            System.out.println("✓ Archivos generados correctamente.");
-        } catch (Exception e) { 
-            System.err.println("Error: " + e.getMessage()); 
-        }
-    }
-
+    /**
+     * Método obtenerNombreToken
+     * Objetivo: Buscar el nombre legible del token (string) a partir de su ID numérico en sym.java.
+     * Entrada: Entero que representa el ID del token.
+     * Salida: String con el nombre del token (ej: "INT_LITERAL") o "UNKNOWN" si falla.
+     * Restricciones: sym.java debe haber sido generado y compilado.
+     */
     private static String obtenerNombreToken(int id) {
         try {
-            java.lang.reflect.Field[] fields = sym.class.getFields();
+            Class<?> symClass = Class.forName("parserlexer.sym");
+            java.lang.reflect.Field[] fields = symClass.getFields();
             for (java.lang.reflect.Field field : fields) {
                 if (field.getInt(null) == id) return field.getName();
             }

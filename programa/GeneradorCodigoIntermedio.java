@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 /**
- * Generador de Código Intermedio (Three-Address Code)
+ * Generador de Código Intermedio (Three-Address Code) - VERSIÓN CORREGIDA
  * Genera código intermedio en formato de tres direcciones
  */
 public class GeneradorCodigoIntermedio {
@@ -46,10 +46,21 @@ public class GeneradorCodigoIntermedio {
     
     /**
      * Generar código para una operación binaria: t = a op b
+     * CORRECCIÓN: Ahora maneja correctamente '//' (división entera)
      */
     public String generarOperacionBinaria(String operando1, String operador, String operando2) {
         String temp = nuevoTemporal();
-        agregarInstruccion(temp + " = " + operando1 + " " + operador + " " + operando2);
+        
+        // CORRECCIÓN: Convertir '//' a 'DIV_ENTERA' para que MIPS lo reconozca
+        // Dentro de generarOperacionBinaria
+        if (operador.equals("//")) {
+    agregarInstruccion(temp + " = " + operando1 + " DIV_ENTERA " + operando2);
+        } else if (operador.equals("/")) {
+            agregarInstruccion(temp + " = " + operando1 + " DIV_DECIMAL " + operando2);
+        } else {
+            agregarInstruccion(temp + " = " + operando1 + " " + operador + " " + operando2);
+        }
+        
         return temp;
     }
     
@@ -180,7 +191,7 @@ public class GeneradorCodigoIntermedio {
     
     public String getCodigoCompleto() {
         StringBuilder sb = new StringBuilder();
-        sb.append("========== CÓDIGO INTERMEDIO (THREE-ADDRESS CODE) ==========\n\n");
+        sb.append("\n    ========== INICIO CÓDIGO INTERMEDIO ==========\n\n");
         
         for (String instruccion : codigo) {
             if (instruccion.isEmpty()) {
@@ -194,6 +205,7 @@ public class GeneradorCodigoIntermedio {
             }
         }
         
+        sb.append("\n    ========== FIN CÓDIGO INTERMEDIO ==========\n");
         return sb.toString();
     }
     

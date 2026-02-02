@@ -1,0 +1,121 @@
+| ============================================================
+| ARCHIVO DE PRUEBA INTEGRAL - PROYECTO COMPILADORES
+| Este archivo prueba todas las producciones de la gramática.
+| ============================================================
+
+є 
+   Comentario multilínea
+   Probando los caracteres especiales
+э
+
+| 1. Declaraciones Globales (world)
+world variableGlobal int = 100 endl
+world pi float = 3.14159 endl
+world estadoGlobal bool = true endl
+world letraGlobal char = 'G' endl
+world saludoGlobal string = "Hola Mundo Global" endl
+
+| Arreglo global (char y entero permitidos)
+world matrizGlobal int[2, 2] = ¡ ¡1, 0!, ¡0, 1! ! endl
+
+| 2. Definición de Funciones (gift)
+| Prueba de parámetros, tipos de retorno y recursividad
+gift factorial ¿ n int ? int ¡
+    decide of
+        ¿n <= 1? -> ¡
+            return 1 endl
+        !
+        else -> ¡
+            return n * factorial¿n - 1? endl
+        !
+    end decide endl
+!
+
+gift operacionesMatematicas ¿ a float, b float ? float ¡
+    local resultado float endl
+    | Prueba de precedencia y operadores: +, -, *, /, //, %, ^, ¿?
+    resultado = ¿a + b? * ¿a - b? / ¿a ^ 2.0? endl
+    resultado = a // b + ¿a % b? endl
+    return resultado endl
+!
+
+| 3. Función Principal (navidad de tipo coal)
+navidad coal ¡
+    | 3.1 Declaraciones Locales
+    local contador int = 0 endl
+    local limite float = 50.5 endl
+    local mensaje string = "Ejecutando bucles" endl
+    local flag bool = false endl
+    
+    | Arreglo local con asignación
+    local notas int[3, 3] = ¡ 
+        ¡10, 20, 30!, 
+        ¡40, 50, 60!, 
+        ¡70, 80, 90! 
+    ! endl
+
+    | 3.2 Entrada y Salida (get y show)
+    show ¿"Ingrese un valor para el contador:"? endl
+    get ¿contador? endl
+    show ¿contador? endl
+    show ¿variableGlobal? endl
+
+    | 3.3 Estructura de Control: decide of (if-else)
+    decide of
+        ¿contador > 10 @ contador < 100? -> ¡
+            show ¿"Contador en rango medio"? endl
+        !
+        ¿contador >= 100 ~ flag == true? -> ¡
+            show ¿"Contador alto o flag activo"? endl
+        !
+        else -> ¡
+            show ¿"Contador bajo"? endl
+        !
+    end decide endl
+
+    | 3.4 Operadores Unarios y Asignaciones
+    ++contador endl
+    --contador endl
+    local negativo int = -5 endl
+    local preIncremento int = ++contador endl
+
+    | 3.5 Bucle: loop (tipo Ada)
+    loop
+        show ¿"Iteracion loop:"? endl
+        show ¿contador? endl
+        contador = contador + 5 endl
+        exit when ¿contador > 20? endl
+    end loop endl
+
+    | 3.6 Bucle: for (tipo C/Java)
+    for ¿local i int = 0 ; i < 3 ; ++i? ¡
+        for ¿local j int = 0 ; j < 3 ; ++j? ¡
+            | Modificar y obtener elementos de arreglos
+            notas[i, j] = notas[i, j] + contador endl
+            show ¿notas[i, j]? endl
+        !
+    !
+
+    | 3.7 Expresiones Lógicas Complejas
+    | Uso de negación (Σ), conjunción (@) y disyunción (~)
+    local validacion bool = Σ¿contador == 0? @ ¿letraGlobal Σ= 'X'? endl
+    
+    decide of
+        validacion -> ¡
+            show ¿mensaje? endl
+            break endl | Prueba de break dentro de bloque
+        !
+    end decide endl
+
+    | 3.8 Llamada a funciones y expresiones aritméticas
+    local rFact int = factorial¿5? endl
+    local rMat float = operacionesMatematicas¿10.5, 2.0? endl
+    
+    show ¿"Factorial de 5 es:"? endl
+    show ¿rFact? endl
+    show ¿"Resultado math:"? endl
+    show ¿rMat? endl
+
+    | El procedimiento navidad es coal (void), no requiere return pero puede tener uno vacío
+    return 0 endl
+!
